@@ -1,0 +1,38 @@
+name: Promote
+
+on:
+  workflow_call:
+    secrets:
+      BOT_APP_ID:
+        required: true
+      BOT_PRIVATE_KEY:
+        required: true
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  channel:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - id: generate-token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.BOT_APP_ID }}
+          private_key: ${{ secrets.BOT_PRIVATE_KEY }}
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+      - uses: actions/checkout@v3
+        with:
+          repository: autifyhq/homebrew-tap
+          path: homebrew-tap
+          token: ${{ steps.generate-token.outputs.token }}
+      - uses: ./.github/actions/setup
+        with:
+          aws-credentials: ${{ github.ref_name }}
+      - run: git config --global user.name "${GITHUB_ACTOR}"
+      - run: git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      - run: npm run release promote

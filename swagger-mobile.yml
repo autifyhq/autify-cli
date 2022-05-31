@@ -1,0 +1,161 @@
+openapi: 3.0.0
+info:
+  title: Autify for Mobile API
+  version: v1
+servers:
+  - url: https://mobile-app.autify.com/api/v1
+    description: Production server
+paths:
+  "/projects/{project_id}/builds":
+    post:
+      summary: Upload a build
+      tags:
+      - Builds
+      description: Upload the build file.
+      operationId: uploadBuild
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          description: The ID of the project to upload the build file to.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Build file.
+              required:
+                - "file"
+      responses:
+        '201':
+          description: build created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: yLA6m0oM
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          example: Error message.
+        '401':
+          description: bad credentials
+  "/test_plans/{test_plan_id}/test_plan_results":
+    post:
+      summary: Run a test plan
+      security:
+        - bearerAuth: []
+      tags:
+      - TestPlans
+      description: Run a test plan
+      operationId: RunTestPlan
+      parameters:
+        - name: test_plan_id
+          in: path
+          required: true
+          description: The ID of the test plan to run.
+          schema:
+            type: string
+      requestBody:
+        description: The build_id to execute the test plan.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/RunTestPlanRequest"
+      responses:
+        '201':
+          description: Test plan result created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: yLA6m0oM
+                  test_plan:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: yLA6m0oM
+                      name:
+                        type: string
+                        example: Test Plan Name
+                      created_at:
+                        type: string
+                        example: '2021-05-18T02:44:55.978Z'
+                      updated_at:
+                        type: string
+                        example: '2021-05-18T02:44:55.978Z'
+                      build:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: yLA6m0oM
+                          name:
+                            type: string
+                            example: App Name
+                          version:
+                            type: string
+                            example: 4.0.0 0000
+                          created_at:
+                            type: string
+                            example: '2021-05-18T02:44:55.978Z'
+                          updated_at:
+                            type: string
+                            example: '2021-05-18T02:44:55.978Z'
+                      execute_environments:
+                        type: array
+                        items:
+                          properties:
+                            os:
+                              type: string
+                              example: iOS
+                            os_version:
+                              type: string
+                              example: '14.4'
+                            device:
+                              type: string
+                              example: iPhone 12 Pro
+        '401':
+          description: bad credentials
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: http
+  schemas:
+    RunTestPlanRequest:
+      properties:
+        build_id:
+          type: string
+          required:
+            - build_id

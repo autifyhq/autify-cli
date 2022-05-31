@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`autify-cli web test run https://app.autify.com/projects/743/scenarios/91437 --wait 1`] = `
+Object {
+  "stderr": "",
+  "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
+[HPM] Proxy created: /  -> https://mobile-app.autify.com
+✅ Successfully started: https://app.autify.com/projects/743/results/846405 (Capability is Linux Chrome 101.0)
+🕐 Waiting for the test result: https://app.autify.com/projects/743/results/846405
+[HH:MM:SS] Waiting... (timeout: 300 s) [started]
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 👍 Passed , TestCases: 👍 Passed 
+[HH:MM:SS] Waiting... (timeout: 300 s) [completed]
+✅ Test passed!: https://app.autify.com/projects/743/results/846405
+[HPM] server close signal received: closing proxy server
+",
+}
+`;
+
+exports[`autify-cli web test run https://app.autify.com/projects/743/scenarios/91437 1`] = `
+Object {
+  "stderr": "",
+  "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
+[HPM] Proxy created: /  -> https://mobile-app.autify.com
+✅ Successfully started: https://app.autify.com/projects/743/results/846404 (Capability is Linux Chrome 101.0)
+To wait for the test result, run the command below:
+💻 $ autify web test wait https://app.autify.com/projects/743/results/846404
+[HPM] server close signal received: closing proxy server
+",
+}
+`;

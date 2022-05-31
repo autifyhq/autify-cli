@@ -1,0 +1,21 @@
+name: Upload
+description: Upload to S3
+
+inputs:
+  target:
+    description: target
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: ./.github/actions/setup
+      with:
+        aws-credentials: upload
+    - if: ${{ inputs.target == 'win' }}
+      run: sudo apt-get install nsis
+      shell: bash
+    - run: npm install
+      shell: bash
+    - run: npm run release upload ${{ inputs.target }}
+      shell: bash

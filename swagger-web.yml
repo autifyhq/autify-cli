@@ -1,0 +1,813 @@
+openapi: 3.0.0
+info:
+  title: Autify API
+  version: v1
+  description: |
+    ## Authorization
+    You can authenticate the API by using a personal access token and passing it to the Bearer header. To generate or manage API keys、please visit [your account page](https://app.autify.com/settings).
+
+    Example of using a personal access token in the header：
+    ```
+    curl -H "Authorization: Bearer YOUR_PERSONAL_ACCESS_TOKEN" https://app.autify.com/api/v1/
+    ```
+
+    If the credentials are invalid or omitted, an error message is returned with status code 401：
+    ```
+    {
+      "errors":[{
+        "message": "Bad credentials"
+      }]
+    }
+    ```
+servers:
+  - url: "https://app.autify.com/api/v1/"
+    description: Production server
+paths:
+  "/schedules/{schedule_id}":
+    post:
+      operationId: executeSchedule
+      description: |
+        Run a test plan. (Note: "Schedule" is called as "TestPlan" now.)
+      tags:
+        - schedule
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: schedule_id
+          in: path
+          required: true
+          description: |
+            For example, 3 for the following URL: https://app.autify.com/projects/1/test_plans/3
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: |
+            ok
+
+            `123456` in the example response is the test plan result ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 123456
+                      type:
+                        type: string
+                        example: test_plan_result
+                      attributes:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 123456
+                    required:
+                      - "id"
+                      - "type"
+                      - "attributes"
+                required:
+                  - "data"
+        "401":
+          description: Bad credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          default: Bad credentials
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+                          default: Not Found
+  "/projects/{project_id}/scenarios":
+    get:
+      operationId: listScenarios
+      description: |
+        List scenarios.
+      tags:
+        - scenario
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          description: |
+            For example, 1 for the following URL: https://app.autify.com/projects/1/scenarios
+          schema:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+          description: The number of page returns.
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Story"
+  "/projects/{project_id}/scenarios/{scenario_id}":
+    get:
+      operationId: describeScenario
+      description: |
+        Get a scenario.
+      tags:
+        - scenario
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          description: |
+            For example, 1 for the following URL: https://app.autify.com/projects/1/scenarios/2
+          schema:
+            type: integer
+        - name: scenario_id
+          in: path
+          required: true
+          description: |
+            For example, 2 for the following URL: https://app.autify.com/projects/1/scenarios/2
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Story"
+  "/projects/{project_id}/results":
+    get:
+      operationId: listResults
+      description: |
+        List results.
+      tags:
+        - result
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          description: |
+            For example, 1 for the following URL: https://app.autify.com/projects/1/results
+          schema:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+          description: The number of page returns.
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 30
+          description: The number of items returns. Default number is 30 and up to a maximum of 100
+        - name: test_plan_id
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Test plan ID used to filter results.
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TestPlanResult"
+  "/projects/{project_id}/results/{result_id}":
+    get:
+      operationId: describeResult
+      description: |
+        Get a result.
+      tags:
+        - result
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          description: |
+            For example, 1 for the following URL: https://app.autify.com/projects/1/results/4
+          schema:
+            type: integer
+        - name: result_id
+          in: path
+          required: true
+          description: |
+            For example, 4 for the following URL: https://app.autify.com/projects/1/results/4
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  status:
+                    type: string
+                    enum:
+                      - queuing
+                      - waiting
+                      - running
+                      - passed
+                      - failed
+                      - skipped
+                    default: waiting
+                  duration:
+                    type: integer
+                  started_at:
+                    type: string
+                    format: date-time
+                  finished_at:
+                    type: string
+                    format: date-time
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+                  test_plan_capability_results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        capability:
+                          $ref: "#/components/schemas/Capability"
+                        test_case_results:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/TestCaseResult"
+                  test_plan:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+  "/projects/{project_id}/capabilities":
+    get:
+      operationId: listCapabilities
+      description: |
+        List available Capabilities.
+      tags:
+        - capability
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          description: |
+            For example, 1 for the following URL: https://app.autify.com/projects/1/capabilities
+          schema:
+            type: integer
+        - in: query
+          name: os
+          schema:
+            type: string
+          description: os name to filter
+        - in: query
+          name: browser
+          schema:
+            type: string
+          description: browser name to filter
+        - in: query
+          name: device_type
+          schema:
+            type: string
+          description: device_type name to filter
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CapabilityOption"
+  "/projects/{project_id}/execute_scenarios":
+    post:
+      operationId: executeScenarios
+      description: |
+        You can execute any scenarios in your workspace using any execution environments (which is called "capabilities" here).
+      tags:
+        - scenario
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: project_id
+          in: path
+          required: true
+          description: |
+            For example, 1 for the following URL: https://app.autify.com/projects/1/scenarios
+          schema:
+            type: integer
+      requestBody:
+        description: The scenarios and settings to execute
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/ExecuteScenariosRequest"
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/ExecuteScenariosResult"
+        "401":
+          description: Bad credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          default: 401
+                        message:
+                          type: string
+                          default: Bad credentials
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: integer
+                          default: 404
+                        message:
+                          type: string
+                          default: Not Found
+  "/test_plans/{test_plan_id}/url_replacements":
+    post:
+      operationId: createUrlReplacement
+      description: |
+        Create a new url replacement for the test plan
+      tags:
+        - url_replacement
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: test_plan_id
+          in: path
+          required: true
+          description: |
+            For example, 15 for the following URL: https://app.autify.com/projects/1/test_plans/15
+          schema:
+            type: integer
+      requestBody:
+        description: The url to replace
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/CreateUrlReplacementRequest"
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/UrlReplacement"
+    get:
+      operationId: listUrlReplacements
+      description: |
+        List url replacements for the test plan
+      tags:
+        - url_replacement
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: test_plan_id
+          in: path
+          required: true
+          description: |
+            For example, 15 for the following URL: https://app.autify.com/projects/1/test_plans/15
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UrlReplacement"
+  "/test_plans/{test_plan_id}/url_replacements/{url_replacement_id}":
+    put:
+      operationId: updateUrlReplacement
+      description: |
+        Update a url replacement for the test plan
+      tags:
+        - url_replacement
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: test_plan_id
+          in: path
+          required: true
+          description: |
+            For example, 15 for the following URL: https://app.autify.com/projects/1/test_plans/15
+          schema:
+            type: integer
+        - name: url_replacement_id
+          in: path
+          required: true
+          description: |
+            url_replacement id
+          schema:
+            type: integer
+      requestBody:
+        description: The url to replace. Either pattern_url or replacement_url is required.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/UpdateUrlReplacementRequest"
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/UrlReplacement"
+    delete:
+      operationId: deleteUrlReplacement
+      description: |
+        Delete a url replacement for the test plan
+      tags:
+        - url_replacement
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: test_plan_id
+          in: path
+          required: true
+          description: |
+            For example, 15 for the following URL: https://app.autify.com/projects/1/test_plans/15
+          schema:
+            type: integer
+        - name: url_replacement_id
+          in: path
+          required: true
+          description: |
+            url_replacement id
+          schema:
+            type: integer
+
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "ok"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: http
+  schemas:
+    Story:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        labels:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+    UrlReplacement:
+      properties:
+        id:
+          type: integer
+        test_plan_id:
+          type: integer
+        pattern_url:
+          type: string
+        replacement_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - "id"
+        - "test_plan_id"
+        - "pattern_url"
+        - "replacement_url"
+        - "created_at"
+        - "updated_at"
+    Capability:
+      properties:
+        id:
+          type: integer
+        os:
+          type: string
+        os_version:
+          type: string
+        browser:
+          type: string
+        browser_version:
+          type: string
+        device:
+          type: string
+        resolution:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    CapabilityOption:
+      properties:
+        os:
+          type: string
+        os_version:
+          type: string
+        browser:
+          type: string
+        browser_version:
+          type: string
+        device:
+          type: string
+        device_type:
+          type: string
+        unsupported:
+          type: boolean
+    TestPlan:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    TestPlanResult:
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          enum:
+            - waiting
+            - running
+            - passed
+            - failed
+            - skipped
+          default: waiting
+        duration:
+          type: integer
+        started_at:
+          type: string
+          format: date-time
+        finished_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        test_plan:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+    TestPlanCapabilityResult:
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          enum:
+            - waiting
+            - running
+            - passed
+            - failed
+            - skipped
+          default: waiting
+        duration:
+          type: integer
+        started_at:
+          type: string
+          format: date-time
+        finished_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    TestCaseResult:
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          enum:
+            - waiting
+            - running
+            - passed
+            - failed
+            - skipped
+          default: waiting
+        duration:
+          type: integer
+        started_at:
+          type: string
+          format: date-time
+        finished_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        test_case_id:
+          type: integer
+        project_url:
+          type: string
+        review_needed:
+          type: integer
+    Label:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        color:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    ExecuteScenariosRequest:
+      required:
+        - capabilities
+        - scenarios
+      properties:
+        name:
+          type: string
+          description: 'Defaults to "API execution {{time_at(Time.now, organization.timezone)}}"'
+        execution_type:
+          description: 'Defaults to "parallel" ("sequential" In case parallel execution was disabled in the workspace)'
+          type: string
+          enum:
+            - parallel
+            - sequential
+          default: parallel
+        capabilities:
+          type: array
+          items:
+            type: object
+            properties:
+              os:
+                type: string
+              os_version:
+                type: string
+              device:
+                type: string
+              device_type:
+                type: string
+              browser:
+                type: string
+        url_replacements:
+          type: array
+          items:
+            type: object
+            $ref: "#/components/schemas/CreateUrlReplacementRequest"
+        scenarios:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: integer
+    ExecuteScenariosResult:
+      required:
+        - result_id
+      properties:
+        result_id:
+          type: integer
+    CreateUrlReplacementRequest:
+      properties:
+        pattern_url:
+          type: string
+          example: "https://example.com"
+        replacement_url:
+          type: string
+          example: "https://example.net"
+      required:
+        - pattern_url
+        - replacement_url
+    UpdateUrlReplacementRequest:
+      properties:
+        pattern_url:
+          type: string
+          example: "https://example.com"
+        replacement_url:
+          type: string
+          example: "https://example.net"

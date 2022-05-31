@@ -1,0 +1,28 @@
+name: Push branch
+
+on:
+  push:
+    branches:
+      - main
+      - releases/*
+
+jobs:
+  validate:
+    uses: ./.github/workflows/validate.yml
+    with:
+      branch: ${{ github.ref_name }}
+
+  upload:
+    needs: [ validate ]
+    uses: ./.github/workflows/upload.yml
+
+  integration-tests:
+    needs: [ upload ]
+    uses: ./.github/workflows/integration-tests.yml
+
+  promote:
+    needs: [ integration-tests ]
+    uses: ./.github/workflows/promote.yml
+    secrets:
+      BOT_APP_ID: ${{ secrets.BOT_APP_ID }}
+      BOT_PRIVATE_KEY: ${{ secrets.BOT_PRIVATE_KEY }}

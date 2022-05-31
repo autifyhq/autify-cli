@@ -1,0 +1,143 @@
+{
+  "name": "autify-cli",
+  "version": "0.1.0-beta.0",
+  "private": true,
+  "description": "Autify Command Line Interface (CLI)",
+  "author": "Autify",
+  "bin": {
+    "autify": "./bin/run"
+  },
+  "homepage": "https://github.com/autifyhq/autify-cli",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "repository": "autifyhq/autify-cli",
+  "files": [
+    "/bin",
+    "/dist",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "dependencies": {
+    "@oclif/core": "^1",
+    "@oclif/errors": "^1.3.5",
+    "@oclif/plugin-help": "^5",
+    "@oclif/plugin-not-found": "^2.3.1",
+    "@oclif/plugin-update": "^3.0.0",
+    "@oclif/plugin-warn-if-update-available": "^2.0.4",
+    "axios": "^0.27.2",
+    "axios-logger": "^2.6.1",
+    "debug": "^4.3.4",
+    "envfile": "^6.17.0",
+    "form-data": "^4.0.0",
+    "inquirer": "^8.2.4",
+    "listr": "^0.14.3",
+    "node-emoji": "^1.11.0"
+  },
+  "devDependencies": {
+    "@oclif/test": "^2",
+    "@openapitools/openapi-generator-cli": "^2.5.1",
+    "@pollyjs/adapter-node-http": "^6.0.5",
+    "@pollyjs/cli": "^6.0.1",
+    "@pollyjs/core": "^6.0.5",
+    "@pollyjs/persister-fs": "^6.0.5",
+    "@types/chai": "^4",
+    "@types/debug": "^4.1.7",
+    "@types/express": "^4.17.13",
+    "@types/inquirer": "^8.2.1",
+    "@types/listr": "^0.14.4",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^16.9.4",
+    "@types/node-emoji": "^1.8.1",
+    "@types/which": "^2.0.1",
+    "chai": "^4",
+    "eslint": "^7.32.0",
+    "eslint-config-oclif": "^4",
+    "eslint-config-oclif-typescript": "^1.0.2",
+    "express": "^4.18.1",
+    "globby": "^11",
+    "http-proxy-middleware": "^2.0.6",
+    "mocha": "^9",
+    "mocha-chai-jest-snapshot": "^1.1.3",
+    "oclif": "^3",
+    "patch-package": "^6.4.7",
+    "pkg-dir": "^6.0.1",
+    "shx": "^0.3.4",
+    "ts-morph": "^14.0.0",
+    "ts-node": "^10.7.0",
+    "tslib": "^2.4.0",
+    "typescript": "^4.6.4",
+    "which": "^2.0.2"
+  },
+  "oclif": {
+    "bin": "autify",
+    "dirname": "autify",
+    "commands": "./dist/commands",
+    "plugins": [
+      "@oclif/plugin-help",
+      "@oclif/plugin-not-found",
+      "@oclif/plugin-update",
+      "@oclif/plugin-warn-if-update-available"
+    ],
+    "topicSeparator": " ",
+    "topics": {
+      "web": {
+        "description": "Autify for Web"
+      },
+      "web:api": {
+        "description": "Low-level APIs on Autify for Web"
+      },
+      "web:auth": {
+        "description": "Authentication on Autify for Web"
+      },
+      "web:test": {
+        "description": "Test on Autify for Web"
+      },
+      "mobile": {
+        "description": "Autify for Mobile"
+      },
+      "mobile:api": {
+        "description": "Low-level APIs on Autify for Mobile"
+      },
+      "mobile:auth": {
+        "description": "Authentication on Autify for Mobile"
+      }
+    },
+    "update": {
+      "s3": {
+        "bucket": "autify-cli-assets",
+        "folder": "autify-cli"
+      }
+    },
+    "macos": {
+      "identifier": "com.autify.cli"
+    }
+  },
+  "scripts": {
+    "postinstall": "patch-package",
+    "generate-openapi-clients:web": "openapi-generator-cli generate -i ./swagger-web.yml -g typescript-axios -o src/generated/web/openapi --additional-properties withNodeImports=true,multipartFormData=true",
+    "generate-openapi-clients:mobile": "openapi-generator-cli generate -i ./swagger-mobile.yml -g typescript-axios -o src/generated/mobile/openapi --additional-properties withNodeImports=true,multipartFormData=true",
+    "generate-api-commands": "ts-node scripts/generate-api-commands.ts",
+    "generate:web": "npm run generate-openapi-clients:web && npm run generate-api-commands web",
+    "generate:mobile": "npm run generate-openapi-clients:mobile && npm run generate-api-commands mobile",
+    "generate": "npm run generate:web && npm run generate:mobile",
+    "build": "shx rm -rf dist && tsc -b",
+    "lint": "eslint . --ext .ts --config .eslintrc",
+    "postpack": "shx rm -f oclif.manifest.json",
+    "posttest": "npm run lint",
+    "prepack": "npm run build && oclif manifest && oclif readme",
+    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "test:integration": "mocha \"integration-test/test/**/*.ts\"",
+    "test:integration:record": "AUTIFY_CLI_PROXY_MODE=record AUTIFY_CLI_PATH=./bin/dev npm run test:integration -- --update",
+    "release": "ts-node ./scripts/release.ts",
+    "polly-proxy": "ts-node ./scripts/polly-proxy.ts",
+    "version": "oclif readme && git add README.md"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "bugs": "https://github.com/autifyhq/autify-cli/issues",
+  "keywords": [
+    "oclif"
+  ],
+  "types": "dist/index.d.ts"
+}

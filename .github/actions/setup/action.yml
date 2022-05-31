@@ -1,0 +1,34 @@
+name: Setup
+description: Setup
+
+inputs:
+  aws-credentials:
+    description: AWS credentials
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v3.2.0
+      with:
+        cache: npm
+    - run: npm install
+      shell: bash
+    - uses: aws-actions/configure-aws-credentials@v1
+      if: ${{ inputs.aws-credentials == 'upload' }}
+      with:
+        role-to-assume: arn:aws:iam::434848343351:role/autify-cli-upload-only-role
+        role-session-name: github-actions
+        aws-region: us-west-2
+    - uses: aws-actions/configure-aws-credentials@v1
+      if: ${{ inputs.aws-credentials == 'main' }}
+      with:
+        role-to-assume: arn:aws:iam::434848343351:role/autify-cli-beta-release-role
+        role-session-name: github-actions
+        aws-region: us-west-2
+    - uses: aws-actions/configure-aws-credentials@v1
+      if: ${{ startsWith(inputs.aws-credentials, 'releases/') }}
+      with:
+        role-to-assume: arn:aws:iam::434848343351:role/autify-cli-release-role
+        role-session-name: github-actions
+        aws-region: us-west-2

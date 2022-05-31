@@ -1,0 +1,19 @@
+name: Validate
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        type: string
+        required: true
+
+jobs:
+  branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/setup
+      - run: npm run release validate ${{ inputs.branch }}

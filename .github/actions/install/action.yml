@@ -1,0 +1,16 @@
+name: Install
+description: Install from S3
+
+inputs:
+  target:
+    description: target
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: ./.github/actions/setup
+    - run: npm install
+      shell: bash
+    - run: npm run release install ${{ inputs.target }}
+      shell: bash

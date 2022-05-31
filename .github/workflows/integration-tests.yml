@@ -1,0 +1,103 @@
+name: Integration tests
+
+on:
+  workflow_call:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  tarball:
+    strategy:
+      matrix:
+        include:
+          - target: linux-x64
+            os: ubuntu-latest
+          - target: win32-x64
+            os: windows-latest
+          - target: darwin-x64
+            os: macos-latest
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/install
+        with:
+          target: ${{ matrix.target }}
+      - run: echo test | autify web auth login
+      - run: npm run test:integration
+
+  win:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/install
+        with:
+          target: win
+      - run: echo test | autify web auth login
+      - run: npm run test:integration
+
+  macos:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/install
+        with:
+          target: macos
+      - run: echo test | autify web auth login
+      - run: npm run test:integration
+
+  shell:
+    strategy:
+      matrix:
+        include:
+          - target: linux-x64
+            os: ubuntu-latest
+          - target: darwin-x64
+            os: macos-latest
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/install
+        with:
+          target: shell
+      - run: echo test | autify web auth login
+      - run: npm run test:integration
+
+  brew:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+          - os: macos-latest
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/install
+        with:
+          target: brew
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # TODO: Remove after public
+      - run: echo test | autify web auth login
+      - run: npm run test:integration

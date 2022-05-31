@@ -1,0 +1,15 @@
+name: Rollback
+
+on:
+  workflow_dispatch:
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup
+        with:
+          aws-credentials: releases/*
+      - run: npm install
+      - run: npm run release rollback
