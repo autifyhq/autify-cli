@@ -35,7 +35,7 @@ const getCapability = async (client: Client, workspaceId: number, option: Capabi
 
   const capabilities = await client.listCapabilities(workspaceId)
   const candidates = capabilities.data
-  .filter(c => c.os === option.os)
+  .filter(c => !option.os || c.os === option.os)
   .filter(c => !option.os_version || c.os_version === option.os_version)
   .filter(c => option.device_type || !option.browser || c.browser === option.browser)
   .filter(c => !option.device || c.device === option.device)
