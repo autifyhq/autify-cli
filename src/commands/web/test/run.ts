@@ -31,9 +31,11 @@ export default class WebTestRun extends Command {
     'Run and wait a test scenario:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --wait --timeout 600',
     'Run a test scenario with a specific capability:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --os "Windows Server" --browser Edge',
     'With URL replacements:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 -r http://example.com=http://example.net -r http://example.org=http://example.net',
+    'Run a test with specifying the execution name:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --name "Sample execution"',
   ]
 
   static flags = {
+    name: Flags.string({char: 'n', description: 'Name of the test execution. (Only for test scenario execution.)'}),
     'url-replacements': Flags.string({char: 'r', description: 'URL replacements. Example: http://example.com=http://example.net', multiple: true}),
     os: Flags.string({description: 'OS to run the test'}),
     'os-version': Flags.string({description: 'OS version to run the test'}),
@@ -63,7 +65,11 @@ export default class WebTestRun extends Command {
     const urlReplacements = parseUrlReplacements(flags['url-replacements'] ?? [])
     if (urlReplacements.length > 0) this.log(`${emoji.get('memo')} Using URL replacements: ${urlReplacementsToString(urlReplacements)}`)
     const client = new Client(this.config.configDir, this.config.userAgent)
-    const {workspaceId, resultId, capability} = await runTest(client, args['scenario-or-test-plan-url'], capabilityOption, urlReplacements)
+    const {workspaceId, resultId, capability} = await runTest(client, args['scenario-or-test-plan-url'], {
+      option: capabilityOption,
+      name: flags.name,
+      urlReplacements,
+    })
     const testResultUrl = getWebTestResultUrl(this.config.configDir, workspaceId, resultId)
     this.log(`${emoji.get('white_check_mark')} Successfully started: ${testResultUrl} (Capability is ${capability})`)
     if (flags.wait) {

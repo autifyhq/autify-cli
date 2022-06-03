@@ -19,7 +19,7 @@ $ npm install -g autify-cli
 $ autify COMMAND
 running command...
 $ autify (--version)
-autify-cli/0.2.0-beta.0 linux-x64 node-v16.15.0
+autify-cli/0.2.0-beta.0 linux-x64 node-v16.14.0
 $ autify --help [COMMAND]
 USAGE
   $ autify COMMAND
@@ -436,14 +436,15 @@ Run a scenario or test plan.
 
 ```
 USAGE
-  $ autify web test run [SCENARIO-OR-TEST-PLAN-URL] [-r <value>] [--os <value>] [--os-version <value>] [--browser
-    <value>] [--device <value>] [--device-type <value>] [-w] [-t <value>] [-v]
+  $ autify web test run [SCENARIO-OR-TEST-PLAN-URL] [-n <value>] [-r <value>] [--os <value>] [--os-version
+    <value>] [--browser <value>] [--device <value>] [--device-type <value>] [-w] [-t <value>] [-v]
 
 ARGUMENTS
   SCENARIO-OR-TEST-PLAN-URL  Scenario URL or Test plan URL e.g.
                              https://app.autify.com/projects/<ID>/(scenarios|test_plans)/<ID>
 
 FLAGS
+  -n, --name=<value>                 Name of the test execution. (Only for test scenario execution.)
   -r, --url-replacements=<value>...  URL replacements. Example: http://example.com=http://example.net
   -t, --timeout=<value>              [default: 300] Timeout seconds when waiting for the finish of the test execution.
   -v, --verbose                      Verbose output
@@ -478,6 +479,10 @@ EXAMPLES
 
     $ autify web test run https://app.autify.com/projects/0000/scenarios/0000 -r \
       http://example.com=http://example.net -r http://example.org=http://example.net
+
+  Run a test with specifying the execution name:
+
+    $ autify web test run https://app.autify.com/projects/0000/scenarios/0000 --name "Sample execution"
 ```
 
 ## `autify web test wait TEST-RESULT-URL`
