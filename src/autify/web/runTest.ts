@@ -51,13 +51,20 @@ const capabilityToString = ({os, os_version, browser, browser_version, device, d
   return [os, os_version, browser, browser_version, device, device_type].filter(s => Boolean(s)).join(' ')
 }
 
-export const runTest = async (client: Client, url: string, option: CapabilityOption, urlReplacements?: CreateUrlReplacementRequest[]): Promise<{workspaceId: number, resultId: number, capability: string}> => {
+type RunTestProps = Readonly<{
+  option: CapabilityOption
+  name?: string
+  urlReplacements: CreateUrlReplacementRequest[]
+}>
+
+export const runTest = async (client: Client, url: string, {option, name, urlReplacements}: RunTestProps): Promise<{workspaceId: number, resultId: number, capability: string}> => {
   const scenario = parseScenarioUrl(url)
   const testPlan = parseTestPlanUrl(url)
   if (scenario) {
     const {workspaceId, scenarioId} = scenario
     const capability = await getCapability(client, workspaceId, option)
     const res = await client.executeScenarios(workspaceId, {
+      name,
       capabilities: [
         capability,
       ],
@@ -76,6 +83,7 @@ export const runTest = async (client: Client, url: string, option: CapabilityOpt
 
   if (testPlan) {
     if (isCapabilitySpecified(option)) throw new CLIError(`Running TestPlan doesn't support capability override: ${JSON.stringify(option)}`)
+    if (name) throw new CLIError(`Running TestPlan doesn't support --name: ${name}`)
     const {workspaceId, testPlanId} = testPlan
     const urlReplacementIds = []
     for await (const urlReplacement of urlReplacements ?? []) {
