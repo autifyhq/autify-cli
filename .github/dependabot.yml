@@ -4,7 +4,7 @@ updates:
     versioning-strategy: increase
     directory: "/"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     labels:
       - "dependencies"
     open-pull-requests-limit: 100
@@ -14,3 +14,7 @@ updates:
       - dependency-name: "fs-extra"
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
