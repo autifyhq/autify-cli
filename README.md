@@ -1,77 +1,84 @@
-Autify Command Line Interface (CLI)
-=================
+# Autify Command Line Interface (CLI)
 
 Autify CLI can help your integration with Autify!
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 
 <!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [Autify Command Line Interface (CLI)](#autify-command-line-interface-cli)
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
+
 # Usage
 
 Note: `npm install` is not available yet. We'll work on publishing to npm.
 
 <!-- usage -->
+
 ```sh-session
-$ npm install -g autify-cli
+$ npm install -g @autifyhq/autify-cli
 $ autify COMMAND
 running command...
 $ autify (--version)
-autify-cli/0.3.0-beta.0 linux-x64 node-v16.15.0
+@autifyhq/autify-cli/0.3.0-beta.0 linux-x64 node-v16.14.0
 $ autify --help [COMMAND]
 USAGE
   $ autify COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 ## Download Prebuilt package
+
 We provide prebuilt packages in the forms below (Node.js runtime is included):
 
-| OS  | Architecture | Package type | Download Link | Note
-| :--- |:--- | :--- | :--- | :--- |
-|Linux  |Intel 64bit|tar.gz   |[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-linux-x64.tar.gz)|
-|Linux  |Intel 64bit|tar.xz   |[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-linux-x64.tar.xz)|
-|Linux  |Arm 32bit  |tar.gz   |[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-linux-arm.tar.gz)|
-|Linux  |Arm 32bit  |tar.xz   |[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-linux-arm.tar.xz)|
-|macOS  |Intel 64bit|tar.gz   |[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-darwin-x64.tar.gz)|
-|macOS  |Intel 64bit|tar.xz   |[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-darwin-x64.tar.xz)|
-|macOS  |Intel 64bit|Installer|[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-x64.pkg)|Not properly signed yet.
-|macOS  |Arm 64bit  |tar.gz   |[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-darwin-arm64.tar.gz)|
-|macOS  |Arm 64bit  |tar.xz   |[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-darwin-arm64.tar.xz)|
-|macOS  |Arm 64bit  |Installer|[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-arm64.pkg)|Not properly signed yet.
-|Windows|Intel 64bit|tar.gz   |[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-win32-x64.tar.gz)|
-|Windows|Intel 64bit|tar.xz   |[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-win32-x64.tar.xz)|
-|Windows|Intel 64bit|Installer|[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-x64.exe)|Not properly signed yet.
-|Windows|Intel 32bit|tar.gz   |[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-win32-x86.tar.gz)|
-|Windows|Intel 32bit|tar.xz   |[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-win32-x86.tar.xz)|
-|Windows|Intel 32bit|Installer|[`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-x86.exe)|Not properly signed yet.
+| OS      | Architecture | Package type | Download Link                                                                                                          | Note                     |
+| :------ | :----------- | :----------- | :--------------------------------------------------------------------------------------------------------------------- | :----------------------- |
+| Linux   | Intel 64bit  | tar.gz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-linux-x64.tar.gz)    |
+| Linux   | Intel 64bit  | tar.xz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-linux-x64.tar.xz)    |
+| Linux   | Arm 32bit    | tar.gz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-linux-arm.tar.gz)    |
+| Linux   | Arm 32bit    | tar.xz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-linux-arm.tar.xz)    |
+| macOS   | Intel 64bit  | tar.gz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-darwin-x64.tar.gz)   |
+| macOS   | Intel 64bit  | tar.xz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-darwin-x64.tar.xz)   |
+| macOS   | Intel 64bit  | Installer    | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-x64.pkg)             | Not properly signed yet. |
+| macOS   | Arm 64bit    | tar.gz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-darwin-arm64.tar.gz) |
+| macOS   | Arm 64bit    | tar.xz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-darwin-arm64.tar.xz) |
+| macOS   | Arm 64bit    | Installer    | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-arm64.pkg)           | Not properly signed yet. |
+| Windows | Intel 64bit  | tar.gz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-win32-x64.tar.gz)    |
+| Windows | Intel 64bit  | tar.xz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-win32-x64.tar.xz)    |
+| Windows | Intel 64bit  | Installer    | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-x64.exe)             | Not properly signed yet. |
+| Windows | Intel 32bit  | tar.gz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-win32-x86.tar.gz)    |
+| Windows | Intel 32bit  | tar.xz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-win32-x86.tar.xz)    |
+| Windows | Intel 32bit  | Installer    | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-x86.exe)             | Not properly signed yet. |
 
 After the installation, you can always get the latest update on `stable` channel automatically, or by running `autify update`.
 
 # Commands
+
 <!-- commands -->
-* [`autify help [COMMAND]`](#autify-help-command)
-* [`autify mobile api run-test-plan`](#autify-mobile-api-run-test-plan)
-* [`autify mobile api upload-build`](#autify-mobile-api-upload-build)
-* [`autify mobile auth login`](#autify-mobile-auth-login)
-* [`autify update [CHANNEL]`](#autify-update-channel)
-* [`autify web api create-url-replacement`](#autify-web-api-create-url-replacement)
-* [`autify web api delete-url-replacement`](#autify-web-api-delete-url-replacement)
-* [`autify web api describe-result`](#autify-web-api-describe-result)
-* [`autify web api describe-scenario`](#autify-web-api-describe-scenario)
-* [`autify web api execute-scenarios`](#autify-web-api-execute-scenarios)
-* [`autify web api execute-schedule`](#autify-web-api-execute-schedule)
-* [`autify web api list-capabilities`](#autify-web-api-list-capabilities)
-* [`autify web api list-results`](#autify-web-api-list-results)
-* [`autify web api list-scenarios`](#autify-web-api-list-scenarios)
-* [`autify web api list-url-replacements`](#autify-web-api-list-url-replacements)
-* [`autify web api update-url-replacement`](#autify-web-api-update-url-replacement)
-* [`autify web auth login`](#autify-web-auth-login)
-* [`autify web test run SCENARIO-OR-TEST-PLAN-URL`](#autify-web-test-run-scenario-or-test-plan-url)
-* [`autify web test wait TEST-RESULT-URL`](#autify-web-test-wait-test-result-url)
+
+- [`autify help [COMMAND]`](#autify-help-command)
+- [`autify mobile api run-test-plan`](#autify-mobile-api-run-test-plan)
+- [`autify mobile api upload-build`](#autify-mobile-api-upload-build)
+- [`autify mobile auth login`](#autify-mobile-auth-login)
+- [`autify update [CHANNEL]`](#autify-update-channel)
+- [`autify web api create-url-replacement`](#autify-web-api-create-url-replacement)
+- [`autify web api delete-url-replacement`](#autify-web-api-delete-url-replacement)
+- [`autify web api describe-result`](#autify-web-api-describe-result)
+- [`autify web api describe-scenario`](#autify-web-api-describe-scenario)
+- [`autify web api execute-scenarios`](#autify-web-api-execute-scenarios)
+- [`autify web api execute-schedule`](#autify-web-api-execute-schedule)
+- [`autify web api list-capabilities`](#autify-web-api-list-capabilities)
+- [`autify web api list-results`](#autify-web-api-list-results)
+- [`autify web api list-scenarios`](#autify-web-api-list-scenarios)
+- [`autify web api list-url-replacements`](#autify-web-api-list-url-replacements)
+- [`autify web api update-url-replacement`](#autify-web-api-update-url-replacement)
+- [`autify web auth login`](#autify-web-auth-login)
+- [`autify web test run SCENARIO-OR-TEST-PLAN-URL`](#autify-web-test-run-scenario-or-test-plan-url)
+- [`autify web test wait TEST-RESULT-URL`](#autify-web-test-wait-test-result-url)
 
 ## `autify help [COMMAND]`
 
@@ -506,4 +513,5 @@ DESCRIPTION
 EXAMPLES
   $ autify web test wait https://app.autify.com/projects/0000/results/0000
 ```
+
 <!-- commandsstop -->
