@@ -13,15 +13,15 @@ jobs:
       branch: ${{ github.base_ref }}
 
   upload:
-    needs: [ validate ]
+    needs: [validate]
     uses: ./.github/workflows/upload.yml
 
   integration-tests:
-    needs: [ upload ]
+    needs: [upload]
     uses: ./.github/workflows/integration-tests.yml
 
   approved:
-    needs: [ integration-tests ]
+    needs: [integration-tests]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:

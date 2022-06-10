@@ -1,3 +1,5 @@
 /dist
+/bin
 /tmp
-/src/generated
+/integration-test/dist
+/integration-test/bin

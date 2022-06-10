@@ -8,9 +8,8 @@
     "strict": true,
     "target": "es2019",
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["chai", "inquirer", "listr", "mocha", "node", "node-emoji"]
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }
