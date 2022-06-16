@@ -1,12 +1,8 @@
-name: Promote
+name: Publish
 
 on:
-  workflow_call:
-    secrets:
-      BOT_APP_ID:
-        required: true
-      BOT_PRIVATE_KEY:
-        required: true
+  release:
+    types: [published]
 
 permissions:
   id-token: write
@@ -25,7 +21,16 @@ jobs:
       - uses: actions/checkout@v3
         with:
           token: ${{ steps.generate-token.outputs.token }}
+      - uses: actions/checkout@v3
+        with:
+          repository: autifyhq/homebrew-tap
+          path: homebrew-tap
+          token: ${{ steps.generate-token.outputs.token }}
       - uses: ./.github/actions/setup
         with:
           aws-credentials: ${{ github.ref_name }}
-      - run: npm run release promote
+      - run: git config --global user.name "${GITHUB_ACTOR}"
+      - run: git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      - run: npm run release publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_RELEASE_TOKEN}}

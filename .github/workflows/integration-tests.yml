@@ -97,7 +97,18 @@ jobs:
       - uses: ./.github/actions/install
         with:
           target: brew
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # TODO: Remove after public
       - run: echo test | autify web auth login
       - run: npm run test:integration
+
+  npm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/install
+        with:
+          target: npm
+      - run: echo test | autify web auth login
+      - run: autify-cli-integration-test

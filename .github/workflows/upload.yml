@@ -54,6 +54,17 @@ jobs:
         with:
           target: macos
 
+  npm:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/upload
+        with:
+          target: npm
+
   # Not supported yet: https://github.com/oclif/oclif/issues/887
   #deb:
   #  runs-on: 'ubuntu-latest'
