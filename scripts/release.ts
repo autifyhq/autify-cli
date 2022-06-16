@@ -1,12 +1,13 @@
+import assert from "node:assert";
 import { execSync } from "node:child_process";
 import {
-  mkdirSync,
   appendFileSync,
   readFileSync,
   writeFileSync,
+  mkdtempSync,
 } from "node:fs";
-import { homedir } from "node:os";
-import path, { resolve } from "node:path";
+import { homedir, tmpdir } from "node:os";
+import { join } from "node:path";
 import pkg from "../package.json";
 
 const { version, oclif: oclifConfig } = pkg;
@@ -42,6 +43,54 @@ const channel = (() => {
 const branch = execSync("git branch --show-current").toString().trim();
 const sha = execSync("git rev-parse --short HEAD").toString().trim();
 
+type S3FileOption = Readonly<{
+  target: string;
+  tarball?: "tar.gz" | "tar.xz";
+  npm?: "autify-cli" | "autify-cli-integration-test";
+}>;
+
+const s3File = ({ target, tarball, npm }: S3FileOption) => {
+  let file = `autify-v${version}-${sha}-`;
+  switch (target) {
+    case "win": {
+      file += "x64.exe";
+      break;
+    }
+
+    case "macos": {
+      file += "x64.pkg";
+      break;
+    }
+
+    case "npm": {
+      assert(npm);
+      file = `autifyhq-${npm}-${version}.tgz`;
+      break;
+    }
+
+    default: {
+      assert(tarball);
+      file += `${target}.${tarball}`;
+    }
+  }
+
+  return file;
+};
+
+const s3KeyPrefix = `${folder}/versions/${version}/${sha}`;
+
+const uploadNpmPackage = (
+  npm: "autify-cli" | "autify-cli-integration-test"
+) => {
+  if (npm === "autify-cli") run("npm pack");
+  else if (npm === "autify-cli-integration-test")
+    run("npm pack -w integration-test");
+  const file = s3File({ target: "npm", npm });
+  run(
+    `aws s3 cp --acl public-read ${file} s3://${bucket}/${s3KeyPrefix}/${file}`
+  );
+};
+
 const uploadCommand = (args: string[]) => {
   const target = args[0];
   if (!target) fail("Usage: ts-node ./scripts/release.ts upload TARGET");
@@ -61,6 +110,12 @@ const uploadCommand = (args: string[]) => {
     case "deb": {
       oclif("pack deb");
       oclif("upload deb");
+      break;
+    }
+
+    case "npm": {
+      uploadNpmPackage("autify-cli");
+      uploadNpmPackage("autify-cli-integration-test");
       break;
     }
 
@@ -103,7 +158,17 @@ const promoteS3 = () => {
   promoteShellInstaller("install-standalone.sh", channel);
 };
 
-const promoteBrew = () => {
+const promoteCommand = () => {
+  if (channel === "stable") {
+    const tag = `v${version}`;
+    run(`git tag ${tag}`);
+    run(`git push origin ${tag}`);
+  } else {
+    promoteS3();
+  }
+};
+
+const publishBrew = () => {
   updateBrewFormula("autify-cli.rb");
   run("cp autify-cli.rb ./homebrew-tap/Formula/");
   const newVersion = JSON.parse(execSync("npm version --json").toString())[
@@ -116,14 +181,25 @@ const promoteBrew = () => {
   run("git push", "./homebrew-tap");
 };
 
-const promoteCommand = () => {
-  promoteS3();
-  if (channel === "stable") {
-    const tag = `v${version}`;
-    run(`git tag ${tag}`);
-    run(`git push origin ${tag}`);
-    promoteBrew();
-  }
+const publishNpm = () => {
+  const cliPackage = downloadS3(".", { target: "npm", npm: "autify-cli" });
+  const testPackage = downloadS3(".", {
+    target: "npm",
+    npm: "autify-cli-integration-test",
+  });
+  run(`npm publish --access=public ${cliPackage}`);
+  run(`npm publish --access=public ${testPackage}`);
+};
+
+const publishCommand = () => {
+  const tag = execSync("git tag --points-at HEAD").toString();
+  if (tag === "") throw new Error("Publish only supports a tagged commit.");
+  // TODO: Uncomment
+  // if (channel !== "stable")
+  //   throw new Error(`Publish only supports stable channel: ${channel}`);
+  // promoteS3();
+  // publishBrew();
+  publishNpm();
 };
 
 const rollbackCommand = () => {
@@ -132,32 +208,12 @@ const rollbackCommand = () => {
   if (channel !== "stable")
     throw new Error(`Rollback only supports stable channel: ${channel}`);
   promoteS3();
-  promoteBrew();
+  publishBrew();
 };
 
-const downloadS3 = (
-  cwd: string,
-  target: string,
-  tarball?: "tar.gz" | "tar.xz"
-) => {
-  let file = `autify-v${version}-${sha}-`;
-  switch (target) {
-    case "win": {
-      file += "x64.exe";
-      break;
-    }
-
-    case "macos": {
-      file += "x64.pkg";
-      break;
-    }
-
-    default: {
-      file += `${target}.${tarball}`;
-    }
-  }
-
-  const key = `${folder}/versions/${version}/${sha}/${file}`;
+const downloadS3 = (cwd: string, { target, tarball, npm }: S3FileOption) => {
+  const file = s3File({ target, tarball, npm });
+  const key = `${s3KeyPrefix}/${file}`;
   const url = `https://${bucket}.s3.amazonaws.com/${key}`;
   run(`curl -s -O ${url}`, cwd);
   return file;
@@ -168,25 +224,25 @@ const installTarball = (
   target: string,
   tarball: "tar.gz" | "tar.xz"
 ) => {
-  const file = downloadS3(cwd, target, tarball);
+  const file = downloadS3(cwd, { target, tarball });
   const tarFlag = tarball === "tar.xz" ? "-xJf" : "-xzf";
   run(`tar ${tarFlag} ${file}`, cwd);
-  return path.join(cwd, "autify", "bin");
+  return join(cwd, "autify", "bin");
 };
 
 const installWindows = (cwd: string) => {
-  const file = downloadS3(cwd, "win");
+  const file = downloadS3(cwd, { target: "win" });
   run(`${file} /S /D=${homedir()}`, cwd);
-  return path.join(homedir(), "bin");
+  return join(homedir(), "bin");
 };
 
 const installMacos = (cwd: string) => {
-  const file = downloadS3(cwd, "macos");
+  const file = downloadS3(cwd, { target: "macos" });
   run(
     `installer -pkg ${file} -target CurrentUserHomeDirectory -verboseR -dumplog`,
     cwd
   );
-  return path.join(homedir(), "usr/local/lib/autify/bin");
+  return join(homedir(), "usr/local/lib/autify/bin");
 };
 
 const installShell = () => {
@@ -203,11 +259,20 @@ const installBrew = () => {
   run("brew install -v -d autify-cli");
 };
 
+const installNpm = (cwd: string) => {
+  const cliPackage = downloadS3(cwd, { target: "npm", npm: "autify-cli" });
+  const testPackage = downloadS3(cwd, {
+    target: "npm",
+    npm: "autify-cli-integration-test",
+  });
+  run(`npm install ${cliPackage} ${testPackage}`, cwd);
+  return join(cwd, "node_modules", ".bin");
+};
+
 const installCommand = (args: string[]) => {
   const target = args[0];
   if (!target) fail("Usage: ts-node ./scripts/release.ts install TARGET");
-  const temp = resolve("./temp");
-  mkdirSync(temp);
+  const temp = mkdtempSync(join(tmpdir(), "autify-cli-"));
   let bin: string | void;
   switch (target) {
     case "win": {
@@ -230,6 +295,11 @@ const installCommand = (args: string[]) => {
       break;
     }
 
+    case "npm": {
+      bin = installNpm(temp);
+      break;
+    }
+
     default: {
       const tarball = "tar.xz";
       bin = installTarball(temp, target, tarball);
@@ -237,6 +307,7 @@ const installCommand = (args: string[]) => {
   }
 
   if (process.env.GITHUB_PATH && bin) {
+    console.log(`Adding ${bin} to PATH`);
     appendFileSync(process.env.GITHUB_PATH, bin);
   }
 };
@@ -248,6 +319,7 @@ const pushToBumpBranch = (
   const tempBranch = "temp";
   run(`git checkout -b ${tempBranch}`);
   run(npmVersionCommand);
+  run(npmVersionCommand + " -w integration-test");
   const newVersion = JSON.parse(execSync("npm version --json").toString())[
     "autify-cli"
   ];
@@ -341,6 +413,11 @@ const main = () => {
 
     case "promote": {
       promoteCommand();
+      break;
+    }
+
+    case "publish": {
+      publishCommand();
       break;
     }
 

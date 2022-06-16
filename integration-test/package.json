@@ -1,7 +1,6 @@
 {
   "name": "@autifyhq/autify-cli-integration-test",
   "version": "0.3.0-beta.0",
-  "private": true,
   "description": "Autify Command Line Interface (CLI) Integration Test",
   "author": "Autify",
   "bin": {
@@ -43,6 +42,7 @@
   },
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
+    "prepack": "npm run build",
     "test": "jest dist/test",
     "test:record": "AUTIFY_POLLY_RECORD=1 npm run test -- --updateSnapshot"
   },
