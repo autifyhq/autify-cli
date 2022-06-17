@@ -194,11 +194,10 @@ const publishNpm = () => {
 const publishCommand = () => {
   const tag = execSync("git tag --points-at HEAD").toString();
   if (tag === "") throw new Error("Publish only supports a tagged commit.");
-  // TODO: Uncomment
-  // if (channel !== "stable")
-  //   throw new Error(`Publish only supports stable channel: ${channel}`);
-  // promoteS3();
-  // publishBrew();
+  if (channel !== "stable")
+    throw new Error(`Publish only supports stable channel: ${channel}`);
+  promoteS3();
+  publishBrew();
   publishNpm();
 };
 
