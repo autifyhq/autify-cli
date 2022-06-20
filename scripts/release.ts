@@ -43,6 +43,14 @@ const channel = (() => {
 const branch = execSync("git branch --show-current").toString().trim();
 const sha = execSync("git rev-parse --short HEAD").toString().trim();
 
+const getNewVersion = () => {
+  const newVersion = JSON.parse(execSync("npm version --json").toString())[
+    "@autifyhq/autify-cli"
+  ] as string | undefined;
+  if (!newVersion) throw new Error("Can't find the new version.");
+  return newVersion;
+};
+
 type S3FileOption = Readonly<{
   target: string;
   tarball?: "tar.gz" | "tar.xz";
@@ -171,9 +179,7 @@ const promoteCommand = () => {
 const publishBrew = () => {
   updateBrewFormula("autify-cli.rb");
   run("cp autify-cli.rb ./homebrew-tap/Formula/");
-  const newVersion = JSON.parse(execSync("npm version --json").toString())[
-    "autify-cli"
-  ];
+  const newVersion = getNewVersion();
   run(
     `git add . && git commit -m "[autify-cli] Release ${newVersion}"`,
     "./homebrew-tap"
@@ -319,9 +325,7 @@ const pushToBumpBranch = (
   run(`git checkout -b ${tempBranch}`);
   run(npmVersionCommand);
   run(npmVersionCommand + " -w integration-test");
-  const newVersion = JSON.parse(execSync("npm version --json").toString())[
-    "autify-cli"
-  ];
+  const newVersion = getNewVersion();
   const bumpBranch = `bump/${prefix}/${newVersion}`;
   run(`git add . && git commit -m "Release ${newVersion}"`);
   run(`git push origin ${tempBranch}:${bumpBranch}`);
