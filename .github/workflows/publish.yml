@@ -28,7 +28,7 @@ jobs:
           token: ${{ steps.generate-token.outputs.token }}
       - uses: ./.github/actions/setup
         with:
-          aws-credentials: ${{ github.ref_name }}
+          aws-credentials: publish
       - run: git config --global user.name "${GITHUB_ACTOR}"
       - run: git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
       - run: npm run release publish
