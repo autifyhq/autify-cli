@@ -28,7 +28,7 @@ runs:
         role-session-name: github-actions
         aws-region: us-west-2
     - uses: aws-actions/configure-aws-credentials@v1
-      if: ${{ startsWith(inputs.aws-credentials, 'releases/') }}
+      if: ${{ startsWith(inputs.aws-credentials, 'releases/') || inputs.aws-credentials == 'publish' }}
       with:
         role-to-assume: arn:aws:iam::434848343351:role/autify-cli-release-role
         role-session-name: github-actions
