@@ -349,7 +349,7 @@ const bumpCommand = () => {
   } else if (branch.startsWith("releases/")) {
     if (channel.endsWith("-rc")) {
       // 0.1.0-rc.0 => 0.1.0
-      pushToBumpBranch("stable", "npm version minor --no-git-tag-version");
+      pushToBumpBranch("stable", "npm version patch --no-git-tag-version");
     } else if (channel === "stable") {
       // 0.1.0 => 0.1.1-rc.0
       pushToBumpBranch(
