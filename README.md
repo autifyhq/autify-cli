@@ -22,7 +22,7 @@ $ npm install -g @autifyhq/autify-cli
 $ autify COMMAND
 running command...
 $ autify (--version)
-@autifyhq/autify-cli/0.4.0-beta.0 linux-x64 node-v16.15.1
+@autifyhq/autify-cli/0.4.0-beta.0 linux-arm64 node-v16.14.2
 $ autify --help [COMMAND]
 USAGE
   $ autify COMMAND
@@ -61,6 +61,8 @@ After the installation, you can always get the latest update on `stable` channel
 <!-- commands -->
 
 - [`autify help [COMMAND]`](#autify-help-command)
+- [`autify mobile api describe-test-result`](#autify-mobile-api-describe-test-result)
+- [`autify mobile api list-test-results`](#autify-mobile-api-list-test-results)
 - [`autify mobile api run-test-plan`](#autify-mobile-api-run-test-plan)
 - [`autify mobile api upload-build`](#autify-mobile-api-upload-build)
 - [`autify mobile auth login`](#autify-mobile-auth-login)
@@ -99,6 +101,47 @@ DESCRIPTION
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.12/src/commands/help.ts)_
+
+## `autify mobile api describe-test-result`
+
+Get a test result.
+
+```
+USAGE
+  $ autify mobile api describe-test-result --project-id <value> --id <value>
+
+FLAGS
+  --id=<value>          (required) Test Result ID.
+  --project-id=<value>  (required) ID of the project from which the test results will be obtained.
+
+DESCRIPTION
+  Get a test result.
+
+EXAMPLES
+  $ autify mobile api describe-test-result
+```
+
+## `autify mobile api list-test-results`
+
+List test results.
+
+```
+USAGE
+  $ autify mobile api list-test-results --project-id <value> [--page <value>] [--per-page <value>] [--test-plan-id
+  <value>]
+
+FLAGS
+  --page=<value>          Page number to be retrieved.
+  --per-page=<value>      Number of test results per page.
+  --project-id=<value>    (required) ID of the project from which the list of test results will be retrieved.
+  --test-plan-id=<value>  ID of the test plan.
+
+DESCRIPTION
+  List test results.
+
+EXAMPLES
+  $ autify mobile api list-test-results
+```
 
 ## `autify mobile api run-test-plan`
 
