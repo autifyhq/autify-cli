@@ -103,9 +103,10 @@ const main = () => {
   if (!service) throw new Error("Service not specified.");
 
   clientSource = project.addSourceFileAtPath(
-    `../../node_modules/@autifyhq/autify-sdk/dist/generated/${service}/client.d.ts`
+    `node_modules/@autifyhq/autify-sdk/dist/generated/${service}/client.d.ts`
   );
-  const clientClass = clientSource.getClassOrThrow("Client");
+  const clientClassName = pascallize(service) + "Client";
+  const clientClass = clientSource.getClassOrThrow(clientClassName);
   for (const apiMethod of clientClass.getMethods()) {
     writeCommandSource(service, apiMethod);
   }
