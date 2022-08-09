@@ -61,11 +61,8 @@ jobs:
   shell:
     strategy:
       matrix:
-        include:
-          - target: linux-x64
-            os: ubuntu-latest
-          - target: darwin-x64
-            os: macos-latest
+        os: [ubuntu-latest, macos-latest]
+        target: [standalone-shell, cicd-shell]
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
@@ -76,7 +73,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: ./.github/actions/install
         with:
-          target: shell
+          target: ${{ matrix.target }}
       - run: echo test | autify web auth login
       - run: npm run test:integration
 
