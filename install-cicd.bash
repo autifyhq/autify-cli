@@ -28,6 +28,7 @@ AUTIFY_S3_BUCKET=REPLACE
 AUTIFY_S3_PREFIX=REPLACE
 
 WORKSPACE="$(pwd)"
+rm -fr ./autify
 mkdir -p ./autify/bin
 mkdir -p ./autify/lib
 cd ./autify/lib
