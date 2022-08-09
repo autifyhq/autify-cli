@@ -134,12 +134,12 @@ const uploadCommand = (args: string[]) => {
   }
 };
 
-const updateShellInstaller = (file: string, prefix: string) => {
+const updateShellInstaller = (file: string, prefix: string, cwd?: string) => {
   const content = readFileSync(file)
     .toString()
     .replace("AUTIFY_S3_BUCKET=REPLACE", `AUTIFY_S3_BUCKET="${bucket}"`)
     .replace("AUTIFY_S3_PREFIX=REPLACE", `AUTIFY_S3_PREFIX="${prefix}"`);
-  writeFileSync(file, content);
+  writeFileSync(cwd ? join(cwd, file) : file, content);
 };
 
 const updateBrewFormula = (file: string) => {
@@ -164,6 +164,7 @@ const promoteS3 = () => {
     `promote --channel ${channel} --version ${version} --sha ${sha} ${indexes} --win --macos --xz`
   );
   promoteShellInstaller("install-standalone.sh", channel);
+  promoteShellInstaller("install-cicd.bash", channel);
 };
 
 const promoteCommand = () => {
@@ -250,10 +251,17 @@ const installMacos = (cwd: string) => {
   return join(homedir(), "usr/local/lib/autify/bin");
 };
 
-const installShell = () => {
+const installStandaloneShell = () => {
   const prefix = `${folder}/versions/${version}/${sha}/autify-v${version}-${sha}`;
   updateShellInstaller("install-standalone.sh", prefix);
   run("cat install-standalone.sh | sh");
+};
+
+const installCicdShell = (cwd: string) => {
+  const prefix = `${folder}/versions/${version}/${sha}/autify-v${version}-${sha}`;
+  updateShellInstaller("install-cicd.bash", prefix, cwd);
+  run("cat install-cicd.bash | bash", cwd);
+  return join(cwd, "autify", "bin");
 };
 
 const installBrew = () => {
@@ -290,8 +298,13 @@ const installCommand = (args: string[]) => {
       break;
     }
 
-    case "shell": {
-      bin = installShell();
+    case "standalone-shell": {
+      bin = installStandaloneShell();
+      break;
+    }
+
+    case "cicd-shell": {
+      bin = installCicdShell(temp);
       break;
     }
 
