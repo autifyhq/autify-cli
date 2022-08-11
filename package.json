@@ -28,7 +28,10 @@
     "inquirer": "^8.2.4",
     "listr": "^0.14.3",
     "node-emoji": "^1.11.0",
-    "per-env": "^1.0.2"
+    "per-env": "^1.0.2",
+    "tempy": "^3.0.0",
+    "tsimportlib": "^0.0.3",
+    "which": "^2.0.2"
   },
   "devDependencies": {
     "@autifyhq/autify-cli-integration-test": "*",
