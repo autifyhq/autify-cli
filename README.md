@@ -22,7 +22,7 @@ $ npm install -g @autifyhq/autify-cli
 $ autify COMMAND
 running command...
 $ autify (--version)
-@autifyhq/autify-cli/0.6.0-beta.0 linux-x64 node-v16.16.0
+@autifyhq/autify-cli/0.6.0-beta.0 linux-x64 node-v16.14.0
 $ autify --help [COMMAND]
 USAGE
   $ autify COMMAND
@@ -66,6 +66,8 @@ After the installation, you can always get the latest update on `stable` channel
 - [`autify mobile api run-test-plan`](#autify-mobile-api-run-test-plan)
 - [`autify mobile api upload-build`](#autify-mobile-api-upload-build)
 - [`autify mobile auth login`](#autify-mobile-auth-login)
+- [`autify mobile test run TEST-PLAN-URL BUILD-PATH`](#autify-mobile-test-run-test-plan-url-build-path)
+- [`autify mobile test wait TEST-RESULT-URL`](#autify-mobile-test-wait-test-result-url)
 - [`autify update [CHANNEL]`](#autify-update-channel)
 - [`autify web api create-url-replacement`](#autify-web-api-create-url-replacement)
 - [`autify web api delete-url-replacement`](#autify-web-api-delete-url-replacement)
@@ -200,6 +202,58 @@ EXAMPLES
   Reading the token from file:
 
     $ autify mobile auth login < token.txt
+```
+
+## `autify mobile test run TEST-PLAN-URL BUILD-PATH`
+
+Run a test plan.
+
+```
+USAGE
+  $ autify mobile test run [TEST-PLAN-URL] [BUILD-PATH] [-w] [-t <value>] [-v]
+
+ARGUMENTS
+  TEST-PLAN-URL  Test plan URL e.g. https://mobile-app.autify.com/projects/<ID>/test_plans/<ID>
+  BUILD-PATH     File path to the iOS app (*.app) or Android app (*.apk).
+
+FLAGS
+  -t, --timeout=<value>  [default: 300] Timeout seconds when waiting for the finish of the test execution.
+  -v, --verbose          Verbose output
+  -w, --wait             Wait until the test finishes.
+
+DESCRIPTION
+  Run a test plan.
+
+EXAMPLES
+  Run a test plan:
+
+    $ autify mobile test run https://mobile-app.autify.com/projects/AAA/test_plans/BBB ./my.app
+
+  Run and wait a test plan:
+
+    $ autify mobile test run https://mobile-app.autify.com/projects/AAA/test_plans/BBB ./my.app --wait --timeout 600
+```
+
+## `autify mobile test wait TEST-RESULT-URL`
+
+Wait a test result until it finishes.
+
+```
+USAGE
+  $ autify mobile test wait [TEST-RESULT-URL] [-t <value>] [-v]
+
+ARGUMENTS
+  TEST-RESULT-URL  Test result URL e.g. https://mobile-app.autify.com/projects/<ID>/results/<ID>
+
+FLAGS
+  -t, --timeout=<value>  [default: 300] Timeout seconds when waiting for the finish of the test execution.
+  -v, --verbose          Verbose output
+
+DESCRIPTION
+  Wait a test result until it finishes.
+
+EXAMPLES
+  $ autify mobile test wait https://mobile-app.autify.com/projects/AAA/results/BBB
 ```
 
 ## `autify update [CHANNEL]`
