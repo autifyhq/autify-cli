@@ -52,6 +52,11 @@ const createPolly = async (args: string[]) => {
     flushRequestsOnStop: true,
     matchRequestsBy: {
       headers: false,
+      body: (body, _) => {
+        // Binary body is not recorded. Ignore for matching.
+        if (typeof body !== "string") return "";
+        return body;
+      },
     },
   });
   // Remove headers because access token is included and also we don't care any other headers.

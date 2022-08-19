@@ -47,6 +47,7 @@ export const createZip = async (buildPath: string): Promise<string> => {
     module
   )) as typeof import("tempy");
   const zipFile = temporaryFile({ name: "build.zip" });
+  // TODO: Use JSZip.
   execFileSync(zip, ["-r", zipFile, name], { cwd: parentPath });
   return zipFile;
 };
