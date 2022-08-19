@@ -66,7 +66,8 @@ After the installation, you can always get the latest update on `stable` channel
 - [`autify mobile api run-test-plan`](#autify-mobile-api-run-test-plan)
 - [`autify mobile api upload-build`](#autify-mobile-api-upload-build)
 - [`autify mobile auth login`](#autify-mobile-auth-login)
-- [`autify mobile test run TEST-PLAN-URL BUILD-PATH`](#autify-mobile-test-run-test-plan-url-build-path)
+- [`autify mobile build upload BUILD-PATH`](#autify-mobile-build-upload-build-path)
+- [`autify mobile test run TEST-PLAN-URL`](#autify-mobile-test-run-test-plan-url)
 - [`autify mobile test wait TEST-RESULT-URL`](#autify-mobile-test-wait-test-result-url)
 - [`autify update [CHANNEL]`](#autify-update-channel)
 - [`autify web api create-url-replacement`](#autify-web-api-create-url-replacement)
@@ -204,34 +205,72 @@ EXAMPLES
     $ autify mobile auth login < token.txt
 ```
 
-## `autify mobile test run TEST-PLAN-URL BUILD-PATH`
+## `autify mobile build upload BUILD-PATH`
+
+Upload a build file
+
+```
+USAGE
+  $ autify mobile build upload [BUILD-PATH] -w <value> [--json]
+
+ARGUMENTS
+  BUILD-PATH  File path to the iOS app (*.app) or Android app (*.apk).
+
+FLAGS
+  -w, --workspace-id=<value>  (required) Workspace ID to upload the build file
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Upload a build file
+
+EXAMPLES
+  $ autify mobile build upload
+
+  Upload build file
+
+    $ autify mobile build upload --workspace-id AAA ./my.app
+
+  Upload build file (JSON output)
+
+    $ autify mobile build upload --workspace-id AAA ./my.app --json
+```
+
+## `autify mobile test run TEST-PLAN-URL`
 
 Run a test plan.
 
 ```
 USAGE
-  $ autify mobile test run [TEST-PLAN-URL] [BUILD-PATH] [-w] [-t <value>] [-v]
+  $ autify mobile test run [TEST-PLAN-URL] [--build-id <value> | --build-path <value>] [-w] [-t <value>] [-v]
 
 ARGUMENTS
   TEST-PLAN-URL  Test plan URL e.g. https://mobile-app.autify.com/projects/<ID>/test_plans/<ID>
-  BUILD-PATH     File path to the iOS app (*.app) or Android app (*.apk).
 
 FLAGS
   -t, --timeout=<value>  [default: 300] Timeout seconds when waiting for the finish of the test execution.
   -v, --verbose          Verbose output
   -w, --wait             Wait until the test finishes.
+  --build-id=<value>     ID of the already uploaded build.
+  --build-path=<value>   File path to the iOS app (*.app) or Android app (*.apk).
 
 DESCRIPTION
   Run a test plan.
 
 EXAMPLES
-  Run a test plan:
+  Run a test plan with a build ID:
 
-    $ autify mobile test run https://mobile-app.autify.com/projects/AAA/test_plans/BBB ./my.app
+    $ autify mobile test run --build-id CCC https://mobile-app.autify.com/projects/AAA/test_plans/BBB
+
+  Run a test plan with a new build file:
+
+    $ autify mobile test run --build-path ./my.[app|apk] https://mobile-app.autify.com/projects/AAA/test_plans/BBB
 
   Run and wait a test plan:
 
-    $ autify mobile test run https://mobile-app.autify.com/projects/AAA/test_plans/BBB ./my.app --wait --timeout 600
+    $ autify mobile test run --build-id CCC https://mobile-app.autify.com/projects/AAA/test_plans/BBB --wait \
+      --timeout 600
 ```
 
 ## `autify mobile test wait TEST-RESULT-URL`
@@ -540,8 +579,9 @@ Run a scenario or test plan.
 
 ```
 USAGE
-  $ autify web test run [SCENARIO-OR-TEST-PLAN-URL] [-n <value>] [-r <value>] [--os <value>] [--os-version
-    <value>] [--browser <value>] [--device <value>] [--device-type <value>] [-w] [-t <value>] [-v]
+  $ autify web test run [SCENARIO-OR-TEST-PLAN-URL] [-n <value>] [-r <value>] [--autify-connect-key <value>] [--os
+    <value>] [--os-version <value>] [--browser <value>] [--device <value>] [--device-type <value>] [-w] [-t <value>]
+    [-v]
 
 ARGUMENTS
   SCENARIO-OR-TEST-PLAN-URL  Scenario URL or Test plan URL e.g.
@@ -553,6 +593,7 @@ FLAGS
   -t, --timeout=<value>              [default: 300] Timeout seconds when waiting for the finish of the test execution.
   -v, --verbose                      Verbose output
   -w, --wait                         Wait until the test finishes.
+  --autify-connect-key=<value>       Name of the Autify Connect Key (Only for test scenario execution.)
   --browser=<value>                  Browser to run the test
   --device=<value>                   Device to run the test
   --device-type=<value>              Device type to run the test
@@ -587,6 +628,10 @@ EXAMPLES
   Run a test with specifying the execution name:
 
     $ autify web test run https://app.autify.com/projects/0000/scenarios/0000 --name "Sample execution"
+
+  Run a test scenario with Autify Connect:
+
+    $ autify web test run https://app.autify.com/projects/0000/scenarios/0000 --autify-connect-key KEY_NAME
 ```
 
 ## `autify web test wait TEST-RESULT-URL`
