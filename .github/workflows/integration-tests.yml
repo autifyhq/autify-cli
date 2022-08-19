@@ -30,6 +30,7 @@ jobs:
         with:
           target: ${{ matrix.target }}
       - run: echo test | autify web auth login
+      - run: echo test | autify mobile auth login
       - run: npm run test:integration
 
   win:
@@ -43,6 +44,7 @@ jobs:
         with:
           target: win
       - run: echo test | autify web auth login
+      - run: echo test | autify mobile auth login
       - run: npm run test:integration
 
   macos:
@@ -56,6 +58,7 @@ jobs:
         with:
           target: macos
       - run: echo test | autify web auth login
+      - run: echo test | autify mobile auth login
       - run: npm run test:integration
 
   shell:
@@ -75,6 +78,7 @@ jobs:
         with:
           target: ${{ matrix.target }}
       - run: echo test | autify web auth login
+      - run: echo test | autify mobile auth login
       - run: npm run test:integration
 
   brew:
@@ -95,6 +99,7 @@ jobs:
         with:
           target: brew
       - run: echo test | autify web auth login
+      - run: echo test | autify mobile auth login
       - run: npm run test:integration
 
   npm:
@@ -108,4 +113,5 @@ jobs:
         with:
           target: npm
       - run: echo test | autify web auth login
+      - run: echo test | autify mobile auth login
       - run: autify-cli-integration-test

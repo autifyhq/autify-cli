@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`autify mobile test run --build-path ios.app https://mobile-app.autify.com/projects/nYmF1n/test_plans/DPjteo 1`] = `
+Object {
+  "stderr": "",
+  "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
+[HPM] Proxy created: /  -> https://mobile-app.autify.com
+✅ Successfully uploaded ios.app (ID: BXu06G). See https://mobile-app.autify.com/projects/nYmF1n/builds?os=ios&selectedBuildId=BXu06G&page=1
+✅ Successfully started: https://mobile-app.autify.com/projects/nYmF1n/results/5OtDG6
+To wait for the test result, run the command below:
+💻 $ autify mobile test wait https://mobile-app.autify.com/projects/nYmF1n/results/5OtDG6
+[HPM] server close signal received: closing proxy server
+",
+}
+`;

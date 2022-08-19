@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`autify mobile test run --build-path android.apk https://mobile-app.autify.com/projects/nYmF1n/test_plans/DEWt9g 1`] = `
+Object {
+  "stderr": "",
+  "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
+[HPM] Proxy created: /  -> https://mobile-app.autify.com
+✅ Successfully uploaded android.apk (ID: rQuo0d). See https://mobile-app.autify.com/projects/nYmF1n/builds?os=android&selectedBuildId=rQuo0d&page=1
+✅ Successfully started: https://mobile-app.autify.com/projects/nYmF1n/results/xjtOvA
+To wait for the test result, run the command below:
+💻 $ autify mobile test wait https://mobile-app.autify.com/projects/nYmF1n/results/xjtOvA
+[HPM] server close signal received: closing proxy server
+",
+}
+`;
