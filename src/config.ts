@@ -6,7 +6,8 @@ type Variable =
   | "AUTIFY_WEB_ACCESS_TOKEN"
   | "AUTIFY_WEB_BASE_PATH"
   | "AUTIFY_MOBILE_ACCESS_TOKEN"
-  | "AUTIFY_MOBILE_BASE_PATH";
+  | "AUTIFY_MOBILE_BASE_PATH"
+  | "AUTIFY_TEST_WAIT_INTERVAL_SECOND";
 
 const envFile = (dir: string) => path.resolve(dir, "config.env");
 const read = (dir: string) =>

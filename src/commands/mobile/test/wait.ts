@@ -1,6 +1,7 @@
 import { MobileClient } from "@autifyhq/autify-sdk";
 import { Command, Flags } from "@oclif/core";
 import emoji from "node-emoji";
+import { getWaitIntervalSecond } from "../../../autify/getWaitIntervalSecond";
 import { getMobileTestResultUrl } from "../../../autify/mobile/getTestResultUrl";
 import { parseTestResultUrl } from "../../../autify/mobile/parseTestResultUrl";
 import { waitTestResult } from "../../../autify/mobile/waitTestResult";
@@ -41,6 +42,7 @@ export default class MobileTestWait extends Command {
     const { configDir, userAgent } = this.config;
     const accessToken = getOrThrow(configDir, "AUTIFY_MOBILE_ACCESS_TOKEN");
     const basePath = get(configDir, "AUTIFY_MOBILE_BASE_PATH");
+    const waitIntervalSecond = getWaitIntervalSecond(configDir);
     const client = new MobileClient(accessToken, { basePath, userAgent });
     const { workspaceId, resultId } = parseTestResultUrl(
       args["test-result-url"]
@@ -57,7 +59,11 @@ export default class MobileTestWait extends Command {
       client,
       workspaceId,
       resultId,
-      { timeoutSecond: flags.timeout, verbose: flags.verbose }
+      {
+        timeoutSecond: flags.timeout,
+        verbose: flags.verbose,
+        intervalSecond: waitIntervalSecond,
+      }
     );
     if (isPassed) {
       this.log(
