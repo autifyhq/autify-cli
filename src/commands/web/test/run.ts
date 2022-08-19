@@ -36,6 +36,7 @@ export default class WebTestRun extends Command {
     'Run a test scenario with a specific capability:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --os "Windows Server" --browser Edge',
     "With URL replacements:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 -r http://example.com=http://example.net -r http://example.org=http://example.net",
     'Run a test with specifying the execution name:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --name "Sample execution"',
+    "Run a test scenario with Autify Connect:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --autify-connect-key KEY_NAME",
   ];
 
   static flags = {
@@ -49,6 +50,10 @@ export default class WebTestRun extends Command {
       description:
         "URL replacements. Example: http://example.com=http://example.net",
       multiple: true,
+    }),
+    "autify-connect-key": Flags.string({
+      description:
+        "Name of the Autify Connect Key (Only for test scenario execution.)",
     }),
     os: Flags.string({ description: "OS to run the test" }),
     "os-version": Flags.string({ description: "OS version to run the test" }),
@@ -102,6 +107,7 @@ export default class WebTestRun extends Command {
           urlReplacements
         )}`
       );
+    const autifyConnectKey = flags["autify-connect-key"];
     const { configDir, userAgent } = this.config;
     const accessToken = getOrThrow(configDir, "AUTIFY_WEB_ACCESS_TOKEN");
     const basePath = get(configDir, "AUTIFY_WEB_BASE_PATH");
@@ -113,6 +119,7 @@ export default class WebTestRun extends Command {
         option: capabilityOption,
         name: flags.name,
         urlReplacements,
+        autifyConnectKey,
       }
     );
     const testResultUrl = getWebTestResultUrl(configDir, workspaceId, resultId);
