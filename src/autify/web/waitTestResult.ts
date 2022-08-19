@@ -81,12 +81,12 @@ export const waitTestResult = async (
   client: WebClient,
   workspaceId: number,
   resultId: number,
-  options: { timeoutSecond: number; verbose: boolean }
+  options: { timeoutSecond: number; verbose: boolean; intervalSecond: number }
 ): Promise<{ isPassed: boolean; data: any }> => {
   const data = await waitUntil(
     describeResult(client, workspaceId, resultId),
     options.timeoutSecond,
-    1,
+    options.intervalSecond,
     options.verbose
   );
   const isPassed = data?.status === "passed";
