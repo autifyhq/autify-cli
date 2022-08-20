@@ -2,13 +2,15 @@
 
 exports[`autify mobile test run --build-id 8DuzpG https://mobile-app.autify.com/projects/nYmF1n/test_plans/DEWt9g --wait 1`] = `
 Object {
+  "code": 0,
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully started: https://mobile-app.autify.com/projects/nYmF1n/results/X1tp12
-🕐 Waiting for the test result: https://mobile-app.autify.com/projects/nYmF1n/results/X1tp12
+✅ Successfully started: https://mobile-app.autify.com/projects/nYmF1n/results/jztEO3
+🕐 Waiting for the test result: https://mobile-app.autify.com/projects/nYmF1n/results/jztEO3
 [HH:MM:SS] Waiting... (timeout: 300 s) [started]
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
@@ -40,7 +42,7 @@ Object {
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 👍 Passed , TestCases: 👍 Passed 
 [HH:MM:SS] Waiting... (timeout: 300 s) [completed]
-✅ Test passed!: https://mobile-app.autify.com/projects/nYmF1n/results/X1tp12
+✅ Test passed!: https://mobile-app.autify.com/projects/nYmF1n/results/jztEO3
 [HPM] server close signal received: closing proxy server
 ",
 }

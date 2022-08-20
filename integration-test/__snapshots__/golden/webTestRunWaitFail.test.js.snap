@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`autify web test run https://app.autify.com/projects/743/scenarios/114338 --wait 1`] = `
+Object {
+  "code": 2,
+  "stderr": " ›   Error: ❌ Test didn't pass. See 
+ ›   https://app.autify.com/projects/743/results/1098036: 
+ ›   {\\"id\\":1098036,\\"status\\":\\"failed\\",\\"duration\\":5902,\\"started_at\\":\\"2022-08-20T0
+ ›   5:33:29.834Z\\",\\"finished_at\\":\\"2022-08-20T05:33:35.737Z\\",\\"created_at\\":\\"2022-
+ ›   08-20T05:33:28.637Z\\",\\"updated_at\\":\\"2022-08-20T05:33:37.222Z\\",\\"review_neede
+ ›   d\\":false,\\"test_plan_capability_results\\":[{\\"id\\":1301236,\\"capability\\":{\\"id\\":
+ ›   339370,\\"os\\":\\"Linux\\",\\"os_version\\":null,\\"browser\\":\\"Chrome\\",\\"browser_version\\"
+ ›   :\\"101.0\\",\\"device\\":null,\\"created_at\\":\\"2022-08-20T05:33:28.618Z\\",\\"updated_at
+ ›   \\":\\"2022-08-20T05:33:28.618Z\\"},\\"test_case_results\\":[{\\"id\\":3809255,\\"test_cas
+ ›   e_id\\":114338,\\"status\\":\\"failed\\",\\"duration\\":4806,\\"started_at\\":\\"2022-08-20T05
+ ›   :33:30.931Z\\",\\"finished_at\\":\\"2022-08-20T05:33:35.737Z\\",\\"created_at\\":\\"2022-0
+ ›   8-20T05:33:29.396Z\\",\\"project_url\\":\\"https://app.autify.com/projects/743/res
+ ›   ults/1098036/capabilities/1301236/scenarios/3809255\\",\\"updated_at\\":\\"2022-08
+ ›   -20T05:33:37.174Z\\",\\"review_needed\\":0}]}],\\"test_plan\\":null}
+",
+  "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
+[HPM] Proxy created: /  -> https://mobile-app.autify.com
+✅ Successfully started: https://app.autify.com/projects/743/results/1098036 (Capability is Linux Chrome 101.0)
+🕐 Waiting for the test result: https://app.autify.com/projects/743/results/1098036
+[HH:MM:SS] Waiting... (timeout: 300 s) [started]
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚨 Failed , TestCases: 🚨 Failed 
+[HH:MM:SS] Waiting... (timeout: 300 s) [completed]
+[HPM] server close signal received: closing proxy server
+",
+}
+`;

@@ -2,13 +2,14 @@
 
 exports[`autify mobile test run --build-path android.apk https://mobile-app.autify.com/projects/nYmF1n/test_plans/DEWt9g 1`] = `
 Object {
+  "code": 0,
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully uploaded android.apk (ID: rQuo0d). See https://mobile-app.autify.com/projects/nYmF1n/builds?os=android&selectedBuildId=rQuo0d&page=1
-✅ Successfully started: https://mobile-app.autify.com/projects/nYmF1n/results/xjtOvA
+✅ Successfully uploaded android.apk (ID: Deug7z). See https://mobile-app.autify.com/projects/nYmF1n/builds?os=android&selectedBuildId=Deug7z&page=1
+✅ Successfully started: https://mobile-app.autify.com/projects/nYmF1n/results/wlt7M6
 To wait for the test result, run the command below:
-💻 $ autify mobile test wait https://mobile-app.autify.com/projects/nYmF1n/results/xjtOvA
+💻 $ autify mobile test wait https://mobile-app.autify.com/projects/nYmF1n/results/wlt7M6
 [HPM] server close signal received: closing proxy server
 ",
 }

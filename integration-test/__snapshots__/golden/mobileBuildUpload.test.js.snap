@@ -2,10 +2,11 @@
 
 exports[`autify mobile build upload --workspace-id nYmF1n android.apk 1`] = `
 Object {
+  "code": 0,
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully uploaded android.apk (ID: LjujRg). See https://mobile-app.autify.com/projects/nYmF1n/builds?os=android&selectedBuildId=LjujRg&page=1
+✅ Successfully uploaded android.apk (ID: 0nuO9K). See https://mobile-app.autify.com/projects/nYmF1n/builds?os=android&selectedBuildId=0nuO9K&page=1
 [HPM] server close signal received: closing proxy server
 ",
 }

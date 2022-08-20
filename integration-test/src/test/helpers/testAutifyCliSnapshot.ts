@@ -25,6 +25,8 @@ export const webTestRun =
   "web test run https://app.autify.com/projects/743/scenarios/91437";
 export const webTestRunWait =
   "web test run https://app.autify.com/projects/743/scenarios/91437 --wait";
+export const webTestRunWaitFail =
+  "web test run https://app.autify.com/projects/743/scenarios/114338 --wait";
 export const mobileBuildUpload = `mobile build upload --workspace-id nYmF1n ${androidBuildPath}`;
 export const mobileTestRun =
   "mobile test run --build-id 8DuzpG https://mobile-app.autify.com/projects/nYmF1n/test_plans/DEWt9g";
