@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
-    "@types/jest": "^28.1.6",
+    "@types/jest": "^28.1.7",
     "@types/node": "^16.11.50",
     "@types/which": "^2.0.1",
     "shx": "^0.3.4",
