@@ -45,7 +45,8 @@
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
     "prepack": "npm run build",
-    "test": "cross-env AUTIFY_TEST_WAIT_INTERVAL_SECOND=0 jest dist/test",
+    "generate-fake-app": "node dist/test/helpers/generateFakeApp.js",
+    "test": "npm run generate-fake-app && cross-env AUTIFY_TEST_WAIT_INTERVAL_SECOND=0 jest dist/test",
     "test:record": "AUTIFY_POLLY_RECORD=1 jest dist/test --updateSnapshot"
   },
   "engines": {
