@@ -22,7 +22,7 @@ $ npm install -g @autifyhq/autify-cli
 $ autify COMMAND
 running command...
 $ autify (--version)
-@autifyhq/autify-cli/0.6.0-rc.0 linux-x64 node-v16.16.0
+@autifyhq/autify-cli/0.6.0 linux-x64 node-v16.16.0
 $ autify --help [COMMAND]
 USAGE
   $ autify COMMAND
