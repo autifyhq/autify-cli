@@ -87,13 +87,13 @@ type RunTestProps = Readonly<{
   option: CapabilityOption;
   name?: string;
   urlReplacements: CreateUrlReplacementRequest[];
-  autifyConnectKey?: string;
+  autifyConnect?: string;
 }>;
 
 export const runTest = async (
   client: WebClient,
   url: string,
-  { option, name, urlReplacements, autifyConnectKey }: RunTestProps
+  { option, name, urlReplacements, autifyConnect }: RunTestProps
 ): Promise<{ workspaceId: number; resultId: number; capability: string }> => {
   const scenario = parseScenarioUrl(url);
   const testPlan = parseTestPlanUrl(url);
@@ -106,10 +106,10 @@ export const runTest = async (
       scenarios: [{ id: scenarioId }],
       // eslint-disable-next-line camelcase
       url_replacements: urlReplacements,
-      ...(autifyConnectKey && {
+      ...(autifyConnect && {
         // eslint-disable-next-line camelcase
         autify_connect: {
-          name: autifyConnectKey,
+          name: autifyConnect,
         },
       }),
     });
@@ -129,9 +129,9 @@ export const runTest = async (
       );
     if (name)
       throw new CLIError(`Running TestPlan doesn't support --name: ${name}`);
-    if (autifyConnectKey)
+    if (autifyConnect)
       throw new CLIError(
-        `Running TestPlan doesn't support --autify-connect-key: ${autifyConnectKey}`
+        `Running TestPlan doesn't support --autify-connect-key: ${autifyConnect}`
       );
     const { workspaceId, testPlanId } = testPlan;
     const urlReplacementIds = [];
