@@ -121,6 +121,7 @@
     "release": "ts-node ./scripts/release.ts",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "test:integration": "npm run build -w integration-test && autify-cli-integration-test",
+    "test:integration:record": "npm run build -w integration-test && autify-cli-integration-test --record",
     "version": "oclif readme && git add README.md",
     "prepare": "per-env || true",
     "prepare:development": "husky install",
