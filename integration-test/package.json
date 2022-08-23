@@ -47,7 +47,7 @@
     "prepack": "npm run build",
     "generate-fake-app": "node dist/test/helpers/generateFakeApp.js",
     "test": "npm run generate-fake-app && cross-env AUTIFY_TEST_WAIT_INTERVAL_SECOND=0 jest dist/test",
-    "test:record": "AUTIFY_POLLY_RECORD=1 jest dist/test --maxWorkers=100 --updateSnapshot"
+    "test:record": "AUTIFY_POLLY_RECORD=1 jest dist/test --updateSnapshot"
   },
   "engines": {
     "node": ">=12.0.0"

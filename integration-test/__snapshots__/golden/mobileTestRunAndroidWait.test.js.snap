@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_plans/BBB --build-id CCC --wait 1`] = `
+exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_plans/BBB --build-path /path/to/app-debug.apk --wait 1`] = `
 Object {
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully started: https://mobile-app.autify.com/projects/nYmF1n/results/b5tOvG
-🕐 Waiting for the test result: https://mobile-app.autify.com/projects/nYmF1n/results/b5tOvG
+✅ Successfully uploaded android.apk (ID: YxukWO). See https://mobile-app.autify.com/projects/nYmF1n/builds?os=android&selectedBuildId=YxukWO&page=1
+✅ Successfully started: https://mobile-app.autify.com/projects/nYmF1n/results/9xtQ6x
+🕐 Waiting for the test result: https://mobile-app.autify.com/projects/nYmF1n/results/9xtQ6x
 [HH:MM:SS] Waiting... (timeout: 300 s) [started]
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
@@ -24,7 +24,7 @@ Object {
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 👍 Passed , TestCases: 👍 Passed 
 [HH:MM:SS] Waiting... (timeout: 300 s) [completed]
-✅ Test passed!: https://mobile-app.autify.com/projects/nYmF1n/results/b5tOvG
+✅ Test passed!: https://mobile-app.autify.com/projects/nYmF1n/results/9xtQ6x
 [HPM] server close signal received: closing proxy server
 ",
 }
