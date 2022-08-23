@@ -1,7 +1,6 @@
 /* eslint-disable unicorn/filename-case */
-import {
-  testAutifyCliSnapshot,
-  mobileTestRunIos,
-} from "../helpers/testAutifyCliSnapshot";
+import { testAutifyCliSnapshot } from "../helpers/testAutifyCliSnapshot";
 
-testAutifyCliSnapshot(mobileTestRunIos);
+testAutifyCliSnapshot(
+  "mobile test run https://mobile-app.autify.com/projects/AAA/test_plans/BBB --build-path /path/to/MyApp.app"
+);

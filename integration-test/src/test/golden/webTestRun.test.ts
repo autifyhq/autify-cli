@@ -1,7 +1,6 @@
 /* eslint-disable unicorn/filename-case */
-import {
-  testAutifyCliSnapshot,
-  webTestRun,
-} from "../helpers/testAutifyCliSnapshot";
+import { testAutifyCliSnapshot } from "../helpers/testAutifyCliSnapshot";
 
-testAutifyCliSnapshot(webTestRun);
+testAutifyCliSnapshot(
+  "web test run https://app.autify.com/projects/0000/scenarios/0000"
+);

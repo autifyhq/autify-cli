@@ -1,7 +1,6 @@
 /* eslint-disable unicorn/filename-case */
-import {
-  testAutifyCliSnapshot,
-  mobileBuildUpload,
-} from "../helpers/testAutifyCliSnapshot";
+import { testAutifyCliSnapshot } from "../helpers/testAutifyCliSnapshot";
 
-testAutifyCliSnapshot(mobileBuildUpload);
+testAutifyCliSnapshot(
+  "mobile build upload /path/to/app-debug.apk --workspace-id AAA"
+);

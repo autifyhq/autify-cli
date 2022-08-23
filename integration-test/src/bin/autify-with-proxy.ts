@@ -9,6 +9,7 @@ import path from "node:path";
 import { argv, env, exit } from "node:process";
 import { existsSync } from "node:fs";
 import which from "which";
+import { normalizeCommand } from "../commands";
 
 Polly.register(NodeHttpAdapter);
 Polly.register(FSPersister);
@@ -77,7 +78,8 @@ const startProxy = (target: string) => {
 
 type ProcStatus = [number | null, NodeJS.Signals | null];
 
-const autifyWithProxy = async (args: string[]) => {
+const autifyWithProxy = async (originalArgs: string[]) => {
+  const args = normalizeCommand(originalArgs);
   const polly = await createPolly(args);
   const webProxy = startProxy("https://app.autify.com");
   const mobileProxy = startProxy("https://mobile-app.autify.com");
