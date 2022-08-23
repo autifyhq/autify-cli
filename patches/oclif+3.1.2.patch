@@ -1,3 +1,18 @@
+diff --git a/node_modules/oclif/lib/commands/pack/deb.js b/node_modules/oclif/lib/commands/pack/deb.js
+index 8903363..7a60189 100644
+--- a/node_modules/oclif/lib/commands/pack/deb.js
++++ b/node_modules/oclif/lib/commands/pack/deb.js
+@@ -64,9 +64,7 @@ class PackDeb extends core_1.Command {
+             await qq.write([workspace, 'DEBIAN/control'], scripts.control(buildConfig, (0, upload_util_1.debArch)(arch)));
+             await qq.chmod([workspace, 'usr/lib', config.dirname, 'bin', config.bin], 0o755);
+             await qq.x(`ln -s "../lib/${config.dirname}/bin/${config.bin}" "${workspace}/usr/bin/${config.bin}"`);
+-            await qq.x(`chown -R root "${workspace}"`);
+-            await qq.x(`chgrp -R root "${workspace}"`);
+-            await qq.x(`dpkg --build "${workspace}" "${qq.join(dist, versionedDebBase)}"`);
++            await qq.x(`dpkg-deb --root-owner-group --build "${workspace}" "${qq.join(dist, versionedDebBase)}"`);
+         };
+         const arches = _.uniq(buildConfig.targets
+             .filter(t => t.platform === 'linux')
 diff --git a/node_modules/oclif/lib/commands/promote.js b/node_modules/oclif/lib/commands/promote.js
 index d89b9c6..9c3f4a5 100644
 --- a/node_modules/oclif/lib/commands/promote.js
