@@ -9,7 +9,7 @@ const rootDir = path.join(scriptDir, "..", "..");
 const isRecord = argv[2] === "--record";
 let command = isRecord ? "test:record" : "test";
 if (platform() === "win32") {
-  command = `${command} -- --testPathIgnorePatterns mobileTestRunIos.test`;
+  command = `${command} -- --testPathIgnorePatterns mobileTestRunIos`;
 }
 
 execSync(`npm run ${command}`, {
