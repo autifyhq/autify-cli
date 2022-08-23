@@ -22,7 +22,7 @@ $ npm install -g @autifyhq/autify-cli
 $ autify COMMAND
 running command...
 $ autify (--version)
-@autifyhq/autify-cli/0.7.0-beta.0 linux-x64 node-v16.16.0
+@autifyhq/autify-cli/0.7.0-beta.0 linux-x64 node-v16.14.0
 $ autify --help [COMMAND]
 USAGE
   $ autify COMMAND
@@ -579,7 +579,7 @@ Run a scenario or test plan.
 
 ```
 USAGE
-  $ autify web test run [SCENARIO-OR-TEST-PLAN-URL] [-n <value>] [-r <value>] [--autify-connect-key <value>] [--os
+  $ autify web test run [SCENARIO-OR-TEST-PLAN-URL] [-n <value>] [-r <value>] [--autify-connect <value>] [--os
     <value>] [--os-version <value>] [--browser <value>] [--device <value>] [--device-type <value>] [-w] [-t <value>]
     [-v]
 
@@ -593,7 +593,7 @@ FLAGS
   -t, --timeout=<value>              [default: 300] Timeout seconds when waiting for the finish of the test execution.
   -v, --verbose                      Verbose output
   -w, --wait                         Wait until the test finishes.
-  --autify-connect-key=<value>       Name of the Autify Connect Key (Only for test scenario execution.)
+  --autify-connect=<value>           Name of the Autify Connect Access Point (Only for test scenario execution.)
   --browser=<value>                  Browser to run the test
   --device=<value>                   Device to run the test
   --device-type=<value>              Device type to run the test
@@ -631,7 +631,7 @@ EXAMPLES
 
   Run a test scenario with Autify Connect:
 
-    $ autify web test run https://app.autify.com/projects/0000/scenarios/0000 --autify-connect-key KEY_NAME
+    $ autify web test run https://app.autify.com/projects/0000/scenarios/0000 --autify-connect NAME
 ```
 
 ## `autify web test wait TEST-RESULT-URL`
