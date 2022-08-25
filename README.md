@@ -1,8 +1,10 @@
 # Autify Command Line Interface (CLI)
 
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/autifyhq/autify-cli?color=blue&display_name=tag&sort=semver) [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+
 Autify CLI can help your integration with Autify!
 
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+![Autify_CLI_ogp (2)](https://user-images.githubusercontent.com/37822/186738361-4d07c65f-9d3b-4295-ba3c-f2b84a6d9743.png)
 
 <!-- toc -->
 
@@ -13,48 +15,7 @@ Autify CLI can help your integration with Autify!
 
 # Usage
 
-Note: `npm install` is not available yet. We'll work on publishing to npm.
-
-<!-- usage -->
-
-```sh-session
-$ npm install -g @autifyhq/autify-cli
-$ autify COMMAND
-running command...
-$ autify (--version)
-@autifyhq/autify-cli/0.8.0-beta.0 linux-x64 node-v16.14.0
-$ autify --help [COMMAND]
-USAGE
-  $ autify COMMAND
-...
-```
-
-<!-- usagestop -->
-
-## Download Prebuilt package
-
-We provide prebuilt packages in the forms below (Node.js runtime is included):
-
-| OS      | Architecture | Package type | Download Link                                                                                                          | Note                     |
-| :------ | :----------- | :----------- | :--------------------------------------------------------------------------------------------------------------------- | :----------------------- |
-| Linux   | Intel 64bit  | tar.gz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-linux-x64.tar.gz)    |
-| Linux   | Intel 64bit  | tar.xz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-linux-x64.tar.xz)    |
-| Linux   | Arm 32bit    | tar.gz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-linux-arm.tar.gz)    |
-| Linux   | Arm 32bit    | tar.xz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-linux-arm.tar.xz)    |
-| macOS   | Intel 64bit  | tar.gz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-darwin-x64.tar.gz)   |
-| macOS   | Intel 64bit  | tar.xz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-darwin-x64.tar.xz)   |
-| macOS   | Intel 64bit  | Installer    | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-x64.pkg)             | Not properly signed yet. |
-| macOS   | Arm 64bit    | tar.gz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-darwin-arm64.tar.gz) |
-| macOS   | Arm 64bit    | tar.xz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-darwin-arm64.tar.xz) |
-| macOS   | Arm 64bit    | Installer    | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-arm64.pkg)           | Not properly signed yet. |
-| Windows | Intel 64bit  | tar.gz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-win32-x64.tar.gz)    |
-| Windows | Intel 64bit  | tar.xz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-win32-x64.tar.xz)    |
-| Windows | Intel 64bit  | Installer    | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-x64.exe)             | Not properly signed yet. |
-| Windows | Intel 32bit  | tar.gz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-win32-x86.tar.gz)    |
-| Windows | Intel 32bit  | tar.xz       | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-win32-x86.tar.xz)    |
-| Windows | Intel 32bit  | Installer    | [`stable`](https://autify-cli-assets.s3.us-west-2.amazonaws.com/autify-cli/channels/stable/autify-x86.exe)             | Not properly signed yet. |
-
-After the installation, you can always get the latest update on `stable` channel automatically, or by running `autify update`.
+See our official document: https://help.autify.com/docs/autify-command-line-interface
 
 # Commands
 

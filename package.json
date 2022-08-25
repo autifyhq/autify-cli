@@ -97,6 +97,21 @@
       },
       "mobile:auth": {
         "description": "Authentication on Autify for Mobile"
+      },
+      "mobile:build": {
+        "description": "Build on Autify for Mobile"
+      },
+      "mobile:test": {
+        "description": "Test on Autify for Mobile"
+      },
+      "connect": {
+        "description": "Autify Connect"
+      },
+      "connect:access-point": {
+        "description": "Autify Connect Access Point"
+      },
+      "connect:client": {
+        "description": "Autify Connect Client"
       }
     },
     "update": {
