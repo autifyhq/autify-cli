@@ -22,7 +22,7 @@ $ npm install -g @autifyhq/autify-cli
 $ autify COMMAND
 running command...
 $ autify (--version)
-@autifyhq/autify-cli/0.8.0-beta.0 linux-x64 node-v16.17.0
+@autifyhq/autify-cli/0.8.0-beta.0 linux-x64 node-v16.14.0
 $ autify --help [COMMAND]
 USAGE
   $ autify COMMAND
@@ -60,6 +60,8 @@ After the installation, you can always get the latest update on `stable` channel
 
 <!-- commands -->
 
+- [`autify connect access-point set`](#autify-connect-access-point-set)
+- [`autify connect client start`](#autify-connect-client-start)
 - [`autify help [COMMAND]`](#autify-help-command)
 - [`autify mobile api describe-test-result`](#autify-mobile-api-describe-test-result)
 - [`autify mobile api list-test-results`](#autify-mobile-api-list-test-results)
@@ -84,6 +86,49 @@ After the installation, you can always get the latest update on `stable` channel
 - [`autify web auth login`](#autify-web-auth-login)
 - [`autify web test run SCENARIO-OR-TEST-PLAN-URL`](#autify-web-test-run-scenario-or-test-plan-url)
 - [`autify web test wait TEST-RESULT-URL`](#autify-web-test-wait-test-result-url)
+
+## `autify connect access-point set`
+
+Set Autify Connect Access Point
+
+```
+USAGE
+  $ autify connect access-point set --name <value>
+
+FLAGS
+  --name=<value>  (required) Name of the Autify Connect Access Point already created
+
+DESCRIPTION
+  Set Autify Connect Access Point
+
+EXAMPLES
+  Start interactive setup:
+
+    $ autify connect access-point set --name=NAME
+
+  Reading the key from file:
+
+    $ autify connect access-point set --name=NAME < key.txt
+```
+
+## `autify connect client start`
+
+Start Autify Connect Client
+
+```
+USAGE
+  $ autify connect client start [--client-args-override <value>]
+
+FLAGS
+  --client-args-override=<value>  Command line argument to override when starting Autify Connect Client e.g. "--verbose
+                                  --log-format json"
+
+DESCRIPTION
+  Start Autify Connect Client
+
+EXAMPLES
+  $ autify connect client start
+```
 
 ## `autify help [COMMAND]`
 
@@ -579,9 +624,9 @@ Run a scenario or test plan.
 
 ```
 USAGE
-  $ autify web test run [SCENARIO-OR-TEST-PLAN-URL] [-n <value>] [-r <value>] [--autify-connect <value>] [--os
-    <value>] [--os-version <value>] [--browser <value>] [--device <value>] [--device-type <value>] [-w] [-t <value>]
-    [-v]
+  $ autify web test run [SCENARIO-OR-TEST-PLAN-URL] [-n <value>] [-r <value>] [--autify-connect <value> |
+    --autify-connect-client] [--os <value>] [--os-version <value>] [--browser <value>] [--device <value>] [--device-type
+    <value>] [-w] [-t <value>] [-v]
 
 ARGUMENTS
   SCENARIO-OR-TEST-PLAN-URL  Scenario URL or Test plan URL e.g.
@@ -594,6 +639,7 @@ FLAGS
   -v, --verbose                      Verbose output
   -w, --wait                         Wait until the test finishes.
   --autify-connect=<value>           Name of the Autify Connect Access Point (Only for test scenario execution.)
+  --autify-connect-client            Start Autify Connect Client (Only for test scenario execution.)
   --browser=<value>                  Browser to run the test
   --device=<value>                   Device to run the test
   --device-type=<value>              Device type to run the test

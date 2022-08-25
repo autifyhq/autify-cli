@@ -5,6 +5,10 @@ import { get, getOrThrow } from "../../../config";
 import { runTest } from "../../../autify/web/runTest";
 import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
 import WebTestWait from "./wait";
+import {
+  AutifyConnectClient,
+  spawnClient,
+} from "../../../autify/connect/spawnClient";
 
 const parseUrlReplacements = (urlReplacements: string[]) => {
   return urlReplacements.map((s) => {
@@ -54,6 +58,13 @@ export default class WebTestRun extends Command {
     "autify-connect": Flags.string({
       description:
         "Name of the Autify Connect Access Point (Only for test scenario execution.)",
+      exclusive: ["autify-connect-client"],
+    }),
+    "autify-connect-client": Flags.boolean({
+      description:
+        "Start Autify Connect Client (Only for test scenario execution.)",
+      exclusive: ["autify-connect"],
+      dependsOn: ["wait"],
     }),
     os: Flags.string({ description: "OS to run the test" }),
     "os-version": Flags.string({ description: "OS version to run the test" }),
@@ -107,36 +118,63 @@ export default class WebTestRun extends Command {
           urlReplacements
         )}`
       );
-    const autifyConnect = flags["autify-connect"];
-    const { configDir, userAgent } = this.config;
+    const { configDir, cacheDir, userAgent } = this.config;
     const accessToken = getOrThrow(configDir, "AUTIFY_WEB_ACCESS_TOKEN");
     const basePath = get(configDir, "AUTIFY_WEB_BASE_PATH");
     const client = new WebClient(accessToken, { basePath, userAgent });
-    const { workspaceId, resultId, capability } = await runTest(
-      client,
-      args["scenario-or-test-plan-url"],
-      {
-        option: capabilityOption,
-        name: flags.name,
-        urlReplacements,
-        autifyConnect,
-      }
-    );
-    const testResultUrl = getWebTestResultUrl(configDir, workspaceId, resultId);
-    this.log(
-      `${emoji.get(
-        "white_check_mark"
-      )} Successfully started: ${testResultUrl} (Capability is ${capability})`
-    );
-    if (flags.wait) {
-      const waitArgs = ["--timeout", flags.timeout.toString(), testResultUrl];
-      if (flags.verbose) waitArgs.push("--verbose");
-      await WebTestWait.run(waitArgs);
-    } else {
-      this.log("To wait for the test result, run the command below:");
+
+    let autifyConnectAccessPoint = flags["autify-connect"];
+    let autifyConnectClient: AutifyConnectClient | undefined;
+    if (flags["autify-connect-client"]) {
+      autifyConnectClient = await spawnClient(configDir, cacheDir, {
+        exitOnSignal: true,
+        killBeforeWaitExit: true,
+      });
+      autifyConnectAccessPoint = autifyConnectClient.accessPoint;
       this.log(
-        `${emoji.get("computer")} $ autify web test wait ${testResultUrl}`
+        `Starting Autify Connect Client for Access Point "${autifyConnectAccessPoint}"...`
       );
+    }
+
+    try {
+      const { workspaceId, resultId, capability } = await runTest(
+        client,
+        args["scenario-or-test-plan-url"],
+        {
+          option: capabilityOption,
+          name: flags.name,
+          urlReplacements,
+          autifyConnectAccessPoint,
+        }
+      );
+      const testResultUrl = getWebTestResultUrl(
+        configDir,
+        workspaceId,
+        resultId
+      );
+      this.log(
+        `${emoji.get(
+          "white_check_mark"
+        )} Successfully started: ${testResultUrl} (Capability is ${capability})`
+      );
+      if (flags.wait) {
+        const waitArgs = ["--timeout", flags.timeout.toString(), testResultUrl];
+        if (flags.verbose) waitArgs.push("--verbose");
+        await WebTestWait.run(waitArgs);
+      } else {
+        this.log("To wait for the test result, run the command below:");
+        this.log(
+          `${emoji.get("computer")} $ autify web test wait ${testResultUrl}`
+        );
+      }
+    } catch (error) {
+      if (autifyConnectClient) {
+        const code = await autifyConnectClient.waitExit();
+        this.log(`Autify Connect Client exited with code ${code}.`);
+        throw error;
+      } else {
+        throw error;
+      }
     }
   }
 }
