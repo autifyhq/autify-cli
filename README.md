@@ -22,6 +22,7 @@ See our official document: https://help.autify.com/docs/autify-command-line-inte
 <!-- commands -->
 
 - [`autify connect access-point set`](#autify-connect-access-point-set)
+- [`autify connect client install`](#autify-connect-client-install)
 - [`autify connect client start`](#autify-connect-client-start)
 - [`autify help [COMMAND]`](#autify-help-command)
 - [`autify mobile api describe-test-result`](#autify-mobile-api-describe-test-result)
@@ -72,17 +73,32 @@ EXAMPLES
     $ autify connect access-point set --name=NAME < key.txt
 ```
 
+## `autify connect client install`
+
+Install the latest stable version of Autify Connect Client
+
+```
+USAGE
+  $ autify connect client install
+
+DESCRIPTION
+  Install the latest stable version of Autify Connect Client
+
+EXAMPLES
+  $ autify connect client install
+```
+
 ## `autify connect client start`
 
 Start Autify Connect Client
 
 ```
 USAGE
-  $ autify connect client start [--client-args-override <value>]
+  $ autify connect client start [--verbose] [--file-logging]
 
 FLAGS
-  --client-args-override=<value>  Command line argument to override when starting Autify Connect Client e.g. "--verbose
-                                  --log-format json"
+  --file-logging  Logging Autify Connect Client log to a file instead of console.
+  --verbose       Make the operation more talkative.
 
 DESCRIPTION
   Start Autify Connect Client

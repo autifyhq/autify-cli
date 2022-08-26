@@ -32,6 +32,8 @@ jobs:
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
       - run: npm run test:integration
+      # TODO: Improve Autify Connect tests
+      - run: autify connect client install
 
   win:
     runs-on: windows-latest

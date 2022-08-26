@@ -30,11 +30,11 @@
     "node-emoji": "^1.11.0",
     "node-fetch": "^2.6.7",
     "per-env": "^1.0.2",
-    "shell-quote": "^1.7.3",
     "tempy": "^3.0.0",
     "tsimportlib": "^0.0.3",
     "unzip-stream": "^0.3.1",
-    "which": "^2.0.2"
+    "which": "^2.0.2",
+    "winston": "^3.8.1"
   },
   "devDependencies": {
     "@autifyhq/autify-cli-integration-test": "*",
@@ -46,7 +46,6 @@
     "@types/node": "^16.11.52",
     "@types/node-emoji": "^1.8.1",
     "@types/node-fetch": "^2.6.2",
-    "@types/shell-quote": "^1.7.1",
     "@types/unzip-stream": "^0.3.1",
     "chai": "^4",
     "eslint": "^7.32.0",
