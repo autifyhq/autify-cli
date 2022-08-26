@@ -2,11 +2,18 @@
 import { CLIError } from "@oclif/errors";
 import { arch, platform } from "node:process";
 import fetch from "node-fetch";
-import { createReadStream, createWriteStream, existsSync } from "node:fs";
+import {
+  createReadStream,
+  createWriteStream,
+  existsSync,
+  mkdirSync,
+  renameSync,
+  rmSync,
+} from "node:fs";
 import { pipeline } from "node:stream";
 import { promisify } from "node:util";
 import { basename, dirname, join } from "node:path";
-import { execSync } from "node:child_process";
+import { exec, execSync } from "node:child_process";
 import { Extract } from "unzip-stream";
 
 const getOs = () => {
@@ -35,9 +42,9 @@ const getUrl = () => {
   return new URL(`${baseUrl}/autifyconnect_${os}_${arch}.${ext}`);
 };
 
-const download = async (cacheDir: string) => {
+const download = async (workspaceDir: string) => {
   const url = getUrl();
-  const downloadPath = join(cacheDir, basename(url.pathname));
+  const downloadPath = join(workspaceDir, basename(url.pathname));
   const response = await fetch(url);
   if (!response.ok)
     throw new CLIError(`Failed to fetch ${url}: ${response.status}`);
@@ -52,6 +59,7 @@ const extract = async (downloadPath: string) => {
   if (file.endsWith(".tar.gz")) {
     const command = `tar xvzf ${file}`;
     execSync(command, { cwd: dir });
+    return join(dir, "autifyconnect");
   }
 
   if (file.endsWith(".zip")) {
@@ -61,18 +69,67 @@ const extract = async (downloadPath: string) => {
       // eslint-disable-next-line new-cap
       Extract({ path: dir })
     );
+    return join(dir, "autifyconnect.exe");
+  }
+
+  throw new CLIError(`Unsupported file format: ${downloadPath}`);
+};
+
+const validateVersion = async (path: string) => {
+  try {
+    return await getInstallVersion(path);
+  } catch (error) {
+    throw new CLIError(
+      `Autify Connect Client binary doesn't work properly (path: ${path}, error: ${error})`
+    );
   }
 };
 
-const getClientPath = (cacheDir: string) =>
+const getWorkspaceDir = (cacheDir: string) =>
+  join(cacheDir, "autifyconnect-install-workspace");
+
+export const getInstallPath = (cacheDir: string): string =>
   getOs() === "windows"
     ? join(cacheDir, "autifyconnect.exe")
     : join(cacheDir, "autifyconnect");
 
-export const installClient = async (cacheDir: string): Promise<string> => {
-  const clientPath = getClientPath(cacheDir);
-  if (existsSync(clientPath)) return clientPath;
-  const downloadPath = await download(cacheDir);
-  await extract(downloadPath);
-  return clientPath;
+export const getInstallVersion = async (path: string): Promise<string> => {
+  if (!existsSync(path))
+    throw new CLIError(
+      `Autify Client isn't installed yet at ${path}. Run \`autify connect client install\`.`
+    );
+  const { stderr } = await promisify(exec)(`${path} --version`);
+  const version = stderr.trim();
+  if (version === "") throw new CLIError("Version is empty");
+  return version;
+};
+
+export const installClient = async (
+  cacheDir: string
+): Promise<{ version: string; path: string }> => {
+  const workspaceDir = getWorkspaceDir(cacheDir);
+  // Clean up workspace in case something is left by previous command.
+  if (existsSync(workspaceDir))
+    rmSync(workspaceDir, { recursive: true, force: true });
+  mkdirSync(workspaceDir);
+  const downloadPath = await download(workspaceDir);
+  const extractPath = await extract(downloadPath);
+  // Pre-install validation
+  await validateVersion(extractPath);
+  const installPath = getInstallPath(cacheDir);
+  renameSync(extractPath, installPath);
+  const version = await validateVersion(installPath);
+  // Clean up workspace. Ignore any exception as install is already done.
+  try {
+    rmSync(workspaceDir, { recursive: true, force: true });
+  } catch (error) {
+    console.error(
+      `Workspace clean up failed. Ignoring because already installed. (error: ${error})`
+    );
+  }
+
+  return {
+    version,
+    path: installPath,
+  };
 };

@@ -1,86 +1,159 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
-import {
-  ChildProcess,
-  execSync,
-  spawn,
-  StdioOptions,
-} from "node:child_process";
-import { parse } from "shell-quote";
-import { constants } from "node:os";
+import { spawn } from "node:child_process";
 import { get } from "../../config";
-import { installClient } from "./installClient";
+import { getInstallPath, getInstallVersion } from "./installClient";
+import { createInterface } from "node:readline";
+import { once, EventEmitter } from "node:events";
+import { createLogger, format, transports } from "winston";
+import { join } from "node:path";
 
-const parseClientArgs = (str: string): string[] =>
-  parse(str).filter((a): a is string => typeof a === "string");
-
-export type AutifyConnectClient = Readonly<{
-  childProcess: ChildProcess;
-  accessPoint: string;
-  waitExit: () => Promise<number>;
-}>;
-
-type SpawnClientOptions = Readonly<{
-  clientArgs?: string;
-  stdio?: StdioOptions;
-  exitOnSignal?: boolean;
-  killBeforeWaitExit?: boolean;
-}>;
-
-const validateClient = (clientPath: string) => {
-  try {
-    execSync(`${clientPath} --version`, { stdio: "ignore" });
-  } catch (error) {
-    throw new CLIError(
-      `Autify Connect Client failed to exec. (path: ${clientPath}, error: ${error})`
-    );
-  }
-};
-
-export const spawnClient = async (
-  configDir: string,
-  cacheDir: string,
-  {
-    clientArgs = "",
-    stdio = "inherit",
-    exitOnSignal = false,
-    killBeforeWaitExit = false,
-  }: SpawnClientOptions
-): Promise<AutifyConnectClient> => {
-  const clientPath = await installClient(cacheDir);
-  validateClient(clientPath);
+const getOrCreateAccessPoint = (configDir: string) => {
   const accessPoint = get(configDir, "AUTIFY_CONNECT_ACCESS_POINT_NAME");
   const key = get(configDir, "AUTIFY_CONNECT_ACCESS_POINT_KEY");
+  const isEphemeral = false;
   if (!accessPoint || !key)
     throw new CLIError(
       "Autify Connect Access Point must be set. Use `autify connect access-point set` first."
     );
-  const childProcess = spawn(clientPath, parseClientArgs(clientArgs), {
+
+  return {
+    accessPoint,
+    key,
+    isEphemeral,
+  };
+};
+
+const logger = createLogger({
+  level: "debug",
+});
+
+const setupLogger = (logFile: string, fileLogging: boolean) => {
+  if (fileLogging) {
+    logger.add(
+      new transports.File({
+        filename: logFile,
+        format: format.combine(
+          format.colorize(),
+          format.timestamp(),
+          format.align(),
+          format.printf(
+            ({ timestamp, level, message }) =>
+              `${timestamp} ${level} ${message}`
+          )
+        ),
+      })
+    );
+  } else {
+    logger.add(
+      new transports.Console({
+        format: format.combine(
+          format.colorize(),
+          format.timestamp(),
+          format.align(),
+          format.printf(
+            ({ timestamp, level, message }) =>
+              `[Autify Connect Client] ${timestamp} ${level} ${message}`
+          )
+        ),
+      })
+    );
+  }
+};
+
+type Log = Readonly<{
+  level: string;
+  ts: string;
+  msg: string;
+}>;
+
+const onLogMsg = (
+  input: NodeJS.ReadableStream,
+  handler: (msg: string) => void
+) => {
+  return createInterface({
+    input,
+    crlfDelay: Number.POSITIVE_INFINITY,
+  }).on("line", (line) => {
+    let msg = line;
+    try {
+      const log = JSON.parse(line) as Log;
+      msg = log.msg;
+      logger.log(log.level, log.msg);
+    } finally {
+      handler(msg);
+    }
+  });
+};
+
+export class ClientExitError extends CLIError {
+  constructor(
+    readonly exitCode: number | null,
+    readonly exitSignal: NodeJS.Signals | null,
+    logFile?: string
+  ) {
+    super(
+      `Autify Connect Client exited (code: ${exitCode}, signal: ${exitSignal}).${
+        logFile && ` See logs at ${logFile}`
+      }`
+    );
+  }
+}
+
+export type AutifyConnectClient = Readonly<{
+  version: string;
+  logFile?: string;
+  accessPoint: string;
+  kill: () => void;
+  waitReady: () => Promise<any[]>;
+  waitExit: () => Promise<any[]>;
+}>;
+
+type SpawnClientOptions = Readonly<{
+  verbose?: boolean;
+  fileLogging?: boolean;
+}>;
+
+export const spawnClient = async (
+  configDir: string,
+  cacheDir: string,
+  { verbose = false, fileLogging = true }: SpawnClientOptions
+): Promise<AutifyConnectClient> => {
+  const state = new EventEmitter();
+  const clientPath = getInstallPath(cacheDir);
+  const args = ["--log-format", "json"];
+  if (verbose) args.push("--verbose");
+  const version = await getInstallVersion(clientPath);
+  const { accessPoint, key } = getOrCreateAccessPoint(configDir);
+  const childProcess = spawn(clientPath, args, {
     env: {
       AUTIFY_CONNECT_KEY: key,
     },
-    stdio,
   });
-  const exitBySignalHandler = (signal: NodeJS.Signals) => {
-    if (exitOnSignal)
-      childProcess.on("exit", () =>
-        // eslint-disable-next-line no-process-exit, unicorn/no-process-exit
-        process.exit(128 + constants.signals[signal])
-      );
-    childProcess.kill(signal);
-  };
+  const logFile = join(
+    cacheDir,
+    `autifyconnect-${Date.now()}-${childProcess.pid}.log`
+  );
+  setupLogger(logFile, fileLogging);
+  process.on("SIGINT", childProcess.kill);
+  process.on("SIGTERM", childProcess.kill);
+  childProcess.on("exit", (code, signal) => {
+    state.emit("error", new ClientExitError(code, signal, logFile));
+  });
+  childProcess.stderr.pipe(process.stderr);
+  onLogMsg(childProcess.stdout, (msg) => {
+    if (msg.includes("Successfully connected")) {
+      state.emit("ready");
+    }
+  });
 
-  process.on("SIGINT", exitBySignalHandler);
-  process.on("SIGTERM", exitBySignalHandler);
   return {
-    childProcess,
+    version,
+    logFile: fileLogging ? logFile : undefined,
     accessPoint,
-    waitExit: () => {
-      return new Promise((resolve, reject) => {
-        childProcess.on("exit", (code) => resolve(code ?? 1));
-        childProcess.on("error", (error) => reject(error));
-        if (killBeforeWaitExit) childProcess.kill();
-      });
-    },
+    kill: () => childProcess.kill(),
+    waitReady: async () => once(state, "ready"),
+    // Wait a fake event to catch ClientExitError.
+    waitExit: async () => once(state, "_"),
   };
 };

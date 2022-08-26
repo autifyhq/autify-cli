@@ -7,6 +7,7 @@ import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
 import WebTestWait from "./wait";
 import {
   AutifyConnectClient,
+  ClientExitError,
   spawnClient,
 } from "../../../autify/connect/spawnClient";
 
@@ -123,17 +124,24 @@ export default class WebTestRun extends Command {
     const basePath = get(configDir, "AUTIFY_WEB_BASE_PATH");
     const client = new WebClient(accessToken, { basePath, userAgent });
 
+    const verbose = flags.verbose;
     let autifyConnectAccessPoint = flags["autify-connect"];
     let autifyConnectClient: AutifyConnectClient | undefined;
     if (flags["autify-connect-client"]) {
+      const fileLogging = !verbose;
       autifyConnectClient = await spawnClient(configDir, cacheDir, {
-        exitOnSignal: true,
-        killBeforeWaitExit: true,
+        verbose,
+        fileLogging,
       });
-      autifyConnectAccessPoint = autifyConnectClient.accessPoint;
+      const { version, logFile, accessPoint, waitReady } = autifyConnectClient;
+      autifyConnectAccessPoint = accessPoint;
       this.log(
-        `Starting Autify Connect Client for Access Point "${autifyConnectAccessPoint}"...`
+        `Starting Autify Connect Client for Access Point "${accessPoint}" (${version})...`
       );
+      if (logFile) this.log(`Log file is located at ${logFile}`);
+      this.log("Waiting until Autify Connect Client is ready...");
+      await waitReady();
+      this.log("Autify Connect Client is ready!");
     }
 
     try {
@@ -159,7 +167,7 @@ export default class WebTestRun extends Command {
       );
       if (flags.wait) {
         const waitArgs = ["--timeout", flags.timeout.toString(), testResultUrl];
-        if (flags.verbose) waitArgs.push("--verbose");
+        if (verbose) waitArgs.push("--verbose");
         await WebTestWait.run(waitArgs);
       } else {
         this.log("To wait for the test result, run the command below:");
@@ -169,9 +177,18 @@ export default class WebTestRun extends Command {
       }
     } catch (error) {
       if (autifyConnectClient) {
-        const code = await autifyConnectClient.waitExit();
-        this.log(`Autify Connect Client exited with code ${code}.`);
-        throw error;
+        try {
+          this.log("Waiting until Autify Connect Client exits...");
+          autifyConnectClient.kill();
+          await autifyConnectClient.waitExit();
+        } catch (clientError) {
+          if (clientError instanceof ClientExitError) {
+            this.log(clientError.message);
+            throw error;
+          }
+
+          throw clientError;
+        }
       } else {
         throw error;
       }
