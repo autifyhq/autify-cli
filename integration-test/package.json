@@ -1,6 +1,6 @@
 {
   "name": "@autifyhq/autify-cli-integration-test",
-  "version": "0.7.1",
+  "version": "0.7.2-rc.0",
   "description": "Autify Command Line Interface (CLI) Integration Test",
   "author": "Autify",
   "bin": {
