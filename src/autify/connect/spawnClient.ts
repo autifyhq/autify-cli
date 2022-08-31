@@ -28,8 +28,8 @@ const logger = createLogger({
   level: "debug",
 });
 
-const setupLogger = (logFile: string, fileLogging: boolean) => {
-  if (fileLogging) {
+const setupLogger = (logFile?: string) => {
+  if (logFile) {
     logger.add(
       new transports.File({
         filename: logFile,
@@ -92,11 +92,9 @@ export class ClientExitError extends CLIError {
     readonly exitSignal: NodeJS.Signals | null,
     logFile?: string
   ) {
-    super(
-      `Autify Connect Client exited (code: ${exitCode}, signal: ${exitSignal}).${
-        logFile && ` See logs at ${logFile}`
-      }`
-    );
+    let message = `Autify Connect Client exited (code: ${exitCode}, signal: ${exitSignal}).`;
+    if (logFile) message += ` See logs at ${logFile}`;
+    super(message);
   }
 }
 
@@ -130,11 +128,10 @@ export const spawnClient = async (
       AUTIFY_CONNECT_KEY: key,
     },
   });
-  const logFile = join(
-    cacheDir,
-    `autifyconnect-${Date.now()}-${childProcess.pid}.log`
-  );
-  setupLogger(logFile, fileLogging);
+  const logFile = fileLogging
+    ? join(cacheDir, `autifyconnect-${Date.now()}-${childProcess.pid}.log`)
+    : undefined;
+  setupLogger(logFile);
   process.on("SIGINT", childProcess.kill);
   process.on("SIGTERM", childProcess.kill);
   childProcess.on("exit", (code, signal) => {
@@ -149,7 +146,7 @@ export const spawnClient = async (
 
   return {
     version,
-    logFile: fileLogging ? logFile : undefined,
+    logFile,
     accessPoint,
     kill: () => childProcess.kill(),
     waitReady: async () => once(state, "ready"),

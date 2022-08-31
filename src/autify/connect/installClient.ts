@@ -96,7 +96,7 @@ export const getInstallPath = (cacheDir: string): string =>
 export const getInstallVersion = async (path: string): Promise<string> => {
   if (!existsSync(path))
     throw new CLIError(
-      `Autify Client isn't installed yet at ${path}. Run \`autify connect client install\`.`
+      `Autify Connect Client isn't installed yet at ${path}. Run \`autify connect client install\` first.`
     );
   const { stderr } = await promisify(exec)(`${path} --version`);
   const version = stderr.trim();
