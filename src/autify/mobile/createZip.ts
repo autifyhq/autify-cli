@@ -2,21 +2,13 @@
 
 import { CLIError } from "@oclif/errors";
 import { execFileSync } from "node:child_process";
-import { lstatSync } from "node:fs";
-import { platform } from "node:os";
+import { createWriteStream, lstatSync } from "node:fs";
 import { basename, dirname, resolve } from "node:path";
 import which from "which";
 import { dynamicImport } from "tsimportlib";
-
-const checkPlatform = () => {
-  const supportedPlatforms: NodeJS.Platform[] = ["linux", "darwin"];
-  const p = platform();
-  if (!supportedPlatforms.includes(p)) {
-    throw new CLIError(
-      `${p} is not supported to zip file. Only supports: ${supportedPlatforms}`
-    );
-  }
-};
+import archiver from "archiver";
+import { once } from "node:events";
+import StreamZip from "node-stream-zip";
 
 const checkBuildPath = (buildPath: string) => {
   if (!lstatSync(buildPath).isDirectory()) {
@@ -28,26 +20,39 @@ const checkBuildPath = (buildPath: string) => {
   return [parentPath, name];
 };
 
-const findZip = () => {
-  const zip = which.sync("zip", { nothrow: true });
-  if (!zip) {
-    throw new CLIError("Can't find zip command in PATH.");
-  }
-
-  return zip;
-};
+const findZip = () => which.sync("zip", { nothrow: true });
 
 export const createZip = async (buildPath: string): Promise<string> => {
-  checkPlatform();
   const [parentPath, name] = checkBuildPath(buildPath);
-  const zip = findZip();
   const { temporaryFile } = (await dynamicImport(
     "tempy",
     // eslint-disable-next-line unicorn/prefer-module
     module
   )) as typeof import("tempy");
   const zipFile = temporaryFile({ name: "build.zip" });
-  // TODO: Use JSZip.
-  execFileSync(zip, ["-r", zipFile, name], { cwd: parentPath });
+  const zip = findZip();
+  if (zip) {
+    execFileSync(zip, ["-r", zipFile, name], { cwd: parentPath });
+  } else {
+    const archive = archiver("zip");
+    const output = createWriteStream(zipFile);
+    const close = once(output, "close");
+    archive.pipe(output);
+    archive.directory(buildPath, name);
+    await archive.finalize();
+    await close;
+  }
+
+  // Ensure zip file is valid.
+  try {
+    // eslint-disable-next-line new-cap
+    const zipStream = new StreamZip.async({ file: zipFile });
+    await zipStream.close();
+  } catch (error) {
+    throw new CLIError(
+      `Failed to create a valid zip file (${zipFile}): ${error}`
+    );
+  }
+
   return zipFile;
 };
