@@ -3,7 +3,7 @@ import { installClient } from "../../../autify/connect/installClient";
 
 export default class ConnectClientInstall extends Command {
   static description =
-    "Install the latest stable version of Autify Connect Client";
+    "[Experimental] Install the latest stable version of Autify Connect Client";
 
   static examples = ["<%= config.bin %> <%= command.id %>"];
 

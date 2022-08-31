@@ -3,7 +3,7 @@ import * as inquirer from "inquirer";
 import { set } from "../../../config";
 
 export default class ConnectAccessPointSet extends Command {
-  static description = "Set Autify Connect Access Point";
+  static description = "[Experimental] Set Autify Connect Access Point";
 
   static examples = [
     "Start interactive setup:\n<%= config.bin %> <%= command.id %> --name=NAME",

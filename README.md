@@ -51,7 +51,7 @@ See our official document: https://help.autify.com/docs/autify-command-line-inte
 
 ## `autify connect access-point set`
 
-Set Autify Connect Access Point
+[Experimental] Set Autify Connect Access Point
 
 ```
 USAGE
@@ -61,7 +61,7 @@ FLAGS
   --name=<value>  (required) Name of the Autify Connect Access Point already created
 
 DESCRIPTION
-  Set Autify Connect Access Point
+  [Experimental] Set Autify Connect Access Point
 
 EXAMPLES
   Start interactive setup:
@@ -75,14 +75,14 @@ EXAMPLES
 
 ## `autify connect client install`
 
-Install the latest stable version of Autify Connect Client
+[Experimental] Install the latest stable version of Autify Connect Client
 
 ```
 USAGE
   $ autify connect client install
 
 DESCRIPTION
-  Install the latest stable version of Autify Connect Client
+  [Experimental] Install the latest stable version of Autify Connect Client
 
 EXAMPLES
   $ autify connect client install
@@ -90,7 +90,7 @@ EXAMPLES
 
 ## `autify connect client start`
 
-Start Autify Connect Client
+[Experimental] Start Autify Connect Client
 
 ```
 USAGE
@@ -101,7 +101,7 @@ FLAGS
   --verbose       Make the operation more talkative.
 
 DESCRIPTION
-  Start Autify Connect Client
+  [Experimental] Start Autify Connect Client
 
 EXAMPLES
   $ autify connect client start
@@ -616,7 +616,7 @@ FLAGS
   -v, --verbose                      Verbose output
   -w, --wait                         Wait until the test finishes.
   --autify-connect=<value>           Name of the Autify Connect Access Point (Only for test scenario execution.)
-  --autify-connect-client            Start Autify Connect Client (Only for test scenario execution.)
+  --autify-connect-client            [Experimental] Start Autify Connect Client (Only for test scenario execution.)
   --browser=<value>                  Browser to run the test
   --device=<value>                   Device to run the test
   --device-type=<value>              Device type to run the test

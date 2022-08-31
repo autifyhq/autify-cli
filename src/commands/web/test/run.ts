@@ -63,7 +63,7 @@ export default class WebTestRun extends Command {
     }),
     "autify-connect-client": Flags.boolean({
       description:
-        "Start Autify Connect Client (Only for test scenario execution.)",
+        "[Experimental] Start Autify Connect Client (Only for test scenario execution.)",
       exclusive: ["autify-connect"],
       dependsOn: ["wait"],
     }),
