@@ -5,7 +5,7 @@ import {
 } from "../../../autify/connect/spawnClient";
 
 export default class ConnectClientStart extends Command {
-  static description = "Start Autify Connect Client";
+  static description = "[Experimental] Start Autify Connect Client";
 
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
