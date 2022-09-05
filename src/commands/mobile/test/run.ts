@@ -42,6 +42,11 @@ export default class MobileTestRun extends Command {
       description: "Verbose output",
       default: false,
     }),
+    "max-retry-count": Flags.integer({
+      description:
+        "Maximum retry count. The command can take up to timeout * (max-retry-count + 1).",
+      default: 0,
+    }),
   };
 
   static args = [
@@ -68,23 +73,58 @@ export default class MobileTestRun extends Command {
       buildId = (await uploadCommand.run()).buildId;
     }
 
-    const res = await client.runTestPlan(testPlanId, {
-      // eslint-disable-next-line camelcase
-      build_id: buildId,
-    });
-    if (!res.data.id) throw new CLIError(`Failed to run a test plan.`);
-    const testResultUrl = getMobileTestResultUrl(
-      configDir,
-      workspaceId,
-      res.data.id
-    );
-    this.log(
-      `${emoji.get("white_check_mark")} Successfully started: ${testResultUrl}`
-    );
+    const runTestPlanOnce = async () => {
+      const res = await client.runTestPlan(testPlanId, {
+        // eslint-disable-next-line camelcase
+        build_id: buildId,
+      });
+      if (!res.data.id) throw new CLIError(`Failed to run a test plan.`);
+      const testResultUrl = getMobileTestResultUrl(
+        configDir,
+        workspaceId,
+        res.data.id
+      );
+      this.log(
+        `${emoji.get(
+          "white_check_mark"
+        )} Successfully started: ${testResultUrl}`
+      );
+      return testResultUrl;
+    };
+
+    let testResultUrl = await runTestPlanOnce();
+
     if (flags.wait) {
-      const waitArgs = ["--timeout", flags.timeout.toString(), testResultUrl];
-      if (flags.verbose) waitArgs.push("--verbose");
-      await MobileTestWait.run(waitArgs);
+      const mobileTestWait = async (url: string) => {
+        const waitArgs = ["--timeout", flags.timeout.toString(), url];
+        if (flags.verbose) waitArgs.push("--verbose");
+        try {
+          await MobileTestWait.run(waitArgs);
+        } catch (error) {
+          if ((error as CLIError).oclif.exit === 0) return null;
+          return error as Error;
+        }
+
+        throw new CLIError(`Unexpected behavior.`);
+      };
+
+      const maxRetryCount = flags["max-retry-count"];
+      let error: Error | null;
+      for await (const [i] of Array.from({
+        length: maxRetryCount + 1,
+      }).entries()) {
+        error = await mobileTestWait(testResultUrl);
+        if (error === null) this.exit();
+        else if (i === maxRetryCount) throw error;
+        else {
+          this.log(
+            `${emoji.get("repeat")} Retrying... (attempt: ${
+              i + 1
+            }/${maxRetryCount})`
+          );
+          testResultUrl = await runTestPlanOnce();
+        }
+      }
     } else {
       this.log("To wait for the test result, run the command below:");
       this.log(

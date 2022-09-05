@@ -67,11 +67,12 @@ export default class WebTestWait extends Command {
       );
       this.exit();
     } else {
-      this.error(
+      this.log(
         `${emoji.get(
           "x"
         )} Test didn't pass. See ${testResultUrl}: ${JSON.stringify(data)}`
       );
+      this.exit(1);
     }
   }
 }
