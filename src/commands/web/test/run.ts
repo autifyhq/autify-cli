@@ -10,6 +10,7 @@ import {
   ClientExitError,
   spawnClient,
 } from "../../../autify/connect/spawnClient";
+import { CLIError } from "@oclif/errors";
 
 const parseUrlReplacements = (urlReplacements: string[]) => {
   return urlReplacements.map((s) => {
@@ -88,6 +89,11 @@ export default class WebTestRun extends Command {
       description: "Verbose output",
       default: false,
     }),
+    "max-retry-count": Flags.integer({
+      description:
+        "Maximum retry count. The command can take up to timeout * (max-retry-count + 1).",
+      default: 0,
+    }),
   };
 
   static args = [
@@ -144,7 +150,7 @@ export default class WebTestRun extends Command {
       this.log("Autify Connect Client is ready!");
     }
 
-    try {
+    const runTestOnce = async () => {
       const { workspaceId, resultId, capability } = await runTest(
         client,
         args["scenario-or-test-plan-url"],
@@ -165,10 +171,42 @@ export default class WebTestRun extends Command {
           "white_check_mark"
         )} Successfully started: ${testResultUrl} (Capability is ${capability})`
       );
+      return testResultUrl;
+    };
+
+    try {
+      let testResultUrl = await runTestOnce();
       if (flags.wait) {
-        const waitArgs = ["--timeout", flags.timeout.toString(), testResultUrl];
-        if (verbose) waitArgs.push("--verbose");
-        await WebTestWait.run(waitArgs);
+        const webTestWait = async (url: string) => {
+          const waitArgs = ["--timeout", flags.timeout.toString(), url];
+          if (verbose) waitArgs.push("--verbose");
+          try {
+            await WebTestWait.run(waitArgs);
+          } catch (error) {
+            if ((error as CLIError).oclif.exit === 0) return null;
+            return error as Error;
+          }
+
+          throw new CLIError(`Unexpected behavior.`);
+        };
+
+        const maxRetryCount = flags["max-retry-count"];
+        let error: Error | null;
+        for await (const [i] of Array.from({
+          length: maxRetryCount + 1,
+        }).entries()) {
+          error = await webTestWait(testResultUrl);
+          if (error === null) this.exit();
+          else if (i === maxRetryCount) throw error;
+          else {
+            this.log(
+              `${emoji.get("repeat")} Retrying... (attempt: ${
+                i + 1
+              }/${maxRetryCount})`
+            );
+            testResultUrl = await runTestOnce();
+          }
+        }
       } else {
         this.log("To wait for the test result, run the command below:");
         this.log(

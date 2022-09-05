@@ -266,16 +266,18 @@ Run a test plan.
 ```
 USAGE
   $ autify mobile test run [TEST-PLAN-URL] [--build-id <value> | --build-path <value>] [-w] [-t <value>] [-v]
+    [--max-retry-count <value>]
 
 ARGUMENTS
   TEST-PLAN-URL  Test plan URL e.g. https://mobile-app.autify.com/projects/<ID>/test_plans/<ID>
 
 FLAGS
-  -t, --timeout=<value>  [default: 300] Timeout seconds when waiting for the finish of the test execution.
-  -v, --verbose          Verbose output
-  -w, --wait             Wait until the test finishes.
-  --build-id=<value>     ID of the already uploaded build.
-  --build-path=<value>   File path to the iOS app (*.app) or Android app (*.apk).
+  -t, --timeout=<value>      [default: 300] Timeout seconds when waiting for the finish of the test execution.
+  -v, --verbose              Verbose output
+  -w, --wait                 Wait until the test finishes.
+  --build-id=<value>         ID of the already uploaded build.
+  --build-path=<value>       File path to the iOS app (*.app) or Android app (*.apk).
+  --max-retry-count=<value>  Maximum retry count. The command can take up to timeout * (max-retry-count + 1).
 
 DESCRIPTION
   Run a test plan.
@@ -603,7 +605,7 @@ Run a scenario or test plan.
 USAGE
   $ autify web test run [SCENARIO-OR-TEST-PLAN-URL] [-n <value>] [-r <value>] [--autify-connect <value> |
     --autify-connect-client] [--os <value>] [--os-version <value>] [--browser <value>] [--device <value>] [--device-type
-    <value>] [-w] [-t <value>] [-v]
+    <value>] [-w] [-t <value>] [-v] [--max-retry-count <value>]
 
 ARGUMENTS
   SCENARIO-OR-TEST-PLAN-URL  Scenario URL or Test plan URL e.g.
@@ -620,6 +622,7 @@ FLAGS
   --browser=<value>                  Browser to run the test
   --device=<value>                   Device to run the test
   --device-type=<value>              Device type to run the test
+  --max-retry-count=<value>          Maximum retry count. The command can take up to timeout * (max-retry-count + 1).
   --os=<value>                       OS to run the test
   --os-version=<value>               OS version to run the test
 
