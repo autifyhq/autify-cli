@@ -1,61 +1,87 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
 import { spawn } from "node:child_process";
-import { get } from "../../config";
 import { getInstallPath, getInstallVersion } from "./installClient";
 import { createInterface } from "node:readline";
 import { once, EventEmitter } from "node:events";
 import { createLogger, format, transports } from "winston";
 import { join } from "node:path";
+import { WebClient } from "@autifyhq/autify-sdk";
+import { get } from "../../config";
+import { v4 as uuid } from "uuid";
 
-const getOrCreateAccessPoint = (configDir: string) => {
-  const accessPoint = get(configDir, "AUTIFY_CONNECT_ACCESS_POINT_NAME");
-  const key = get(configDir, "AUTIFY_CONNECT_ACCESS_POINT_KEY");
-  const isEphemeral = false;
-  if (!accessPoint || !key)
-    throw new CLIError(
-      "Autify Connect Access Point must be set. Use `autify connect access-point set` first."
-    );
+type EphemeralAccessPoint = Readonly<{
+  webClient: WebClient;
+  workspaceId: number;
+}>;
 
-  return {
-    accessPoint,
-    key,
-    isEphemeral,
-  };
-};
+const EPHEMERAL_ACCESS_POINT_NAME_PREFIX = "autify-cli-";
 
 const logger = createLogger({
   level: "debug",
 });
+
+const getOrCreateAccessPoint = async (
+  configDir: string,
+  ephemeralAccessPoint?: EphemeralAccessPoint
+) => {
+  if (!ephemeralAccessPoint) {
+    const accessPointName = get(configDir, "AUTIFY_CONNECT_ACCESS_POINT_NAME");
+    const accessPointKey = get(configDir, "AUTIFY_CONNECT_ACCESS_POINT_KEY");
+    if (!accessPointName || !accessPointKey)
+      throw new CLIError(
+        "Access Point is not set. Run `autify connect access-point set` first."
+      );
+    return { accessPointName, accessPointKey };
+  }
+
+  const { webClient, workspaceId } = ephemeralAccessPoint;
+  const accessPointName = `${EPHEMERAL_ACCESS_POINT_NAME_PREFIX}${uuid()}`;
+  const accessPointKey = (
+    await webClient.createAccessPoint(workspaceId, { name: accessPointName })
+  ).data.key;
+  return { accessPointName, accessPointKey };
+};
+
+const deleteAccessPointIfPossible = async (
+  accessPointName: string,
+  ephemeralAccessPoint?: EphemeralAccessPoint
+) => {
+  if (!ephemeralAccessPoint) return;
+  if (!accessPointName.startsWith(EPHEMERAL_ACCESS_POINT_NAME_PREFIX)) return;
+
+  const { webClient, workspaceId } = ephemeralAccessPoint;
+  try {
+    await webClient.deleteAccessPoint(workspaceId, { name: accessPointName });
+    return accessPointName;
+  } catch {
+    // Ignore errors since this is best effort.
+  }
+};
+
+const logFormat = (prefix?: string) =>
+  format.combine(
+    format.colorize(),
+    format.timestamp(),
+    format.align(),
+    format.printf(
+      ({ timestamp, level, message }) =>
+        `${prefix ?? ""}${timestamp} ${level} ${message}`
+    )
+  );
 
 const setupLogger = (logFile?: string) => {
   if (logFile) {
     logger.add(
       new transports.File({
         filename: logFile,
-        format: format.combine(
-          format.colorize(),
-          format.timestamp(),
-          format.align(),
-          format.printf(
-            ({ timestamp, level, message }) =>
-              `${timestamp} ${level} ${message}`
-          )
-        ),
+        format: logFormat(),
       })
     );
   } else {
     logger.add(
       new transports.Console({
-        format: format.combine(
-          format.colorize(),
-          format.timestamp(),
-          format.align(),
-          format.printf(
-            ({ timestamp, level, message }) =>
-              `[Autify Connect Client] ${timestamp} ${level} ${message}`
-          )
-        ),
+        format: logFormat("[Autify Connect Client] "),
       })
     );
   }
@@ -86,46 +112,42 @@ const onLogMsg = (
   });
 };
 
-export class ClientExitError extends CLIError {
-  constructor(
-    readonly exitCode: number | null,
-    readonly exitSignal: NodeJS.Signals | null,
-    logFile?: string
-  ) {
-    let message = `Autify Connect Client exited (code: ${exitCode}, signal: ${exitSignal}).`;
-    if (logFile) message += ` See logs at ${logFile}`;
-    super(message);
-  }
-}
+type ProcessExit = [code: number | null, signal: NodeJS.Signals | null];
 
 export type AutifyConnectClient = Readonly<{
   version: string;
   logFile?: string;
-  accessPoint: string;
+  accessPointName: string;
   kill: () => void;
   waitReady: () => Promise<any[]>;
-  waitExit: () => Promise<any[]>;
+  waitExit: () => Promise<
+    [...ProcessExit, ...[deletedAccessPointName?: string]]
+  >;
 }>;
 
 type SpawnClientOptions = Readonly<{
   verbose?: boolean;
   fileLogging?: boolean;
+  ephemeralAccessPoint?: EphemeralAccessPoint;
 }>;
 
 export const spawnClient = async (
   configDir: string,
   cacheDir: string,
-  { verbose = false, fileLogging = true }: SpawnClientOptions
+  { verbose, fileLogging, ephemeralAccessPoint }: SpawnClientOptions
 ): Promise<AutifyConnectClient> => {
   const state = new EventEmitter();
   const clientPath = getInstallPath(cacheDir);
   const args = ["--log-format", "json"];
   if (verbose) args.push("--verbose");
   const version = await getInstallVersion(clientPath);
-  const { accessPoint, key } = getOrCreateAccessPoint(configDir);
+  const { accessPointName, accessPointKey } = await getOrCreateAccessPoint(
+    configDir,
+    ephemeralAccessPoint
+  );
   const childProcess = spawn(clientPath, args, {
     env: {
-      AUTIFY_CONNECT_KEY: key,
+      AUTIFY_CONNECT_KEY: accessPointKey,
     },
   });
   const logFile = fileLogging
@@ -134,9 +156,8 @@ export const spawnClient = async (
   setupLogger(logFile);
   process.on("SIGINT", childProcess.kill);
   process.on("SIGTERM", childProcess.kill);
-  childProcess.on("exit", (code, signal) => {
-    state.emit("error", new ClientExitError(code, signal, logFile));
-  });
+  const clientReady = once(state, "ready");
+  const childProcessExit = once(childProcess, "exit") as Promise<ProcessExit>;
   childProcess.stderr.pipe(process.stderr);
   onLogMsg(childProcess.stdout, (msg) => {
     if (msg.includes("Successfully connected")) {
@@ -147,10 +168,16 @@ export const spawnClient = async (
   return {
     version,
     logFile,
-    accessPoint,
+    accessPointName,
     kill: () => childProcess.kill(),
-    waitReady: async () => once(state, "ready"),
-    // Wait a fake event to catch ClientExitError.
-    waitExit: async () => once(state, "_"),
+    waitReady: async () => clientReady,
+    waitExit: async () => {
+      const [code, signal] = await childProcessExit;
+      const deletedAccessPointName = await deleteAccessPointIfPossible(
+        accessPointName,
+        ephemeralAccessPoint
+      );
+      return [code, signal, deletedAccessPointName];
+    },
   };
 };

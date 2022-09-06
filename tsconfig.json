@@ -9,6 +9,7 @@
     "target": "es2019",
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "lib": ["es2021"],
     "types": ["chai", "inquirer", "listr", "mocha", "node", "node-emoji"]
   },
   "include": ["src/**/*"]

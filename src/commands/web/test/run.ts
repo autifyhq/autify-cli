@@ -7,10 +7,10 @@ import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
 import WebTestWait from "./wait";
 import {
   AutifyConnectClient,
-  ClientExitError,
   spawnClient,
 } from "../../../autify/connect/spawnClient";
 import { CLIError } from "@oclif/errors";
+import { parseAutifyTestUrl } from "../../../autify/web/parseAutifyTestUrl";
 
 const parseUrlReplacements = (urlReplacements: string[]) => {
   return urlReplacements.map((s) => {
@@ -67,6 +67,16 @@ export default class WebTestRun extends Command {
         "[Experimental] Start Autify Connect Client (Only for test scenario execution.)",
       exclusive: ["autify-connect"],
       dependsOn: ["wait"],
+    }),
+    "autify-connect-client-verbose": Flags.boolean({
+      description:
+        "[Experimental] Verbose output for Autify Connect Client (Only for test scenario execution.)",
+      dependsOn: ["autify-connect-client"],
+    }),
+    "autify-connect-client-file-logging": Flags.boolean({
+      description:
+        "[Experimental] Logging Autify Connect Client log to a file instead of console.",
+      dependsOn: ["autify-connect-client"],
     }),
     os: Flags.string({ description: "OS to run the test" }),
     "os-version": Flags.string({ description: "OS version to run the test" }),
@@ -130,37 +140,40 @@ export default class WebTestRun extends Command {
     const basePath = get(configDir, "AUTIFY_WEB_BASE_PATH");
     const client = new WebClient(accessToken, { basePath, userAgent });
 
-    const verbose = flags.verbose;
+    const parsedTest = parseAutifyTestUrl(args["scenario-or-test-plan-url"]);
+    const { workspaceId } = parsedTest;
+
     let autifyConnectAccessPoint = flags["autify-connect"];
     let autifyConnectClient: AutifyConnectClient | undefined;
     if (flags["autify-connect-client"]) {
-      const fileLogging = !verbose;
       autifyConnectClient = await spawnClient(configDir, cacheDir, {
-        verbose,
-        fileLogging,
+        verbose: flags["autify-connect-client-verbose"],
+        fileLogging: flags["autify-connect-client-file-logging"],
+        ephemeralAccessPoint: {
+          webClient: client,
+          workspaceId,
+        },
       });
-      const { version, logFile, accessPoint, waitReady } = autifyConnectClient;
-      autifyConnectAccessPoint = accessPoint;
+      const { version, logFile, accessPointName, waitReady } =
+        autifyConnectClient;
+      autifyConnectAccessPoint = accessPointName;
       this.log(
-        `Starting Autify Connect Client for Access Point "${accessPoint}" (${version})...`
+        `Starting Autify Connect Client for Access Point "${accessPointName}" (${version})...`
       );
-      if (logFile) this.log(`Log file is located at ${logFile}`);
+      if (logFile)
+        this.log(`Autify Connect Client log file is located at ${logFile}`);
       this.log("Waiting until Autify Connect Client is ready...");
       await waitReady();
       this.log("Autify Connect Client is ready!");
     }
 
     const runTestOnce = async () => {
-      const { workspaceId, resultId, capability } = await runTest(
-        client,
-        args["scenario-or-test-plan-url"],
-        {
-          option: capabilityOption,
-          name: flags.name,
-          urlReplacements,
-          autifyConnectAccessPoint,
-        }
-      );
+      const { resultId, capability } = await runTest(client, parsedTest, {
+        option: capabilityOption,
+        name: flags.name,
+        urlReplacements,
+        autifyConnectAccessPoint,
+      });
       const testResultUrl = getWebTestResultUrl(
         configDir,
         workspaceId,
@@ -179,7 +192,7 @@ export default class WebTestRun extends Command {
       if (flags.wait) {
         const webTestWait = async (url: string) => {
           const waitArgs = ["--timeout", flags.timeout.toString(), url];
-          if (verbose) waitArgs.push("--verbose");
+          if (flags.verbose) waitArgs.push("--verbose");
           try {
             await WebTestWait.run(waitArgs);
           } catch (error) {
@@ -215,21 +228,20 @@ export default class WebTestRun extends Command {
       }
     } catch (error) {
       if (autifyConnectClient) {
-        try {
-          this.log("Waiting until Autify Connect Client exits...");
-          autifyConnectClient.kill();
+        this.log("Waiting until Autify Connect Client exits...");
+        autifyConnectClient.kill();
+        const [code, signal, deleteAccessPointName] =
           await autifyConnectClient.waitExit();
-        } catch (clientError) {
-          if (clientError instanceof ClientExitError) {
-            this.log(clientError.message);
-            throw error;
-          }
-
-          throw clientError;
-        }
-      } else {
-        throw error;
+        if (deleteAccessPointName)
+          this.log(
+            `Autify Connect Access Point was deleted: "${deleteAccessPointName}"`
+          );
+        this.log(
+          `Autify Connect Client exited (code: ${code}, signal: ${signal}).`
+        );
       }
+
+      throw error;
     }
   }
 }

@@ -1,6 +1,7 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
 import { WebClient } from "@autifyhq/autify-sdk";
+import { TestPlan, TestScenario } from "./parseAutifyTestUrl";
 
 type CapabilityOption = Parameters<
   WebClient["executeScenarios"]
@@ -8,28 +9,6 @@ type CapabilityOption = Parameters<
 type CreateUrlReplacementRequest = Parameters<
   WebClient["createUrlReplacement"]
 >[1];
-
-const parseScenarioUrl = (url: string) => {
-  const { pathname } = new URL(url);
-  const scenarioUrlPathRegExp =
-    /\/projects\/(?<workspaceId>\d+)\/scenarios\/(?<scenarioId>\d+)/;
-  const match = scenarioUrlPathRegExp.exec(pathname);
-  const workspaceId = Number.parseInt(match?.groups?.workspaceId ?? "", 10);
-  const scenarioId = Number.parseInt(match?.groups?.scenarioId ?? "", 10);
-  if (!workspaceId || !scenarioId) return;
-  return { workspaceId, scenarioId };
-};
-
-const parseTestPlanUrl = (url: string) => {
-  const { pathname } = new URL(url);
-  const testPlanUrlPathRegExp =
-    /\/projects\/(?<workspaceId>\d+)\/test_plans\/(?<testPlanId>\d+)/;
-  const match = testPlanUrlPathRegExp.exec(pathname);
-  const workspaceId = Number.parseInt(match?.groups?.workspaceId ?? "", 10);
-  const testPlanId = Number.parseInt(match?.groups?.testPlanId ?? "", 10);
-  if (!workspaceId || !testPlanId) return;
-  return { workspaceId, testPlanId };
-};
 
 const isCapabilitySpecified = (option: CapabilityOption) => {
   return Object.values(option).some(Boolean);
@@ -92,18 +71,16 @@ type RunTestProps = Readonly<{
 
 export const runTest = async (
   client: WebClient,
-  url: string,
+  parsedTest: TestScenario | TestPlan,
   { option, name, urlReplacements, autifyConnectAccessPoint }: RunTestProps
-): Promise<{ workspaceId: number; resultId: number; capability: string }> => {
-  const scenario = parseScenarioUrl(url);
-  const testPlan = parseTestPlanUrl(url);
-  if (scenario) {
-    const { workspaceId, scenarioId } = scenario;
+): Promise<{ resultId: number; capability: string }> => {
+  const { workspaceId, testScenarioId, testPlanId } = parsedTest;
+  if (testScenarioId) {
     const capability = await getCapability(client, workspaceId, option);
     const res = await client.executeScenarios(workspaceId, {
       name,
       capabilities: [capability],
-      scenarios: [{ id: scenarioId }],
+      scenarios: [{ id: testScenarioId }],
       // eslint-disable-next-line camelcase
       url_replacements: urlReplacements,
       ...(autifyConnectAccessPoint && {
@@ -114,13 +91,12 @@ export const runTest = async (
       }),
     });
     return {
-      workspaceId,
       resultId: res.data.result_id,
       capability: capabilityToString(capability),
     };
   }
 
-  if (testPlan) {
+  if (testPlanId) {
     if (isCapabilitySpecified(option))
       throw new CLIError(
         `Running TestPlan doesn't support capability override: ${JSON.stringify(
@@ -133,7 +109,6 @@ export const runTest = async (
       throw new CLIError(
         "Running TestPlan doesn't support Autify Connect Access Point"
       );
-    const { workspaceId, testPlanId } = testPlan;
     const urlReplacementIds = [];
     for await (const urlReplacement of urlReplacements ?? []) {
       const res = await client.createUrlReplacement(testPlanId, urlReplacement);
@@ -146,11 +121,10 @@ export const runTest = async (
     }
 
     return {
-      workspaceId,
       resultId: res.data.data.id,
       capability: "configured by test plan",
     };
   }
 
-  throw new CLIError(`Invalid URL: ${url}`);
+  throw new CLIError("testScenarioId or testPlanId is required.");
 };

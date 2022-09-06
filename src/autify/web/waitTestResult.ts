@@ -16,10 +16,19 @@ const waitUntil = async <T>(
       {
         title: `Waiting... (timeout: ${timeoutSecond} s)`,
         task: async (ctx, task) => {
+          let killed;
+          process.on("SIGINT", (signal) => {
+            killed = signal;
+          });
+          process.on("SIGTERM", (signal) => {
+            killed = signal;
+          });
           for await (const startTime of setInterval(
             intervalSecond * 1000,
             Date.now()
           )) {
+            if (killed) throw new CLIError(`Process was killed by ${killed}.`);
+
             const now = Date.now();
             if (now - startTime > timeoutSecond * 1000) {
               throw new CLIError(`Timeout after ${timeoutSecond} seconds.`);

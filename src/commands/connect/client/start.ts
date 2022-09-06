@@ -1,8 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import {
-  ClientExitError,
-  spawnClient,
-} from "../../../autify/connect/spawnClient";
+import { spawnClient } from "../../../autify/connect/spawnClient";
 
 export default class ConnectClientStart extends Command {
   static description = "[Experimental] Start Autify Connect Client";
@@ -26,27 +23,22 @@ export default class ConnectClientStart extends Command {
     const { configDir, cacheDir } = this.config;
     const verbose = flags.verbose;
     const fileLogging = flags["file-logging"];
-    const { version, logFile, accessPoint, waitReady, waitExit } =
+    const { version, logFile, accessPointName, waitReady, waitExit } =
       await spawnClient(configDir, cacheDir, {
         verbose,
         fileLogging,
       });
     this.log(
-      `Starting Autify Connect Client for Access Point "${accessPoint}" (${version})...`
+      `Starting Autify Connect Client for Access Point "${accessPointName}" (${version})...`
     );
     if (logFile) this.log(`Log file is located at ${logFile}`);
-    try {
-      this.log("Waiting until Autify Connect Client is ready...");
-      await waitReady();
-      this.log("Autify Connect Client is ready!");
-      await waitExit();
-    } catch (error) {
-      if (error instanceof ClientExitError) {
-        this.log(error.message);
-        this.exit(error.exitCode ?? 1);
-      }
-
-      throw error;
-    }
+    this.log("Waiting until Autify Connect Client is ready...");
+    await waitReady();
+    this.log("Autify Connect Client is ready!");
+    const [code, signal] = await waitExit();
+    this.log(
+      `Autify Connect Client exited (code: ${code}, signal: ${signal}).`
+    );
+    this.exit(code ?? 1);
   }
 }
