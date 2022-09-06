@@ -604,27 +604,32 @@ Run a scenario or test plan.
 ```
 USAGE
   $ autify web test run [SCENARIO-OR-TEST-PLAN-URL] [-n <value>] [-r <value>] [--autify-connect <value> |
-    --autify-connect-client] [--os <value>] [--os-version <value>] [--browser <value>] [--device <value>] [--device-type
-    <value>] [-w] [-t <value>] [-v] [--max-retry-count <value>]
+    --autify-connect-client] [--autify-connect-client-verbose ] [--autify-connect-client-file-logging ] [--os <value>]
+    [--os-version <value>] [--browser <value>] [--device <value>] [--device-type <value>] [-w] [-t <value>] [-v]
+    [--max-retry-count <value>]
 
 ARGUMENTS
   SCENARIO-OR-TEST-PLAN-URL  Scenario URL or Test plan URL e.g.
                              https://app.autify.com/projects/<ID>/(scenarios|test_plans)/<ID>
 
 FLAGS
-  -n, --name=<value>                 Name of the test execution. (Only for test scenario execution.)
-  -r, --url-replacements=<value>...  URL replacements. Example: http://example.com=http://example.net
-  -t, --timeout=<value>              [default: 300] Timeout seconds when waiting for the finish of the test execution.
-  -v, --verbose                      Verbose output
-  -w, --wait                         Wait until the test finishes.
-  --autify-connect=<value>           Name of the Autify Connect Access Point (Only for test scenario execution.)
-  --autify-connect-client            [Experimental] Start Autify Connect Client (Only for test scenario execution.)
-  --browser=<value>                  Browser to run the test
-  --device=<value>                   Device to run the test
-  --device-type=<value>              Device type to run the test
-  --max-retry-count=<value>          Maximum retry count. The command can take up to timeout * (max-retry-count + 1).
-  --os=<value>                       OS to run the test
-  --os-version=<value>               OS version to run the test
+  -n, --name=<value>                    Name of the test execution. (Only for test scenario execution.)
+  -r, --url-replacements=<value>...     URL replacements. Example: http://example.com=http://example.net
+  -t, --timeout=<value>                 [default: 300] Timeout seconds when waiting for the finish of the test
+                                        execution.
+  -v, --verbose                         Verbose output
+  -w, --wait                            Wait until the test finishes.
+  --autify-connect=<value>              Name of the Autify Connect Access Point (Only for test scenario execution.)
+  --autify-connect-client               [Experimental] Start Autify Connect Client (Only for test scenario execution.)
+  --autify-connect-client-file-logging  [Experimental] Logging Autify Connect Client log to a file instead of console.
+  --autify-connect-client-verbose       [Experimental] Verbose output for Autify Connect Client (Only for test scenario
+                                        execution.)
+  --browser=<value>                     Browser to run the test
+  --device=<value>                      Device to run the test
+  --device-type=<value>                 Device type to run the test
+  --max-retry-count=<value>             Maximum retry count. The command can take up to timeout * (max-retry-count + 1).
+  --os=<value>                          OS to run the test
+  --os-version=<value>                  OS version to run the test
 
 DESCRIPTION
   Run a scenario or test plan.
