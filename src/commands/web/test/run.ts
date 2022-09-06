@@ -230,11 +230,11 @@ export default class WebTestRun extends Command {
       if (autifyConnectClient) {
         this.log("Waiting until Autify Connect Client exits...");
         autifyConnectClient.kill();
-        const [code, signal, deleteAccessPointName] =
+        const [code, signal, deletedAccessPointName] =
           await autifyConnectClient.waitExit();
-        if (deleteAccessPointName)
+        if (deletedAccessPointName)
           this.log(
-            `Autify Connect Access Point was deleted: "${deleteAccessPointName}"`
+            `Autify Connect Access Point was deleted: "${deletedAccessPointName}"`
           );
         this.log(
           `Autify Connect Client exited (code: ${code}, signal: ${signal}).`

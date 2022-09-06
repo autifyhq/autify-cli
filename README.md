@@ -94,11 +94,13 @@ EXAMPLES
 
 ```
 USAGE
-  $ autify connect client start [--verbose] [--file-logging]
+  $ autify connect client start [--verbose] [--file-logging] [--web-workspace-id <value>]
 
 FLAGS
-  --file-logging  Logging Autify Connect Client log to a file instead of console.
-  --verbose       Make the operation more talkative.
+  --file-logging              Logging Autify Connect Client log to a file instead of console.
+  --verbose                   Make the operation more talkative.
+  --web-workspace-id=<value>  Workspace ID of Autify for Web to create an ephemeral Access Point. If not specified, it
+                              will use the one configured by `autify connect access-point set`, instead.
 
 DESCRIPTION
   [Experimental] Start Autify Connect Client
