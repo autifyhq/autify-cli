@@ -35,6 +35,40 @@ jobs:
       # TODO: Improve Autify Connect tests
       - run: autify connect client install
 
+  tarball-qemu:
+    strategy:
+      matrix:
+        include:
+          - target: linux-arm
+            platform: linux/arm/v7
+          - target: linux-arm64
+            platform: linux/arm64/v8
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/setup
+      - run: npm install
+      - run: sudo apt-get update -q -y
+      - run: sudo apt-get -qq install -y qemu qemu-user-static
+      - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credential yes
+      - run: |
+          echo "set -ex" >> run.sh
+          echo "export GITHUB_PATH=/tmp/path" >> run.sh
+          echo "npm install" >> run.sh
+          echo "npm run release install ${{ matrix.target }}" >> run.sh
+          echo "export PATH=\"\$(cat \$GITHUB_PATH):\$PATH\"" >> run.sh
+          echo "echo test | autify web auth login" >> run.sh
+          echo "echo test | autify mobile auth login" >> run.sh
+          echo "npm run test:integration" >> run.sh
+          # TODO: Improve Autify Connect tests
+          echo "autify connect client install" >> run.sh
+      - run: docker run --rm -t --platform ${{ matrix.platform }} -v$PWD:/app --workdir /app node:lts-bullseye bash /app/run.sh
+
   win:
     runs-on: windows-latest
 
@@ -82,6 +116,31 @@ jobs:
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
       - run: npm run test:integration
+
+  shell-qemu:
+    strategy:
+      matrix:
+        arch: [armv7, aarch64]
+        target: [standalone-shell, cicd-shell]
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: uraimo/run-on-arch-action@v2
+        with:
+          arch: ${{ matrix.arch }}
+          distro: ubuntu_latest
+          run: |
+            snap install node
+            npm ci
+            npm run release install ${{ matrix.target }}
+            echo test | autify web auth login
+            echo test | autify mobile auth login
+            npm run test:integration
 
   brew:
     strategy:
