@@ -160,8 +160,10 @@ const promoteShellInstaller = (file: string, channel: string) => {
 
 const promoteS3 = () => {
   const indexes = channel === "stable" ? "--indexes" : "";
+  const targets =
+    "darwin-arm64,darwin-x64,linux-arm,linux-arm64,linux-x64,win32-x86,win32-x64";
   oclif(
-    `promote --channel ${channel} --version ${version} --sha ${sha} ${indexes} --win --macos --xz`
+    `promote --channel ${channel} --version ${version} --sha ${sha} ${indexes} --targets ${targets} --win --macos --xz`
   );
   promoteShellInstaller("install-standalone.sh", channel);
   promoteShellInstaller("install-cicd.bash", channel);
