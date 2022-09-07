@@ -33,8 +33,10 @@
   ARCH="\$(uname -m)"
   if [ "\$ARCH" == "x86_64" ]; then
     ARCH=x64
-  elif [[ "\$ARCH" == aarch* ]]; then
+  elif [ "\$ARCH" == "armv7l" ]; then
     ARCH=arm
+  elif [ "\$ARCH" == "aarch64" ]; then
+    ARCH=arm64
   elif [ "\$ARCH" == "arm64" ]; then
     ARCH=arm64
   else
