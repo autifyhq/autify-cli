@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
-import { arch, platform } from "node:process";
+import { arch, env, platform } from "node:process";
 import fetch from "node-fetch";
 import {
   createReadStream,
@@ -13,8 +13,8 @@ import {
 import { pipeline } from "node:stream";
 import { promisify } from "node:util";
 import { basename, dirname, join } from "node:path";
-import { exec, execSync } from "node:child_process";
 import { Extract } from "unzip-stream";
+import { crossExecFilePromise } from "../../child-process";
 
 const getOs = () => {
   const os = platform;
@@ -57,8 +57,8 @@ const extract = async (downloadPath: string) => {
   const file = basename(downloadPath);
   const dir = dirname(downloadPath);
   if (file.endsWith(".tar.gz")) {
-    const command = `tar xvzf ${file}`;
-    execSync(command, { cwd: dir });
+    // TODO: Pure JS
+    await crossExecFilePromise("tar", ["xvzf", file], { cwd: dir });
     return join(dir, "autifyconnect");
   }
 
@@ -75,9 +75,9 @@ const extract = async (downloadPath: string) => {
   throw new CLIError(`Unsupported file format: ${downloadPath}`);
 };
 
-const validateVersion = async (path: string) => {
+const validateVersion = async (path: string, installPath: string) => {
   try {
-    return await getInstallVersion(path);
+    return await getInstallVersion(path, installPath);
   } catch (error) {
     throw new CLIError(
       `Autify Connect Client binary doesn't work properly (path: ${path}, error: ${error})`
@@ -93,12 +93,29 @@ export const getInstallPath = (cacheDir: string): string =>
     ? join(cacheDir, "autifyconnect.exe")
     : join(cacheDir, "autifyconnect");
 
-export const getInstallVersion = async (path: string): Promise<string> => {
-  if (!existsSync(path))
-    throw new CLIError(
-      `Autify Connect Client isn't installed yet at ${path}. Run \`autify connect client install\` first.`
-    );
-  const { stderr } = await promisify(exec)(`${path} --version`);
+export const getInstallVersion = async (
+  path: string,
+  installPath: string
+): Promise<string> => {
+  if (!existsSync(path)) {
+    const error =
+      path === installPath
+        ? new CLIError(
+            `Autify Connect Client isn't installed yet at ${path}. Run \`autify connect client install\` first.`
+          )
+        : new CLIError(
+            `Autify Connect Client isn't installed specified location ${path}.`
+          );
+    throw error;
+  }
+
+  const { stderr } = await crossExecFilePromise(path, ["--version"], {
+    env: {
+      ...env,
+      // For fake command
+      AUTIFY_CONNECT_CLIENT_INSTALL_PATH: installPath,
+    },
+  });
   const version = stderr.trim();
   if (version === "") throw new CLIError("Version is empty");
   return version;
@@ -115,10 +132,10 @@ export const installClient = async (
   const downloadPath = await download(workspaceDir);
   const extractPath = await extract(downloadPath);
   // Pre-install validation
-  await validateVersion(extractPath);
   const installPath = getInstallPath(cacheDir);
+  await validateVersion(extractPath, installPath);
   renameSync(extractPath, installPath);
-  const version = await validateVersion(installPath);
+  const version = await validateVersion(installPath, installPath);
   // Clean up workspace. Ignore any exception as install is already done.
   try {
     rmSync(workspaceDir, { recursive: true, force: true });

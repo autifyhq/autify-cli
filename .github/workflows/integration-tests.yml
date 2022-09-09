@@ -31,9 +31,8 @@ jobs:
           target: ${{ matrix.target }}
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
-      - run: npm run test:integration
-      # TODO: Improve Autify Connect tests
       - run: autify connect client install
+      - run: npm run test:integration
 
   win:
     runs-on: windows-latest
@@ -47,6 +46,7 @@ jobs:
           target: win
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
+      - run: autify connect client install
       - run: npm run test:integration
 
   macos:
@@ -61,6 +61,7 @@ jobs:
           target: macos
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
+      - run: autify connect client install
       - run: npm run test:integration
 
   shell:
@@ -81,6 +82,7 @@ jobs:
           target: ${{ matrix.target }}
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
+      - run: autify connect client install
       - run: npm run test:integration
 
   brew:
@@ -102,6 +104,7 @@ jobs:
           target: brew
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
+      - run: autify connect client install
       - run: npm run test:integration
 
   npm:
@@ -116,4 +119,5 @@ jobs:
           target: npm
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
+      - run: autify connect client install
       - run: autify-cli-integration-test

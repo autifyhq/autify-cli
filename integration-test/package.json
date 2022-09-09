@@ -6,7 +6,8 @@
   "bin": {
     "autify-cli-integration-test": "bin/autify-cli-integration-test.js",
     "autify-mobile-generate-fake-app": "bin/autify-mobile-generate-fake-app.js",
-    "autify-with-proxy": "bin/autify-with-proxy.js"
+    "autify-with-proxy": "bin/autify-with-proxy.js",
+    "autifyconnect-fake": "bin/autifyconnect-fake.js"
   },
   "homepage": "https://github.com/autifyhq/autify-cli",
   "license": "MIT",
@@ -25,7 +26,9 @@
   "dependencies": {
     "@pollyjs/adapter-node-http": "^6.0.5",
     "@pollyjs/core": "^6.0.5",
+    "@pollyjs/persister": "^6.0.5",
     "@pollyjs/persister-fs": "^6.0.5",
+    "app-root-path": "^3.1.0",
     "cross-env": "^7.0.3",
     "express": "^4.18.1",
     "http-proxy-middleware": "^2.0.6",

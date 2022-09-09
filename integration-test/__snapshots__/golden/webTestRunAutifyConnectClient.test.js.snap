@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`autify web test run https://app.autify.com/projects/0000/scenarios/0000 --wait --autify-connect-client 1`] = `
+Object {
+  "stderr": "",
+  "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
+[HPM] Proxy created: /  -> https://mobile-app.autify.com
+Starting Autify Connect Client for Access Point \\"autify-cli-ed5323e0-1163-4f5f-99fe-0a6f3388027a\\" (Autify Connect version fake)...
+Waiting until Autify Connect Client is ready...
+[Autify Connect Client] YYYY-MM-DDTHH:MM:SS.MMMZ info 	Starting to establish a secure connection with the Autify connect server. Your session ID is \\"fake\\".
+[Autify Connect Client] YYYY-MM-DDTHH:MM:SS.MMMZ info 	Successfully connected!
+Autify Connect Client is ready!
+✅ Successfully started: https://app.autify.com/projects/743/results/1161901 (Capability is Linux Chrome 104.0)
+🕐 Waiting for the test result: https://app.autify.com/projects/743/results/1161901
+[HH:MM:SS] Waiting... (timeout: 300 s) [started]
+[HH:MM:SS] → TestPlan: 🌀 Queuing, TestCases: 
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 👍 Passed , TestCases: 👍 Passed 
+[HH:MM:SS] Waiting... (timeout: 300 s) [completed]
+✅ Test passed!: https://app.autify.com/projects/743/results/1161901
+Waiting until Autify Connect Client exits...
+Autify Connect Access Point was deleted: \\"autify-cli-ed5323e0-1163-4f5f-99fe-0a6f3388027a\\"
+Autify Connect Client exited
+[HPM] server close signal received: closing proxy server
+",
+}
+`;

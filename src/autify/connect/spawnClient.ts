@@ -1,6 +1,5 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
-import { spawn } from "node:child_process";
 import { getInstallPath, getInstallVersion } from "./installClient";
 import { createInterface } from "node:readline";
 import { once, EventEmitter } from "node:events";
@@ -9,6 +8,9 @@ import { join } from "node:path";
 import { WebClient } from "@autifyhq/autify-sdk";
 import { get } from "../../config";
 import { v4 as uuid } from "uuid";
+import { env, platform } from "node:process";
+import { crossSpawn } from "../../child-process";
+import { ctrlc } from "ctrlc-windows";
 
 type EphemeralAccessPoint = Readonly<{
   webClient: WebClient;
@@ -36,10 +38,10 @@ const getOrCreateAccessPoint = async (
   }
 
   const { webClient, workspaceId } = ephemeralAccessPoint;
-  const accessPointName = `${EPHEMERAL_ACCESS_POINT_NAME_PREFIX}${uuid()}`;
-  const accessPointKey = (
-    await webClient.createAccessPoint(workspaceId, { name: accessPointName })
-  ).data.key;
+  const name = `${EPHEMERAL_ACCESS_POINT_NAME_PREFIX}${uuid()}`;
+  const { name: accessPointName, key: accessPointKey } = (
+    await webClient.createAccessPoint(workspaceId, { name })
+  ).data;
   return { accessPointName, accessPointKey };
 };
 
@@ -137,16 +139,19 @@ export const spawnClient = async (
   { verbose, fileLogging, ephemeralAccessPoint }: SpawnClientOptions
 ): Promise<AutifyConnectClient> => {
   const state = new EventEmitter();
-  const clientPath = getInstallPath(cacheDir);
+  const installPath = getInstallPath(cacheDir);
+  const clientPath =
+    get(configDir, "AUTIFY_CONNECT_CLIENT_PATH") ?? installPath;
   const args = ["--log-format", "json"];
   if (verbose) args.push("--verbose");
-  const version = await getInstallVersion(clientPath);
+  const version = await getInstallVersion(clientPath, installPath);
   const { accessPointName, accessPointKey } = await getOrCreateAccessPoint(
     configDir,
     ephemeralAccessPoint
   );
-  const childProcess = spawn(clientPath, args, {
+  const childProcess = crossSpawn(clientPath, args, {
     env: {
+      ...env,
       AUTIFY_CONNECT_KEY: accessPointKey,
     },
   });
@@ -169,7 +174,10 @@ export const spawnClient = async (
     version,
     logFile,
     accessPointName,
-    kill: () => childProcess.kill(),
+    kill: () => {
+      if (platform === "win32" && !env.JEST_WORKER_ID) ctrlc(childProcess.pid);
+      else childProcess.kill("SIGINT");
+    },
     waitReady: async () => clientReady,
     waitExit: async () => {
       const [code, signal] = await childProcessExit;
