@@ -237,7 +237,7 @@ export default class WebTestRun extends Command {
             `Autify Connect Access Point was deleted: "${deletedAccessPointName}"`
           );
         this.log(
-          `Autify Connect Client exited (code: ${code}, signal: ${signal}).`
+          `Autify Connect Client exited (code: ${code}, signal: ${signal})`
         );
       }
 

@@ -50,6 +50,19 @@ index d89b9c6..9c3f4a5 100644
                      CopySource: debCopySource,
                      Key: debKey,
                      CacheControl: maxAge,
+diff --git a/node_modules/oclif/lib/tarballs/build.js b/node_modules/oclif/lib/tarballs/build.js
+index ffbbd21..975c4ae 100644
+--- a/node_modules/oclif/lib/tarballs/build.js
++++ b/node_modules/oclif/lib/tarballs/build.js
+@@ -61,6 +61,8 @@ async function build(c, options = {}) {
+             }
+             await qq.cp(lockpath, '.');
+             await qq.x('npm install --production');
++            await qq.x('mkdir ./node_modules/ctrlc-windows/dist');
++            await qq.x('curl -L https://github.com/thefrontside/ctrlc-windows/releases/download/v2.0.0/win32-x64-napi-v4.tar.gz | tar xvzf - -C ./node_modules/ctrlc-windows/dist')
+         }
+     };
+     const pretarball = async () => {
 diff --git a/node_modules/oclif/lib/version-indexes.js b/node_modules/oclif/lib/version-indexes.js
 index 2410048..ca12848 100644
 --- a/node_modules/oclif/lib/version-indexes.js

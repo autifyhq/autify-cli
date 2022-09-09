@@ -1,14 +1,16 @@
 import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
-import { Polly } from "@pollyjs/core";
+import { Polly, Request } from "@pollyjs/core";
 import NodeHttpAdapter from "@pollyjs/adapter-node-http";
+import { HarRequest, HarEntry } from "@pollyjs/persister";
 import FSPersister from "@pollyjs/persister-fs";
 import { spawn } from "node:child_process";
 import { AddressInfo } from "node:net";
-import path from "node:path";
+import path, { join } from "node:path";
 import { argv, env, exit } from "node:process";
 import { existsSync } from "node:fs";
 import which from "which";
+import appRoot from "app-root-path";
 import { normalizeCommand } from "../commands";
 
 Polly.register(NodeHttpAdapter);
@@ -27,6 +29,47 @@ const getAutifyCli = (): string => {
   if (!existsSync(autify) && !which.sync(autify))
     throw new Error(`Invalid autify-cli path: ${autify}`);
   return autify;
+};
+
+const getAutifyConnectClient = () => {
+  if (AUTIFY_POLLY_RECORD) return;
+  const root = appRoot.path;
+  return join(root, "node_modules", ".bin", "autifyconnect-fake");
+};
+
+const isEndpoint = (
+  request: HarRequest | Request,
+  method: string,
+  pathnameRegExp: RegExp
+) => {
+  const { pathname } = new URL(request.url);
+  return method === request.method && pathnameRegExp.test(pathname);
+};
+
+const isCreateAccessPoint = (request: HarRequest | Request) =>
+  isEndpoint(
+    request,
+    "POST",
+    /\/api\/v1\/projects\/[^/]+\/autify_connect\/access_points/
+  );
+const isDeleteAccessPoint = (request: HarRequest | Request) =>
+  isEndpoint(
+    request,
+    "DELETE",
+    /\/api\/v1\/projects\/[^/]+\/autify_connect\/access_points/
+  );
+
+const ignoreBody = (request: HarRequest | Request) => {
+  if (isCreateAccessPoint(request) || isDeleteAccessPoint(request)) return true;
+};
+
+const filterRecording = ({ request, response }: HarEntry) => {
+  if (isCreateAccessPoint(request)) {
+    response.content.text = response.content.text?.replace(
+      /"key":"[^"]+"/,
+      `"key":"000000000000000000000000000000"`
+    );
+  }
 };
 
 const createPolly = async (args: string[]) => {
@@ -53,9 +96,10 @@ const createPolly = async (args: string[]) => {
     flushRequestsOnStop: true,
     matchRequestsBy: {
       headers: false,
-      body: (body, _) => {
+      body: (body, request) => {
         // Binary body is not recorded. Ignore for matching.
         if (typeof body !== "string") return "";
+        if (ignoreBody(request)) return "";
         return body;
       },
     },
@@ -64,6 +108,7 @@ const createPolly = async (args: string[]) => {
   polly.server.any().on("beforePersist", (_req, recording) => {
     recording.request.headers = [];
     recording.response.headers = [];
+    filterRecording(recording);
   });
   return polly;
 };
@@ -89,6 +134,7 @@ const autifyWithProxy = async (originalArgs: string[]) => {
       ...env,
       AUTIFY_WEB_BASE_PATH: `http://localhost:${webProxy.port}/api/v1/`,
       AUTIFY_MOBILE_BASE_PATH: `http://localhost:${mobileProxy.port}/api/v1/`,
+      AUTIFY_CONNECT_CLIENT_PATH: getAutifyConnectClient(),
     },
     stdio: "inherit",
     shell: true,
