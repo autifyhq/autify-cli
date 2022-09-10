@@ -1,3 +1,41 @@
+diff --git a/node_modules/oclif/lib/commands/pack/win.js b/node_modules/oclif/lib/commands/pack/win.js
+index 4e7875c..13f707d 100644
+--- a/node_modules/oclif/lib/commands/pack/win.js
++++ b/node_modules/oclif/lib/commands/pack/win.js
+@@ -7,15 +7,26 @@ const upload_util_1 = require("../../upload-util");
+ const scripts = {
+     /* eslint-disable no-useless-escape */
+     // eslint-disable-next-line unicorn/no-useless-undefined
+-    cmd: (config, additionalCLI = undefined) => `@echo off
+-setlocal enableextensions
++    cmd: (config, additionalCLI = undefined) => `@ECHO off
++SETLOCAL enableextensions
+ 
+-set ${additionalCLI ? `${additionalCLI.toUpperCase()}_BINPATH` : config.scopedEnvVarKey('BINPATH')}=%~dp0\\${additionalCLI !== null && additionalCLI !== void 0 ? additionalCLI : config.bin}.cmd
+-if exist "%LOCALAPPDATA%\\${config.dirname}\\client\\bin\\${additionalCLI !== null && additionalCLI !== void 0 ? additionalCLI : config.bin}.cmd" (
+-  "%LOCALAPPDATA%\\${config.dirname}\\client\\bin\\${additionalCLI !== null && additionalCLI !== void 0 ? additionalCLI : config.bin}.cmd" %*
+-) else (
+-  "%~dp0\\..\\client\\bin\\node.exe" "%~dp0\\..\\client\\${additionalCLI ? `${additionalCLI}\\bin\\run` : 'bin\\run'}" %*
++GOTO start
++:find_dp0
++SET dp0=%~dp0
++EXIT /b
++:start
++SETLOCAL
++CALL :find_dp0
++
++SET ${additionalCLI ? `${additionalCLI.toUpperCase()}_BINPATH` : config.scopedEnvVarKey('BINPATH')}=%dp0%\\${additionalCLI !== null && additionalCLI !== void 0 ? additionalCLI : config.bin}.cmd
++IF EXIST "%LOCALAPPDATA%\\${config.dirname}\\client\\bin\\${additionalCLI !== null && additionalCLI !== void 0 ? additionalCLI : config.bin}.cmd" (
++  SET "_prog=%LOCALAPPDATA%\\${config.dirname}\\client\\bin\\${additionalCLI !== null && additionalCLI !== void 0 ? additionalCLI : config.bin}.cmd"
++) ELSE (
++  SET "_prog=%dp0%\\..\\client\\bin\\node.exe"
++  SET "_script=%dp0%\\..\\client\\${additionalCLI ? `${additionalCLI}\\bin\\run` : 'bin\\run'}"
+ )
++
++ENDLOCAL & GOTO #_undefined_# 2>NUL || title %COMSPEC% & IF "%_script%" == "" ("%_prog%" %*) ELSE ("%_prog%" "%_script%" %*)
+ `,
+     sh: (config) => `#!/bin/sh
+ basedir=$(dirname "$(echo "$0" | sed -e 's,\\\\,/,g')")
 diff --git a/node_modules/oclif/lib/commands/promote.js b/node_modules/oclif/lib/commands/promote.js
 index d89b9c6..9c3f4a5 100644
 --- a/node_modules/oclif/lib/commands/promote.js
@@ -50,6 +88,59 @@ index d89b9c6..9c3f4a5 100644
                      CopySource: debCopySource,
                      Key: debKey,
                      CacheControl: maxAge,
+diff --git a/node_modules/oclif/lib/tarballs/bin.js b/node_modules/oclif/lib/tarballs/bin.js
+index 835eb02..46c7b2b 100644
+--- a/node_modules/oclif/lib/tarballs/bin.js
++++ b/node_modules/oclif/lib/tarballs/bin.js
+@@ -8,23 +8,34 @@ async function writeBinScripts({ config, baseWorkspace, nodeVersion }) {
+     const clientHomeEnvVar = config.scopedEnvVarKey('OCLIF_CLIENT_HOME');
+     const writeWin32 = async () => {
+         const { bin } = config;
+-        await qq.write([baseWorkspace, 'bin', `${config.bin}.cmd`], `@echo off
+-setlocal enableextensions
++        await qq.write([baseWorkspace, 'bin', `${config.bin}.cmd`], `@ECHO off
++SETLOCAL enableextensions
+ 
+-if not "%${redirectedEnvVar}%"=="1" if exist "%LOCALAPPDATA%\\${bin}\\client\\bin\\${bin}.cmd" (
+-  set ${redirectedEnvVar}=1
+-  "%LOCALAPPDATA%\\${bin}\\client\\bin\\${bin}.cmd" %*
+-  goto:EOF
+-)
++GOTO start
++:find_dp0
++SET dp0=%~dp0
++EXIT /b
++:start
++SETLOCAL
++CALL :find_dp0
+ 
+-if not defined ${binPathEnvVar} set ${binPathEnvVar}="%~dp0${bin}.cmd"
+-if exist "%~dp0..\\bin\\node.exe" (
+-  "%~dp0..\\bin\\node.exe" "%~dp0..\\bin\\run" %*
+-) else if exist "%LOCALAPPDATA%\\oclif\\node\\node-${nodeVersion}.exe" (
+-  "%LOCALAPPDATA%\\oclif\\node\\node-${nodeVersion}.exe" "%~dp0..\\bin\\run" %*
+-) else (
+-  node "%~dp0..\\bin\\run" %*
++IF NOT "%${redirectedEnvVar}%"=="1" IF EXIST "%LOCALAPPDATA%\\${bin}\\client\\bin\\${bin}.cmd" (
++  SET ${redirectedEnvVar}=1
++  SET "_prog=%LOCALAPPDATA%\\${bin}\\client\\bin\\${bin}.cmd"
++) ELSE (
++  IF NOT DEFINED ${binPathEnvVar} SET ${binPathEnvVar}="%dp0%\\${bin}.cmd"
++  SET "_script=%dp0%\\..\\bin\\run"
++  IF EXIST "%dp0%\\..\\bin\\node.exe" (
++    SET "_prog=%dp0%\\..\\bin\\node.exe"
++  ) ELSE IF EXIST "%LOCALAPPDATA%\\oclif\\node\\node-${nodeVersion}.exe" (
++    SET "_prog=%LOCALAPPDATA%\\oclif\\node\\node-${nodeVersion}.exe"
++  ) ELSE (
++    SET "_prog=node"
++    SET PATHEXT=%PATHEXT:;.JS;=;%
++  )
+ )
++
++ENDLOCAL & GOTO #_undefined_# 2>NUL || title %COMSPEC% & IF "%_script%" == "" ("%_prog%" %*) ELSE ("%_prog%" "%_script%" %*)
+ `);
+         // await qq.write([output, 'bin', config.bin], `#!/bin/sh
+         // basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 diff --git a/node_modules/oclif/lib/tarballs/build.js b/node_modules/oclif/lib/tarballs/build.js
 index ffbbd21..975c4ae 100644
 --- a/node_modules/oclif/lib/tarballs/build.js
