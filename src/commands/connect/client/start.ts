@@ -1,6 +1,9 @@
 import { WebClient } from "@autifyhq/autify-sdk";
 import { Command, Flags } from "@oclif/core";
-import { spawnClient } from "../../../autify/connect/spawnClient";
+import {
+  DEFAULT_CLIENT_DEBUG_SERVER_PORT,
+  spawnClient,
+} from "../../../autify/connect/spawnClient";
 import { get, getOrThrow } from "../../../config";
 
 const createEphemeralAccessPointIfNeeded = (
@@ -33,6 +36,9 @@ export default class ConnectClientStart extends Command {
         "Logging Autify Connect Client log to a file instead of console.",
       default: false,
     }),
+    "debug-server-port": Flags.integer({
+      description: `[default: ${DEFAULT_CLIENT_DEBUG_SERVER_PORT}] The server for debugging and monitoring launches on your local machine on the given port.`,
+    }),
     "web-workspace-id": Flags.integer({
       description:
         "Workspace ID of Autify for Web to create an ephemeral Access Point. If not specified, it will use the one configured by `autify connect access-point set`, instead.",
@@ -46,6 +52,7 @@ export default class ConnectClientStart extends Command {
       verbose,
       "file-logging": fileLogging,
       "web-workspace-id": webWorkspaceId,
+      "debug-server-port": debugServerPort,
     } = flags;
     const ephemeralAccessPoint = createEphemeralAccessPointIfNeeded(
       configDir,
@@ -63,6 +70,7 @@ export default class ConnectClientStart extends Command {
     } = await spawnClient(configDir, cacheDir, {
       verbose,
       fileLogging,
+      debugServerPort,
       ephemeralAccessPoint,
     });
     this.log(
@@ -72,16 +80,21 @@ export default class ConnectClientStart extends Command {
 
     if (logFile) this.log(`Log file is located at ${logFile}`);
     this.log("Waiting until Autify Connect Client is ready...");
-    await waitReady();
-    this.log("Autify Connect Client is ready!");
-    const [code, signal, deletedAccessPointName] = await waitExit();
-    if (deletedAccessPointName)
+    try {
+      await waitReady();
+      this.log("Autify Connect Client is ready!");
+    } catch (error) {
+      this.warn(error as Error);
+    } finally {
+      const [code, signal, deletedAccessPointName] = await waitExit();
+      if (deletedAccessPointName)
+        this.log(
+          `Autify Connect Access Point was deleted: "${deletedAccessPointName}"`
+        );
       this.log(
-        `Autify Connect Access Point was deleted: "${deletedAccessPointName}"`
+        `Autify Connect Client exited (code: ${code}, signal: ${signal})`
       );
-    this.log(
-      `Autify Connect Client exited (code: ${code}, signal: ${signal}).`
-    );
-    this.exit(code ?? 1);
+      this.exit(code ?? 1);
+    }
   }
 }

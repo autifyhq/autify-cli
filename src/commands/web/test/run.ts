@@ -7,6 +7,7 @@ import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
 import WebTestWait from "./wait";
 import {
   AutifyConnectClient,
+  DEFAULT_CLIENT_DEBUG_SERVER_PORT,
   spawnClient,
 } from "../../../autify/connect/spawnClient";
 import { CLIError } from "@oclif/errors";
@@ -78,6 +79,10 @@ export default class WebTestRun extends Command {
         "[Experimental] Logging Autify Connect Client log to a file instead of console.",
       dependsOn: ["autify-connect-client"],
     }),
+    "autify-connect-client-debug-server-port": Flags.integer({
+      description: `[Experimental] [default: ${DEFAULT_CLIENT_DEBUG_SERVER_PORT}] Port for Autify Connect Client debug server.`,
+      dependsOn: ["autify-connect-client"],
+    }),
     os: Flags.string({ description: "OS to run the test" }),
     "os-version": Flags.string({ description: "OS version to run the test" }),
     browser: Flags.string({ description: "Browser to run the test" }),
@@ -145,33 +150,6 @@ export default class WebTestRun extends Command {
 
     let autifyConnectAccessPoint = flags["autify-connect"];
     let autifyConnectClient: AutifyConnectClient | undefined;
-    if (flags["autify-connect-client"]) {
-      autifyConnectClient = await spawnClient(configDir, cacheDir, {
-        verbose: flags["autify-connect-client-verbose"],
-        fileLogging: flags["autify-connect-client-file-logging"],
-        ephemeralAccessPoint: {
-          webClient: client,
-          workspaceId,
-        },
-      });
-      const {
-        version,
-        versionMismatchWarning,
-        logFile,
-        accessPointName,
-        waitReady,
-      } = autifyConnectClient;
-      autifyConnectAccessPoint = accessPointName;
-      this.log(
-        `Starting Autify Connect Client for Access Point "${accessPointName}" (${version})...`
-      );
-      if (versionMismatchWarning) this.warn(versionMismatchWarning);
-      if (logFile)
-        this.log(`Autify Connect Client log file is located at ${logFile}`);
-      this.log("Waiting until Autify Connect Client is ready...");
-      await waitReady();
-      this.log("Autify Connect Client is ready!");
-    }
 
     const runTestOnce = async () => {
       const { resultId, capability } = await runTest(client, parsedTest, {
@@ -194,6 +172,35 @@ export default class WebTestRun extends Command {
     };
 
     try {
+      if (flags["autify-connect-client"]) {
+        autifyConnectClient = await spawnClient(configDir, cacheDir, {
+          verbose: flags["autify-connect-client-verbose"],
+          fileLogging: flags["autify-connect-client-file-logging"],
+          debugServerPort: flags["autify-connect-client-debug-server-port"],
+          ephemeralAccessPoint: {
+            webClient: client,
+            workspaceId,
+          },
+        });
+        const {
+          version,
+          versionMismatchWarning,
+          logFile,
+          accessPointName,
+          waitReady,
+        } = autifyConnectClient;
+        autifyConnectAccessPoint = accessPointName;
+        this.log(
+          `Starting Autify Connect Client for Access Point "${accessPointName}" (${version})...`
+        );
+        if (versionMismatchWarning) this.warn(versionMismatchWarning);
+        if (logFile)
+          this.log(`Autify Connect Client log file is located at ${logFile}`);
+        this.log("Waiting until Autify Connect Client is ready...");
+        await waitReady();
+        this.log("Autify Connect Client is ready!");
+      }
+
       let testResultUrl = await runTestOnce();
       if (flags.wait) {
         const webTestWait = async (url: string) => {
@@ -235,7 +242,7 @@ export default class WebTestRun extends Command {
     } catch (error) {
       if (autifyConnectClient) {
         this.log("Waiting until Autify Connect Client exits...");
-        autifyConnectClient.kill();
+        await autifyConnectClient.kill();
         const [code, signal, deletedAccessPointName] =
           await autifyConnectClient.waitExit();
         if (deletedAccessPointName)
