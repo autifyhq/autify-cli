@@ -26,7 +26,7 @@
     "@oclif/plugin-warn-if-update-available": "^2.0.4",
     "archiver": "^5.3.1",
     "ctrlc-windows": "^2.0.0",
-    "envfile": "^6.17.0",
+    "envfile": "^6.18.0",
     "inquirer": "^8.2.4",
     "listr": "^0.14.3",
     "node-emoji": "^1.11.0",
