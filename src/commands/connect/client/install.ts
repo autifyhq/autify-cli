@@ -13,8 +13,8 @@ export default class ConnectClientInstall extends Command {
 
   public async run(): Promise<void> {
     await this.parse(ConnectClientInstall);
-    const { cacheDir } = this.config;
-    const { version, path } = await installClient(cacheDir);
+    const { configDir, cacheDir } = this.config;
+    const { version, path } = await installClient(configDir, cacheDir);
     this.log(
       `Successfully installed Autify Connect Client (path: ${path}, version: ${version})`
     );

@@ -32,6 +32,8 @@ jobs:
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
       - run: autify connect client install
+        env:
+          AUTIFY_CONNECT_CLIENT_MODE: "fake"
       - run: npm run test:integration
 
   win:
@@ -47,6 +49,8 @@ jobs:
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
       - run: autify connect client install
+        env:
+          AUTIFY_CONNECT_CLIENT_MODE: "fake"
       - run: npm run test:integration
 
   macos:
@@ -62,6 +66,8 @@ jobs:
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
       - run: autify connect client install
+        env:
+          AUTIFY_CONNECT_CLIENT_MODE: "fake"
       - run: npm run test:integration
 
   shell:
@@ -83,6 +89,8 @@ jobs:
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
       - run: autify connect client install
+        env:
+          AUTIFY_CONNECT_CLIENT_MODE: "fake"
       - run: npm run test:integration
 
   brew:
@@ -105,6 +113,8 @@ jobs:
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
       - run: autify connect client install
+        env:
+          AUTIFY_CONNECT_CLIENT_MODE: "fake"
       - run: npm run test:integration
 
   npm:
@@ -120,4 +130,6 @@ jobs:
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
       - run: autify connect client install
+        env:
+          AUTIFY_CONNECT_CLIENT_MODE: "fake"
       - run: autify-cli-integration-test
