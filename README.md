@@ -21,6 +21,7 @@ See our official document: https://help.autify.com/docs/autify-command-line-inte
 
 <!-- commands -->
 
+- [`autify connect access-point create`](#autify-connect-access-point-create)
 - [`autify connect access-point set`](#autify-connect-access-point-set)
 - [`autify connect client install [VERSION]`](#autify-connect-client-install-version)
 - [`autify connect client start`](#autify-connect-client-start)
@@ -48,6 +49,25 @@ See our official document: https://help.autify.com/docs/autify-command-line-inte
 - [`autify web auth login`](#autify-web-auth-login)
 - [`autify web test run SCENARIO-OR-TEST-PLAN-URL`](#autify-web-test-run-scenario-or-test-plan-url)
 - [`autify web test wait TEST-RESULT-URL`](#autify-web-test-wait-test-result-url)
+
+## `autify connect access-point create`
+
+[Experimental] Create an Autify Connect Access Point
+
+```
+USAGE
+  $ autify connect access-point create --name <value> [--web-workspace-id <value>]
+
+FLAGS
+  --name=<value>              (required) Name of Autify Connect Access Point to be created
+  --web-workspace-id=<value>  Workspace ID of Autify for Web to which the Access Point belong
+
+DESCRIPTION
+  [Experimental] Create an Autify Connect Access Point
+
+EXAMPLES
+  $ autify connect access-point create --name NAME --web-workspace-id ID
+```
 
 ## `autify connect access-point set`
 
