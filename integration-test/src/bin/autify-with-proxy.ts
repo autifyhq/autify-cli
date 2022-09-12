@@ -6,11 +6,10 @@ import { HarRequest, HarEntry } from "@pollyjs/persister";
 import FSPersister from "@pollyjs/persister-fs";
 import { spawn } from "node:child_process";
 import { AddressInfo } from "node:net";
-import path, { join } from "node:path";
+import path from "node:path";
 import { argv, env, exit } from "node:process";
 import { existsSync } from "node:fs";
 import which from "which";
-import appRoot from "app-root-path";
 import { normalizeCommand } from "../commands";
 
 Polly.register(NodeHttpAdapter);
@@ -29,12 +28,6 @@ const getAutifyCli = (): string => {
   if (!existsSync(autify) && !which.sync(autify))
     throw new Error(`Invalid autify-cli path: ${autify}`);
   return autify;
-};
-
-const getAutifyConnectClient = () => {
-  if (AUTIFY_POLLY_RECORD) return;
-  const root = appRoot.path;
-  return join(root, "node_modules", ".bin", "autifyconnect-fake");
 };
 
 const isEndpoint = (
@@ -134,7 +127,7 @@ const autifyWithProxy = async (originalArgs: string[]) => {
       ...env,
       AUTIFY_WEB_BASE_PATH: `http://localhost:${webProxy.port}/api/v1/`,
       AUTIFY_MOBILE_BASE_PATH: `http://localhost:${mobileProxy.port}/api/v1/`,
-      AUTIFY_CONNECT_CLIENT_PATH: getAutifyConnectClient(),
+      AUTIFY_CONNECT_CLIENT_MODE: "fake",
     },
     stdio: "inherit",
     shell: true,

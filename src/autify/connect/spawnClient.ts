@@ -9,8 +9,8 @@ import { WebClient } from "@autifyhq/autify-sdk";
 import { get } from "../../config";
 import { v4 as uuid } from "uuid";
 import { env, platform } from "node:process";
-import { crossSpawn } from "../../child-process";
 import { ctrlc } from "ctrlc-windows";
+import { spawn } from "node:child_process";
 
 type EphemeralAccessPoint = Readonly<{
   webClient: WebClient;
@@ -139,17 +139,15 @@ export const spawnClient = async (
   { verbose, fileLogging, ephemeralAccessPoint }: SpawnClientOptions
 ): Promise<AutifyConnectClient> => {
   const state = new EventEmitter();
-  const installPath = getInstallPath(cacheDir);
-  const clientPath =
-    get(configDir, "AUTIFY_CONNECT_CLIENT_PATH") ?? installPath;
+  const clientPath = getInstallPath(configDir, cacheDir);
   const args = ["--log-format", "json"];
   if (verbose) args.push("--verbose");
-  const version = await getInstallVersion(clientPath, installPath);
+  const version = await getInstallVersion(clientPath);
   const { accessPointName, accessPointKey } = await getOrCreateAccessPoint(
     configDir,
     ephemeralAccessPoint
   );
-  const childProcess = crossSpawn(clientPath, args, {
+  const childProcess = spawn(clientPath, args, {
     env: {
       ...env,
       AUTIFY_CONNECT_KEY: accessPointKey,
@@ -175,7 +173,7 @@ export const spawnClient = async (
     logFile,
     accessPointName,
     kill: () => {
-      if (platform === "win32" && !env.JEST_WORKER_ID) ctrlc(childProcess.pid);
+      if (platform === "win32" && !env.JEST_WORKER_ID) ctrlc(childProcess.pid!);
       else childProcess.kill("SIGINT");
     },
     waitReady: async () => clientReady,
