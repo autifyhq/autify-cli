@@ -22,7 +22,7 @@ See our official document: https://help.autify.com/docs/autify-command-line-inte
 <!-- commands -->
 
 - [`autify connect access-point set`](#autify-connect-access-point-set)
-- [`autify connect client install`](#autify-connect-client-install)
+- [`autify connect client install [VERSION]`](#autify-connect-client-install-version)
 - [`autify connect client start`](#autify-connect-client-start)
 - [`autify help [COMMAND]`](#autify-help-command)
 - [`autify mobile api describe-test-result`](#autify-mobile-api-describe-test-result)
@@ -73,19 +73,32 @@ EXAMPLES
     $ autify connect access-point set --name=NAME < key.txt
 ```
 
-## `autify connect client install`
+## `autify connect client install [VERSION]`
 
-[Experimental] Install the latest stable version of Autify Connect Client
+[Experimental] Install Autify Connect Client
 
 ```
 USAGE
-  $ autify connect client install
+  $ autify connect client install [VERSION]
+
+ARGUMENTS
+  VERSION  [default: v0.6.1] Specify the target version of Autify Connect Client.
 
 DESCRIPTION
-  [Experimental] Install the latest stable version of Autify Connect Client
+  [Experimental] Install Autify Connect Client
 
 EXAMPLES
-  $ autify connect client install
+  (Recommended) Install the supported version:
+
+    $ autify connect client install
+
+  Install a specific version:
+
+    $ autify connect client install v0.6.1
+
+  Install a stable version:
+
+    $ autify connect client install stable
 ```
 
 ## `autify connect client start`

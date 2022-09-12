@@ -53,15 +53,23 @@ export default class ConnectClientStart extends Command {
       webWorkspaceId
     );
 
-    const { version, logFile, accessPointName, waitReady, waitExit } =
-      await spawnClient(configDir, cacheDir, {
-        verbose,
-        fileLogging,
-        ephemeralAccessPoint,
-      });
+    const {
+      version,
+      versionMismatchWarning,
+      logFile,
+      accessPointName,
+      waitReady,
+      waitExit,
+    } = await spawnClient(configDir, cacheDir, {
+      verbose,
+      fileLogging,
+      ephemeralAccessPoint,
+    });
     this.log(
       `Starting Autify Connect Client for Access Point "${accessPointName}" (${version})...`
     );
+    if (versionMismatchWarning) this.warn(versionMismatchWarning);
+
     if (logFile) this.log(`Log file is located at ${logFile}`);
     this.log("Waiting until Autify Connect Client is ready...");
     await waitReady();
