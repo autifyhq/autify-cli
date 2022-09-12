@@ -107,13 +107,15 @@ EXAMPLES
 
 ```
 USAGE
-  $ autify connect client start [--verbose] [--file-logging] [--web-workspace-id <value>]
+  $ autify connect client start [--verbose] [--file-logging] [--debug-server-port <value>] [--web-workspace-id <value>]
 
 FLAGS
-  --file-logging              Logging Autify Connect Client log to a file instead of console.
-  --verbose                   Make the operation more talkative.
-  --web-workspace-id=<value>  Workspace ID of Autify for Web to create an ephemeral Access Point. If not specified, it
-                              will use the one configured by `autify connect access-point set`, instead.
+  --debug-server-port=<value>  [default: 3000] The server for debugging and monitoring launches on your local machine on
+                               the given port.
+  --file-logging               Logging Autify Connect Client log to a file instead of console.
+  --verbose                    Make the operation more talkative.
+  --web-workspace-id=<value>   Workspace ID of Autify for Web to create an ephemeral Access Point. If not specified, it
+                               will use the one configured by `autify connect access-point set`, instead.
 
 DESCRIPTION
   [Experimental] Start Autify Connect Client
@@ -619,32 +621,38 @@ Run a scenario or test plan.
 ```
 USAGE
   $ autify web test run [SCENARIO-OR-TEST-PLAN-URL] [-n <value>] [-r <value>] [--autify-connect <value> |
-    --autify-connect-client] [--autify-connect-client-verbose ] [--autify-connect-client-file-logging ] [--os <value>]
-    [--os-version <value>] [--browser <value>] [--device <value>] [--device-type <value>] [-w] [-t <value>] [-v]
-    [--max-retry-count <value>]
+    --autify-connect-client] [--autify-connect-client-verbose ] [--autify-connect-client-file-logging ]
+    [--autify-connect-client-debug-server-port <value> ] [--os <value>] [--os-version <value>] [--browser <value>]
+    [--device <value>] [--device-type <value>] [-w] [-t <value>] [-v] [--max-retry-count <value>]
 
 ARGUMENTS
   SCENARIO-OR-TEST-PLAN-URL  Scenario URL or Test plan URL e.g.
                              https://app.autify.com/projects/<ID>/(scenarios|test_plans)/<ID>
 
 FLAGS
-  -n, --name=<value>                    Name of the test execution. (Only for test scenario execution.)
-  -r, --url-replacements=<value>...     URL replacements. Example: http://example.com=http://example.net
-  -t, --timeout=<value>                 [default: 300] Timeout seconds when waiting for the finish of the test
-                                        execution.
-  -v, --verbose                         Verbose output
-  -w, --wait                            Wait until the test finishes.
-  --autify-connect=<value>              Name of the Autify Connect Access Point (Only for test scenario execution.)
-  --autify-connect-client               [Experimental] Start Autify Connect Client (Only for test scenario execution.)
-  --autify-connect-client-file-logging  [Experimental] Logging Autify Connect Client log to a file instead of console.
-  --autify-connect-client-verbose       [Experimental] Verbose output for Autify Connect Client (Only for test scenario
-                                        execution.)
-  --browser=<value>                     Browser to run the test
-  --device=<value>                      Device to run the test
-  --device-type=<value>                 Device type to run the test
-  --max-retry-count=<value>             Maximum retry count. The command can take up to timeout * (max-retry-count + 1).
-  --os=<value>                          OS to run the test
-  --os-version=<value>                  OS version to run the test
+  -n, --name=<value>                                 Name of the test execution. (Only for test scenario execution.)
+  -r, --url-replacements=<value>...                  URL replacements. Example: http://example.com=http://example.net
+  -t, --timeout=<value>                              [default: 300] Timeout seconds when waiting for the finish of the
+                                                     test execution.
+  -v, --verbose                                      Verbose output
+  -w, --wait                                         Wait until the test finishes.
+  --autify-connect=<value>                           Name of the Autify Connect Access Point (Only for test scenario
+                                                     execution.)
+  --autify-connect-client                            [Experimental] Start Autify Connect Client (Only for test scenario
+                                                     execution.)
+  --autify-connect-client-debug-server-port=<value>  [Experimental] [default: 3000] Port for Autify Connect Client debug
+                                                     server.
+  --autify-connect-client-file-logging               [Experimental] Logging Autify Connect Client log to a file instead
+                                                     of console.
+  --autify-connect-client-verbose                    [Experimental] Verbose output for Autify Connect Client (Only for
+                                                     test scenario execution.)
+  --browser=<value>                                  Browser to run the test
+  --device=<value>                                   Device to run the test
+  --device-type=<value>                              Device type to run the test
+  --max-retry-count=<value>                          Maximum retry count. The command can take up to timeout *
+                                                     (max-retry-count + 1).
+  --os=<value>                                       OS to run the test
+  --os-version=<value>                               OS version to run the test
 
 DESCRIPTION
   Run a scenario or test plan.

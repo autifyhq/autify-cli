@@ -17,6 +17,7 @@ import { v4 as uuid } from "uuid";
 import { env, platform } from "node:process";
 import { ctrlc } from "ctrlc-windows";
 import { spawn } from "node:child_process";
+import fetch from "node-fetch";
 
 type EphemeralAccessPoint = Readonly<{
   webClient: WebClient;
@@ -120,6 +121,37 @@ const onLogMsg = (
   });
 };
 
+export const DEFAULT_CLIENT_DEBUG_SERVER_PORT = 3000;
+
+const requestDebugServer = async (
+  port: number,
+  path: string,
+  method = "GET"
+) => {
+  const response = await fetch(`http://localhost:${port}${path}`, { method });
+  if (response.ok) return response.json();
+  throw new CLIError(
+    `Request to debug server failed: ${method} ${path} => ${response.status} ${response.statusText}`
+  );
+};
+
+type DebugServerStatusResponse = Readonly<{
+  status: string;
+  message: string;
+}>;
+
+const requestDebugServerStatus = async (port: number) => {
+  const response = (await requestDebugServer(
+    port,
+    "/status"
+  )) as DebugServerStatusResponse;
+  if (!response.status || !response.message)
+    return new CLIError(
+      `Invalid response from GET /status: ${JSON.stringify(response)}`
+    );
+  return response;
+};
+
 type ProcessExit = [code: number | null, signal: NodeJS.Signals | null];
 
 export type AutifyConnectClient = Readonly<{
@@ -127,8 +159,8 @@ export type AutifyConnectClient = Readonly<{
   versionMismatchWarning?: string;
   logFile?: string;
   accessPointName: string;
-  kill: () => void;
-  waitReady: () => Promise<any[]>;
+  kill: () => Promise<void>;
+  waitReady: () => Promise<void>;
   waitExit: () => Promise<
     [...ProcessExit, ...[deletedAccessPointName?: string]]
   >;
@@ -137,18 +169,22 @@ export type AutifyConnectClient = Readonly<{
 type SpawnClientOptions = Readonly<{
   verbose?: boolean;
   fileLogging?: boolean;
+  debugServerPort?: number;
   ephemeralAccessPoint?: EphemeralAccessPoint;
 }>;
 
 export const spawnClient = async (
   configDir: string,
   cacheDir: string,
-  { verbose, fileLogging, ephemeralAccessPoint }: SpawnClientOptions
+  {
+    verbose,
+    fileLogging,
+    debugServerPort = DEFAULT_CLIENT_DEBUG_SERVER_PORT,
+    ephemeralAccessPoint,
+  }: SpawnClientOptions
 ): Promise<AutifyConnectClient> => {
   const state = new EventEmitter();
   const clientPath = getInstallPath(configDir, cacheDir);
-  const args = ["--log-format", "json"];
-  if (verbose) args.push("--verbose");
   const version = await getInstallVersion(clientPath);
   let versionMismatchWarning;
   try {
@@ -166,6 +202,13 @@ export const spawnClient = async (
     configDir,
     ephemeralAccessPoint
   );
+  const args = [
+    "--log-format",
+    "json",
+    "--experimental-debug-server-port",
+    debugServerPort.toString(),
+  ];
+  if (verbose) args.push("--verbose");
   const childProcess = spawn(clientPath, args, {
     env: {
       ...env,
@@ -186,19 +229,44 @@ export const spawnClient = async (
       state.emit("ready");
     }
   });
+  const statusTimer = setInterval(async () => {
+    try {
+      const response = await requestDebugServerStatus(debugServerPort);
+      if (response instanceof CLIError) state.emit("error", response);
+      else state.emit(response.status, response.message);
+    } catch (error) {
+      state.emit("error", error);
+    }
+  }, 1000);
+  const kill = async () => {
+    try {
+      await requestDebugServer(debugServerPort, "/terminate", "POST");
+      // TODO: Add timeout logic and fallback to signal.
+    } catch {
+      // Ignore any exceptions to fallback to signal.
+    } finally {
+      if (platform === "win32" && !env.JEST_WORKER_ID) ctrlc(childProcess.pid!);
+      else childProcess.kill("SIGINT");
+    }
+  };
 
   return {
     version,
     versionMismatchWarning,
     logFile,
     accessPointName,
-    kill: () => {
-      if (platform === "win32" && !env.JEST_WORKER_ID) ctrlc(childProcess.pid!);
-      else childProcess.kill("SIGINT");
+    kill,
+    waitReady: async () => {
+      try {
+        await clientReady;
+      } catch (error) {
+        await kill();
+        throw error;
+      }
     },
-    waitReady: async () => clientReady,
     waitExit: async () => {
       const [code, signal] = await childProcessExit;
+      clearInterval(statusTimer);
       const deletedAccessPointName = await deleteAccessPointIfPossible(
         accessPointName,
         ephemeralAccessPoint
