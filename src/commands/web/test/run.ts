@@ -154,12 +154,18 @@ export default class WebTestRun extends Command {
           workspaceId,
         },
       });
-      const { version, logFile, accessPointName, waitReady } =
-        autifyConnectClient;
+      const {
+        version,
+        versionMismatchWarning,
+        logFile,
+        accessPointName,
+        waitReady,
+      } = autifyConnectClient;
       autifyConnectAccessPoint = accessPointName;
       this.log(
         `Starting Autify Connect Client for Access Point "${accessPointName}" (${version})...`
       );
+      if (versionMismatchWarning) this.warn(versionMismatchWarning);
       if (logFile)
         this.log(`Autify Connect Client log file is located at ${logFile}`);
       this.log("Waiting until Autify Connect Client is ready...");

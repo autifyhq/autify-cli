@@ -17,6 +17,9 @@ import { Extract } from "unzip-stream";
 import { execFile } from "node:child_process";
 import { get } from "../../config";
 
+// Update whenever to bump supported version.
+export const AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION = "v0.6.1";
+
 export type ClientMode = "fake" | "real";
 
 const getMode = (configDir: string): ClientMode => {
@@ -47,20 +50,24 @@ const getArch = () => {
 const getExt = () => (getOs() === "windows" ? "zip" : "tar.gz");
 
 const realBaseUrl =
-  "https://autifyconnect.s3.ap-northeast-1.amazonaws.com/autifyconnect/versions/stable";
+  "https://autifyconnect.s3.ap-northeast-1.amazonaws.com/autifyconnect/versions";
 const fakeBaseUrl =
-  "https://autifyconnect.s3.ap-northeast-1.amazonaws.com/fake/versions/stable";
-const getUrl = (mode: ClientMode) => {
+  "https://autifyconnect.s3.ap-northeast-1.amazonaws.com/fake/versions";
+const getUrl = (mode: ClientMode, version: string) => {
   const baseUrl = mode === "fake" ? fakeBaseUrl : realBaseUrl;
   const prefix = mode === "fake" ? "autifyconnect-fake" : "autifyconnect";
   const os = getOs();
   const arch = getArch();
   const ext = getExt();
-  return new URL(`${baseUrl}/${prefix}_${os}_${arch}.${ext}`);
+  return new URL(`${baseUrl}/${version}/${prefix}_${os}_${arch}.${ext}`);
 };
 
-const download = async (workspaceDir: string, mode: ClientMode) => {
-  const url = getUrl(mode);
+const download = async (
+  workspaceDir: string,
+  mode: ClientMode,
+  version: string
+) => {
+  const url = getUrl(mode, version);
   const downloadPath = join(workspaceDir, basename(url.pathname));
   const response = await fetch(url);
   if (!response.ok)
@@ -95,14 +102,23 @@ const extract = async (downloadPath: string) => {
   throw new CLIError(`Unsupported file format: ${downloadPath}`);
 };
 
-const validateVersion = async (path: string) => {
-  try {
-    return await getInstallVersion(path);
-  } catch (error) {
-    throw new CLIError(
-      `Autify Connect Client binary doesn't work properly (path: ${path}, error: ${error})`
+export class ConnectClientVersionMismatchError extends CLIError {
+  constructor(readonly expected: string, readonly reality: string) {
+    super(
+      `Autify Connect Client version mismatch: ${reality} !== ${expected} (expected)`
     );
   }
+}
+
+export const validateVersion = async (
+  versionString: string,
+  version: string
+): Promise<void> => {
+  // No need to validate version if it's installed as "stable".
+  if (version === "stable") return;
+  // Format example: Autify Connect version v0.6.1, build ca0972e
+  if (!versionString.includes(version + ","))
+    throw new ConnectClientVersionMismatchError(version, versionString);
 };
 
 const getWorkspaceDir = (cacheDir: string) =>
@@ -133,7 +149,8 @@ export const getInstallVersion = async (path: string): Promise<string> => {
 
 export const installClient = async (
   configDir: string,
-  cacheDir: string
+  cacheDir: string,
+  version: string
 ): Promise<{ version: string; path: string }> => {
   const mode = getMode(configDir);
   const workspaceDir = getWorkspaceDir(cacheDir);
@@ -141,13 +158,16 @@ export const installClient = async (
   if (existsSync(workspaceDir))
     rmSync(workspaceDir, { recursive: true, force: true });
   mkdirSync(workspaceDir);
-  const downloadPath = await download(workspaceDir, mode);
+  const downloadPath = await download(workspaceDir, mode, version);
   const extractPath = await extract(downloadPath);
   // Pre-install validation
-  await validateVersion(extractPath);
+  const preInstalledVersionString = await getInstallVersion(extractPath);
+  await validateVersion(preInstalledVersionString, version);
   const installPath = getInstallPath(configDir, cacheDir);
   renameSync(extractPath, installPath);
-  const version = await validateVersion(installPath);
+  // Re-validate against the final path
+  const versionString = await getInstallVersion(installPath);
+  await validateVersion(versionString, version);
   // Clean up workspace. Ignore any exception as install is already done.
   try {
     rmSync(workspaceDir, { recursive: true, force: true });
@@ -158,7 +178,7 @@ export const installClient = async (
   }
 
   return {
-    version,
+    version: versionString,
     path: installPath,
   };
 };

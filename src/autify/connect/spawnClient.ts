@@ -1,6 +1,12 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
-import { getInstallPath, getInstallVersion } from "./installClient";
+import {
+  AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION,
+  ConnectClientVersionMismatchError,
+  getInstallPath,
+  getInstallVersion,
+  validateVersion,
+} from "./installClient";
 import { createInterface } from "node:readline";
 import { once, EventEmitter } from "node:events";
 import { createLogger, format, transports } from "winston";
@@ -118,6 +124,7 @@ type ProcessExit = [code: number | null, signal: NodeJS.Signals | null];
 
 export type AutifyConnectClient = Readonly<{
   version: string;
+  versionMismatchWarning?: string;
   logFile?: string;
   accessPointName: string;
   kill: () => void;
@@ -143,6 +150,18 @@ export const spawnClient = async (
   const args = ["--log-format", "json"];
   if (verbose) args.push("--verbose");
   const version = await getInstallVersion(clientPath);
+  let versionMismatchWarning;
+  try {
+    await validateVersion(version, AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION);
+  } catch (error) {
+    if (error instanceof ConnectClientVersionMismatchError) {
+      versionMismatchWarning =
+        "Installed Autify Connect Client version doesn't match our supported version. " +
+        "Consider to run `autify connect client install` to install the supported version. " +
+        `(version: ${version}, supported: ${AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION})`;
+    }
+  }
+
   const { accessPointName, accessPointKey } = await getOrCreateAccessPoint(
     configDir,
     ephemeralAccessPoint
@@ -170,6 +189,7 @@ export const spawnClient = async (
 
   return {
     version,
+    versionMismatchWarning,
     logFile,
     accessPointName,
     kill: () => {
