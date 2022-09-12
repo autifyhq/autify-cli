@@ -1,6 +1,9 @@
 import { Command, Flags } from "@oclif/core";
 import * as inquirer from "inquirer";
-import { set } from "../../../config";
+import {
+  confirmOverwriteAccessPoint,
+  saveAccessPoint,
+} from "../../../autify/connect/accessPointConfig";
 
 export default class ConnectAccessPointSet extends Command {
   static description = "[Experimental] Set Autify Connect Access Point";
@@ -19,9 +22,11 @@ export default class ConnectAccessPointSet extends Command {
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ConnectAccessPointSet);
+    const { name } = flags;
+    const { configDir } = this.config;
+    await confirmOverwriteAccessPoint(configDir);
     const key = await this.readKeyFromStdin();
-    set(this.config.configDir, "AUTIFY_CONNECT_ACCESS_POINT_NAME", flags.name);
-    set(this.config.configDir, "AUTIFY_CONNECT_ACCESS_POINT_KEY", key);
+    this.log(saveAccessPoint(configDir, name, key));
   }
 
   private async readKeyFromStdin() {
