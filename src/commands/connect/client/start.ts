@@ -54,6 +54,10 @@ export default class ConnectClientStart extends Command {
       "web-workspace-id": webWorkspaceId,
       "debug-server-port": debugServerPort,
     } = flags;
+    const errorHandler = (error: Error) => {
+      if (verbose) this.warn(error);
+    };
+
     const ephemeralAccessPoint = createEphemeralAccessPointIfNeeded(
       configDir,
       userAgent,
@@ -67,7 +71,7 @@ export default class ConnectClientStart extends Command {
       accessPointName,
       waitReady,
       waitExit,
-    } = await spawnClient(configDir, cacheDir, {
+    } = await spawnClient(configDir, cacheDir, errorHandler, {
       verbose,
       fileLogging,
       debugServerPort,

@@ -18,7 +18,7 @@ import { execFile } from "node:child_process";
 import { get } from "../../config";
 
 // Update whenever to bump supported version.
-export const AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION = "v0.6.1";
+export const AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION = "v0.6.2";
 
 export type ClientMode = "fake" | "real";
 
