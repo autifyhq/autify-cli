@@ -173,15 +173,24 @@ export default class WebTestRun extends Command {
 
     try {
       if (flags["autify-connect-client"]) {
-        autifyConnectClient = await spawnClient(configDir, cacheDir, {
-          verbose: flags["autify-connect-client-verbose"],
-          fileLogging: flags["autify-connect-client-file-logging"],
-          debugServerPort: flags["autify-connect-client-debug-server-port"],
-          ephemeralAccessPoint: {
-            webClient: client,
-            workspaceId,
-          },
-        });
+        const errorHandler = (error: Error) => {
+          if (flags.verbose) this.warn(error);
+        };
+
+        autifyConnectClient = await spawnClient(
+          configDir,
+          cacheDir,
+          errorHandler,
+          {
+            verbose: flags["autify-connect-client-verbose"],
+            fileLogging: flags["autify-connect-client-file-logging"],
+            debugServerPort: flags["autify-connect-client-debug-server-port"],
+            ephemeralAccessPoint: {
+              webClient: client,
+              workspaceId,
+            },
+          }
+        );
         const {
           version,
           versionMismatchWarning,

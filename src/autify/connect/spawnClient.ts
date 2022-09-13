@@ -14,10 +14,11 @@ import { join } from "node:path";
 import { WebClient } from "@autifyhq/autify-sdk";
 import { get } from "../../config";
 import { v4 as uuid } from "uuid";
-import { env, platform } from "node:process";
-import { ctrlc } from "ctrlc-windows";
+import { env } from "node:process";
 import { spawn } from "node:child_process";
 import fetch from "node-fetch";
+import { setInterval as setIntervalPromise } from "node:timers/promises";
+import isRunning from "is-running";
 
 type EphemeralAccessPoint = Readonly<{
   webClient: WebClient;
@@ -176,6 +177,7 @@ type SpawnClientOptions = Readonly<{
 export const spawnClient = async (
   configDir: string,
   cacheDir: string,
+  errorHandler: (error: Error) => void,
   {
     verbose,
     fileLogging,
@@ -184,6 +186,7 @@ export const spawnClient = async (
   }: SpawnClientOptions
 ): Promise<AutifyConnectClient> => {
   const state = new EventEmitter();
+  state.on("error", errorHandler);
   const clientPath = getInstallPath(configDir, cacheDir);
   const version = await getInstallVersion(clientPath);
   let versionMismatchWarning;
@@ -223,6 +226,7 @@ export const spawnClient = async (
   process.on("SIGTERM", childProcess.kill);
   const clientReady = once(state, "ready");
   const childProcessExit = once(childProcess, "exit") as Promise<ProcessExit>;
+
   childProcess.stderr.pipe(process.stderr);
   onLogMsg(childProcess.stdout, (msg) => {
     if (msg.includes("Successfully connected")) {
@@ -238,15 +242,19 @@ export const spawnClient = async (
       state.emit("error", error);
     }
   }, 1000);
+
   const kill = async () => {
     try {
       await requestDebugServer(debugServerPort, "/terminate", "POST");
-      // TODO: Add timeout logic and fallback to signal.
+      for await (const start of setIntervalPromise(1000, Date.now())) {
+        if (childProcess.pid && !isRunning(childProcess.pid)) break;
+        if (Date.now() - start > 5000) break;
+      }
     } catch {
       // Ignore any exceptions to fallback to signal.
     } finally {
-      if (platform === "win32" && !env.JEST_WORKER_ID) ctrlc(childProcess.pid!);
-      else childProcess.kill("SIGINT");
+      // Guardrail.
+      childProcess.kill("SIGINT");
     }
   };
 

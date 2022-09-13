@@ -13,8 +13,6 @@ const normalize = (stdout: string) =>
       "[Autify Connect Client] YYYY-MM-DDTHH:MM:SS.MMMZ"
     )
     .replace(/Your session ID is "[^"]+"/, 'Your session ID is "fake"')
-    .replace(/.+Interrupt received.\n/, "")
-    .replace(/.+Shutdown completed.\n/, "")
     .replace(/Autify Connect Client exited .+/, "Autify Connect Client exited");
 
 export const execAutifyCli = async (
