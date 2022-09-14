@@ -5,13 +5,9 @@ import { get, getOrThrow } from "../../../config";
 import { runTest } from "../../../autify/web/runTest";
 import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
 import WebTestWait from "./wait";
-import {
-  AutifyConnectClient,
-  DEFAULT_CLIENT_DEBUG_SERVER_PORT,
-  spawnClient,
-} from "../../../autify/connect/spawnClient";
 import { CLIError } from "@oclif/errors";
 import { parseAutifyTestUrl } from "../../../autify/web/parseAutifyTestUrl";
+import { ClientManager } from "../../../autify/connect/client-manager/ClientManager";
 
 const parseUrlReplacements = (urlReplacements: string[]) => {
   return urlReplacements.map((s) => {
@@ -80,7 +76,7 @@ export default class WebTestRun extends Command {
       dependsOn: ["autify-connect-client"],
     }),
     "autify-connect-client-debug-server-port": Flags.integer({
-      description: `[Experimental] [default: ${DEFAULT_CLIENT_DEBUG_SERVER_PORT}] Port for Autify Connect Client debug server.`,
+      description: `[Experimental] [default: ${ClientManager.DEFAULT_DEBUG_SERVER_PORT}] Port for Autify Connect Client debug server.`,
       dependsOn: ["autify-connect-client"],
     }),
     os: Flags.string({ description: "OS to run the test" }),
@@ -149,7 +145,7 @@ export default class WebTestRun extends Command {
     const { workspaceId } = parsedTest;
 
     let autifyConnectAccessPoint = flags["autify-connect"];
-    let autifyConnectClient: AutifyConnectClient | undefined;
+    let autifyConnectClientManager: ClientManager | undefined;
 
     const runTestOnce = async () => {
       const { resultId, capability } = await runTest(client, parsedTest, {
@@ -173,40 +169,20 @@ export default class WebTestRun extends Command {
 
     try {
       if (flags["autify-connect-client"]) {
-        const errorHandler = (error: Error) => {
-          if (flags.verbose) this.warn(error);
-        };
-
-        autifyConnectClient = await spawnClient(
+        autifyConnectClientManager = await ClientManager.create({
           configDir,
           cacheDir,
-          errorHandler,
-          {
-            verbose: flags["autify-connect-client-verbose"],
-            fileLogging: flags["autify-connect-client-file-logging"],
-            debugServerPort: flags["autify-connect-client-debug-server-port"],
-            ephemeralAccessPoint: {
-              webClient: client,
-              workspaceId,
-            },
-          }
-        );
-        const {
-          version,
-          versionMismatchWarning,
-          logFile,
-          accessPointName,
-          waitReady,
-        } = autifyConnectClient;
-        autifyConnectAccessPoint = accessPointName;
-        this.log(
-          `Starting Autify Connect Client for Access Point "${accessPointName}" (${version})...`
-        );
-        if (versionMismatchWarning) this.warn(versionMismatchWarning);
-        if (logFile)
-          this.log(`Autify Connect Client log file is located at ${logFile}`);
+          userAgent,
+          verbose: flags["autify-connect-client-verbose"],
+          fileLogging: flags["autify-connect-client-file-logging"],
+          debugServerPort: flags["autify-connect-client-debug-server-port"],
+          webWorkspaceId: workspaceId,
+        });
+        autifyConnectAccessPoint = autifyConnectClientManager.accessPointName;
+        this.log("Starting Autify Connect Client...");
+        await autifyConnectClientManager.spawn();
         this.log("Waiting until Autify Connect Client is ready...");
-        await waitReady();
+        await autifyConnectClientManager.onceReady();
         this.log("Autify Connect Client is ready!");
       }
 
@@ -249,18 +225,12 @@ export default class WebTestRun extends Command {
         );
       }
     } catch (error) {
-      if (autifyConnectClient) {
+      if (autifyConnectClientManager) {
         this.log("Waiting until Autify Connect Client exits...");
-        await autifyConnectClient.kill();
-        const [code, signal, deletedAccessPointName] =
-          await autifyConnectClient.waitExit();
-        if (deletedAccessPointName)
-          this.log(
-            `Autify Connect Access Point was deleted: "${deletedAccessPointName}"`
-          );
-        this.log(
-          `Autify Connect Client exited (code: ${code}, signal: ${signal})`
-        );
+        await autifyConnectClientManager.exit({
+          ignoreError: true,
+        });
+        this.log("Autify Connect Client exited.");
       }
 
       throw error;
