@@ -1,8 +1,8 @@
 diff --git a/node_modules/oclif/lib/commands/pack/win.js b/node_modules/oclif/lib/commands/pack/win.js
-index 4e7875c..13f707d 100644
+index 4e7875c..397b479 100644
 --- a/node_modules/oclif/lib/commands/pack/win.js
 +++ b/node_modules/oclif/lib/commands/pack/win.js
-@@ -7,15 +7,26 @@ const upload_util_1 = require("../../upload-util");
+@@ -7,15 +7,28 @@ const upload_util_1 = require("../../upload-util");
  const scripts = {
      /* eslint-disable no-useless-escape */
      // eslint-disable-next-line unicorn/no-useless-undefined
@@ -24,15 +24,17 @@ index 4e7875c..13f707d 100644
 +SETLOCAL
 +CALL :find_dp0
 +
-+SET ${additionalCLI ? `${additionalCLI.toUpperCase()}_BINPATH` : config.scopedEnvVarKey('BINPATH')}=%dp0%\\${additionalCLI !== null && additionalCLI !== void 0 ? additionalCLI : config.bin}.cmd
++SET "_binpath=%dp0%${additionalCLI !== null && additionalCLI !== void 0 ? additionalCLI : config.bin}.cmd"
 +IF EXIST "%LOCALAPPDATA%\\${config.dirname}\\client\\bin\\${additionalCLI !== null && additionalCLI !== void 0 ? additionalCLI : config.bin}.cmd" (
 +  SET "_prog=%LOCALAPPDATA%\\${config.dirname}\\client\\bin\\${additionalCLI !== null && additionalCLI !== void 0 ? additionalCLI : config.bin}.cmd"
 +) ELSE (
-+  SET "_prog=%dp0%\\..\\client\\bin\\node.exe"
-+  SET "_script=%dp0%\\..\\client\\${additionalCLI ? `${additionalCLI}\\bin\\run` : 'bin\\run'}"
++  SET "_prog=%dp0%..\\client\\bin\\node.exe"
++  SET "_script=%dp0%..\\client\\${additionalCLI ? `${additionalCLI}\\bin\\run` : 'bin\\run'}"
  )
 +
-+ENDLOCAL & GOTO #_undefined_# 2>NUL || title %COMSPEC% & IF "%_script%" == "" ("%_prog%" %*) ELSE ("%_prog%" "%_script%" %*)
++ENDLOCAL & GOTO #_undefined_# 2>NUL || TITLE %COMSPEC% & (
++  SET "${additionalCLI ? `${additionalCLI.toUpperCase()}_BINPATH` : config.scopedEnvVarKey('BINPATH')}=%_binpath%"
++) & IF "%_script%" == "" ("%_prog%" %*) ELSE ("%_prog%" "%_script%" %*)
  `,
      sh: (config) => `#!/bin/sh
  basedir=$(dirname "$(echo "$0" | sed -e 's,\\\\,/,g')")
@@ -89,10 +91,10 @@ index d89b9c6..9c3f4a5 100644
                      Key: debKey,
                      CacheControl: maxAge,
 diff --git a/node_modules/oclif/lib/tarballs/bin.js b/node_modules/oclif/lib/tarballs/bin.js
-index 835eb02..46c7b2b 100644
+index 835eb02..44a3163 100644
 --- a/node_modules/oclif/lib/tarballs/bin.js
 +++ b/node_modules/oclif/lib/tarballs/bin.js
-@@ -8,23 +8,34 @@ async function writeBinScripts({ config, baseWorkspace, nodeVersion }) {
+@@ -8,23 +8,37 @@ async function writeBinScripts({ config, baseWorkspace, nodeVersion }) {
      const clientHomeEnvVar = config.scopedEnvVarKey('OCLIF_CLIENT_HOME');
      const writeWin32 = async () => {
          const { bin } = config;
@@ -122,13 +124,13 @@ index 835eb02..46c7b2b 100644
 -) else (
 -  node "%~dp0..\\bin\\run" %*
 +IF NOT "%${redirectedEnvVar}%"=="1" IF EXIST "%LOCALAPPDATA%\\${bin}\\client\\bin\\${bin}.cmd" (
-+  SET ${redirectedEnvVar}=1
++  SET "_redirect=1"
 +  SET "_prog=%LOCALAPPDATA%\\${bin}\\client\\bin\\${bin}.cmd"
 +) ELSE (
-+  IF NOT DEFINED ${binPathEnvVar} SET ${binPathEnvVar}="%dp0%\\${bin}.cmd"
-+  SET "_script=%dp0%\\..\\bin\\run"
-+  IF EXIST "%dp0%\\..\\bin\\node.exe" (
-+    SET "_prog=%dp0%\\..\\bin\\node.exe"
++  IF NOT DEFINED ${binPathEnvVar} SET "_binpath=%dp0%${bin}.cmd"
++  SET "_script=%dp0%..\\bin\\run"
++  IF EXIST "%dp0%..\\bin\\node.exe" (
++    SET "_prog=%dp0%..\\bin\\node.exe"
 +  ) ELSE IF EXIST "%LOCALAPPDATA%\\oclif\\node\\node-${nodeVersion}.exe" (
 +    SET "_prog=%LOCALAPPDATA%\\oclif\\node\\node-${nodeVersion}.exe"
 +  ) ELSE (
@@ -137,7 +139,10 @@ index 835eb02..46c7b2b 100644
 +  )
  )
 +
-+ENDLOCAL & GOTO #_undefined_# 2>NUL || title %COMSPEC% & IF "%_script%" == "" ("%_prog%" %*) ELSE ("%_prog%" "%_script%" %*)
++ENDLOCAL & GOTO #_undefined_# 2>NUL || TITLE %COMSPEC% & (
++  IF NOT "%_redirect%" == "" SET "${redirectedEnvVar}=%_redirect%"
++  IF NOT "%_binpath%" == "" SET "${binPathEnvVar}=%_binpath%"
++) & IF "%_script%" == "" ("%_prog%" %*) ELSE ("%_prog%" "%_script%" %*)
  `);
          // await qq.write([output, 'bin', config.bin], `#!/bin/sh
          // basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
