@@ -1,3 +1,7 @@
 {
-  "extends": ["oclif", "oclif-typescript", "prettier"]
+  "extends": ["oclif", "oclif-typescript", "prettier"],
+  "rules": {
+    "no-useless-constructor": "off",
+    "@typescript-eslint/no-useless-constructor": "error"
+  }
 }

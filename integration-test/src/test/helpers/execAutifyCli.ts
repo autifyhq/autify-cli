@@ -7,13 +7,15 @@ import { env } from "node:process";
 const normalize = (stdout: string) =>
   stdout
     .replace(/\[\d{2}:\d{2}:\d{2}]/g, "[HH:MM:SS]")
-    .replace(/\(Autify Connect version .+\)/, "(Autify Connect version fake)")
     .replace(
-      /\[Autify Connect Client] \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/g,
-      "[Autify Connect Client] YYYY-MM-DDTHH:MM:SS.MMMZ"
+      /path: .+autifyconnect-fake(\.exe)?,/g,
+      "path: /path/to/autifyconnect-fake,"
     )
-    .replace(/Your session ID is "[^"]+"/, 'Your session ID is "fake"')
-    .replace(/Autify Connect Client exited .+/, "Autify Connect Client exited");
+    .replace(
+      /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/g,
+      "YYYY-MM-DDTHH:MM:SS.MMMZ"
+    )
+    .replace(/Your session ID is "[^"]+"/, 'Your session ID is "fake"');
 
 export const execAutifyCli = async (
   args: string
