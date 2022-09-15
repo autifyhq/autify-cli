@@ -15,6 +15,7 @@ import { promisify } from "node:util";
 import { basename, dirname, join } from "node:path";
 import { Extract } from "unzip-stream";
 import { execFile } from "node:child_process";
+import tar from "tar";
 import { get } from "../../config";
 
 // Update whenever to bump supported version.
@@ -84,8 +85,8 @@ const extract = async (downloadPath: string) => {
     ? "autifyconnect-fake"
     : "autifyconnect";
   if (file.endsWith(".tar.gz")) {
-    // TODO: Pure JS
-    await promisify(execFile)("tar", ["xvzf", file], { cwd: dir });
+    const streamPipeline = promisify(pipeline);
+    await streamPipeline(createReadStream(downloadPath), tar.x({ cwd: dir }));
     return join(dir, binaryName);
   }
 
