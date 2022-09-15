@@ -5,7 +5,7 @@ Object {
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully uploaded ios.app (ID: gquRM0). See https://mobile-app.autify.com/projects/nYmF1n/builds?os=ios&selectedBuildId=gquRM0&page=1
+✅ Successfully uploaded ios.app (ID: 90uBXW). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=ios&selectedBuildId=90uBXW&page=1
 [HPM] server close signal received: closing proxy server
 ",
 }
