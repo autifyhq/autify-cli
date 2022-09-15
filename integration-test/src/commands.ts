@@ -4,11 +4,11 @@ export const androidBuildPath = "android.apk";
 const webTestScenarioUrl =
   "https://app.autify.com/projects/743/scenarios/91437";
 const mobileAndroidTestPlanUrl =
-  "https://mobile-app.autify.com/projects/nYmF1n/test_plans/DEWt9g";
+  "https://mobile-app.autify.com/projects/4yyFEL/test_plans/Wptd97";
 const mobileIosTestPlanUrl =
-  "https://mobile-app.autify.com/projects/nYmF1n/test_plans/DPjteo";
-const mobileWorkspaceId = "nYmF1n";
-const mobileAndroidBuildId = "8DuzpG";
+  "https://mobile-app.autify.com/projects/4yyFEL/test_plans/kYtlRR";
+const mobileWorkspaceId = "4yyFEL";
+const mobileAndroidBuildId = "d1ulrD";
 
 const concatFlagAndValue = (args: string[]) => {
   const newArgs = [];
