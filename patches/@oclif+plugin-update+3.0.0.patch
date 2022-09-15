@@ -1,8 +1,8 @@
 diff --git a/node_modules/@oclif/plugin-update/lib/update.js b/node_modules/@oclif/plugin-update/lib/update.js
-index b542c89..98716eb 100644
+index b542c89..4b78044 100644
 --- a/node_modules/@oclif/plugin-update/lib/update.js
 +++ b/node_modules/@oclif/plugin-update/lib/update.js
-@@ -333,11 +333,25 @@ class Updater {
+@@ -333,11 +333,23 @@ class Updater {
          const binPathEnvVar = this.config.scopedEnvVarKey('BINPATH');
          const redirectedEnvVar = this.config.scopedEnvVarKey('REDIRECTED');
          if (windows) {
@@ -12,8 +12,6 @@ index b542c89..98716eb 100644
 -set ${binPathEnvVar}=%~dp0${bin}
 -"%~dp0..\\${version}\\bin\\${bin}.cmd" %*
 +            const body = `@ECHO off
-+SETLOCAL enableextensions
-+
 +GOTO start
 +:find_dp0
 +SET dp0=%~dp0
@@ -24,7 +22,7 @@ index b542c89..98716eb 100644
 +
 +SET "_redirect=1"
 +SET "_binpath=%dp0%${bin}"
-+SET "_prog=%dp0%${version}\\bin\\${bin}.cmd"
++SET "_prog=%dp0%..\\${version}\\bin\\${bin}.cmd"
 +
 +ENDLOCAL & GOTO #_undefined_# 2>NUL || TITLE %COMSPEC% & (
 +  SET "${redirectedEnvVar}=%_redirect%"
