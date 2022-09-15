@@ -28,6 +28,7 @@ import {
 } from "./Logger";
 import { join } from "node:path";
 import TypedEmitter from "typed-emitter";
+import getPort from "get-port";
 
 export type ClientEvents = TypedEmitter<{
   log: (msg: string) => void;
@@ -51,8 +52,6 @@ type ClientManagerOptions = Readonly<{
 }>;
 
 export class ClientManager {
-  public static DEFAULT_DEBUG_SERVER_PORT = 3000;
-
   public static async create(
     options: ClientManagerOptions & {
       userAgent: string;
@@ -99,33 +98,14 @@ export class ClientManager {
     return new ClientManager(accessPoint, options);
   }
 
-  public async spawn(): Promise<void> {
+  public async start(): Promise<void> {
+    this.logger.debug("start");
     const version = await this.getClientVersion();
+    const debugServerPort = this.options.debugServerPort ?? (await getPort());
     this.logger.info(
-      `Starting Autify Connect Client (accessPoint: ${this.accessPointName}, path: ${this.clientPath}, version: ${version})`
+      `Starting Autify Connect Client (accessPoint: ${this.accessPointName}, debugServerPort: ${debugServerPort}, path: ${this.clientPath}, version: ${version})`
     );
-    this.service.send("SPAWN");
-    const logFormatArgs = ["--log-format", "json"];
-    const debugServerPortArgs = [
-      "--experimental-debug-server-port",
-      this.debugServerPort.toString(),
-    ];
-    const args = [...logFormatArgs, ...debugServerPortArgs];
-    if (this.options.verbose) args.push("--verbose");
-    this.childProcess = spawn(this.clientPath, args, {
-      env: {
-        ...env,
-        AUTIFY_CONNECT_KEY: this.accessPoint.key,
-      },
-    });
-    this.childProcess.on("exit", (code, signal) => {
-      this.service.send("EXIT", { processExit: { code, signal } });
-    });
-    this.debugServerClient.startStatusTimer(1000);
-    setupClientOutputLogger(this.childProcess, (log) => {
-      this.clientLogger.log(log.level, log.msg);
-      this.clientEvents.emit("log", log.msg);
-    });
+    this.service.send("SPAWN", { debugServerPort });
   }
 
   public async onceReady(): Promise<void> {
@@ -181,8 +161,8 @@ export class ClientManager {
   private readonly logger: Logger;
   private readonly clientLogger: Logger;
   private readonly service: ClientStateMachineService;
-  private debugServerClient: DebugServerClient;
   private childProcess?: ChildProcessWithoutNullStreams;
+  private debugServerClient?: DebugServerClient;
 
   private constructor(
     private readonly accessPoint: AccessPoint,
@@ -200,6 +180,7 @@ export class ClientManager {
     if (filename) this.logger.info(`Client log will be written on ${filename}`);
     this.clientLogger = createClientLogger({ level }, filename);
     this.service = createService({
+      spawn: (debugServerPort) => this.spawn(debugServerPort),
       terminate: () => this.terminate(),
       kill: () => this.kill(),
       cleanup: () => this.cleanup(),
@@ -209,10 +190,6 @@ export class ClientManager {
         `Transition to: ${state.value}, event: ${JSON.stringify(event)}`
       );
     });
-    this.debugServerClient = new DebugServerClient(
-      this.debugServerPort,
-      this.clientEvents
-    );
     process.on("SIGINT", () => this.service.send("TERMINATE"));
     process.on("SIGTERM", () => this.service.send("TERMINATE"));
     this.clientEvents.on("ready", () => {
@@ -227,6 +204,37 @@ export class ClientManager {
     this.clientEvents.on("error", (error) => {
       this.logger.warn(`Ignoring client error: ${error}`);
     });
+  }
+
+  private spawn(debugServerPort: number) {
+    try {
+      const args = [
+        "--log-format",
+        "json",
+        "--experimental-debug-server-port",
+        debugServerPort.toString(),
+      ];
+      if (this.options.verbose) args.push("--verbose");
+      this.childProcess = spawn(this.clientPath, args, {
+        env: {
+          ...env,
+          AUTIFY_CONNECT_KEY: this.accessPoint.key,
+        },
+      });
+      this.childProcess.on("exit", (code, signal) => {
+        this.service.send("EXIT", { processExit: { code, signal } });
+      });
+      this.debugServerClient = new DebugServerClient(
+        debugServerPort,
+        this.clientEvents
+      );
+      setupClientOutputLogger(this.childProcess, (log) => {
+        this.clientLogger.log(log.level, log.msg);
+        this.clientEvents.emit("log", log.msg);
+      });
+    } catch (error) {
+      this.logger.warn(`Ignoring spawn error: ${error}`);
+    }
   }
 
   private async terminate() {
@@ -288,12 +296,6 @@ export class ClientManager {
 
   private get clientPath() {
     return getInstallPath(this.options.configDir, this.options.cacheDir);
-  }
-
-  private get debugServerPort() {
-    return (
-      this.options.debugServerPort ?? ClientManager.DEFAULT_DEBUG_SERVER_PORT
-    );
   }
 
   private async getClientVersion() {
