@@ -18,8 +18,10 @@ type ClientLog = Readonly<{
 const logFormatConsole = (prefix: string) =>
   format.combine(
     format.colorize(),
+    format.timestamp(),
     format.printf(
-      ({ level, message }) => `${prefix.padEnd(25)} ${level}\t${message}`
+      ({ timestamp, level, message }) =>
+        `${prefix.padEnd(25)} ${timestamp}\t${level}\t${message}`
     )
   );
 
