@@ -3,6 +3,7 @@ import { assign, createMachine, interpret, Interpreter } from "xstate";
 import { ProcessExit } from "./ClientManager";
 
 type ClientStateMachineContext = {
+  spawn: (debugServerPort: number) => void;
   terminate: () => Promise<void>;
   kill: () => void;
   cleanup: () => Promise<void>;
@@ -11,7 +12,7 @@ type ClientStateMachineContext = {
 };
 
 type ClientStateMachineEvent =
-  | { type: "SPAWN" }
+  | { type: "SPAWN"; debugServerPort: number }
   | { type: "READY" }
   | { type: "TERMINATE" }
   | { type: "EXIT"; processExit: ProcessExit };
@@ -61,6 +62,10 @@ export const createService = (
         },
       },
       starting: {
+        entry: (context, event) => {
+          if (event.type !== "SPAWN") return;
+          context.spawn(event.debugServerPort);
+        },
         on: {
           READY: { target: "ready" },
           EXIT: {

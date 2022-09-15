@@ -15,6 +15,11 @@ const normalize = (stdout: string) =>
       /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/g,
       "YYYY-MM-DDTHH:MM:SS.MMMZ"
     )
+    .replace(/debugServerPort: \d+,/g, "debugServerPort: <random>,")
+    .replace(
+      /debug server on http:\/\/localhost:\d+/g,
+      "debug server on http://localhost:<random>"
+    )
     .replace(/Your session ID is "[^"]+"/, 'Your session ID is "fake"');
 
 export const execAutifyCli = async (

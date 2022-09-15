@@ -130,8 +130,8 @@ USAGE
   $ autify connect client start [--verbose] [--file-logging] [--debug-server-port <value>] [--web-workspace-id <value>]
 
 FLAGS
-  --debug-server-port=<value>  [default: 3000] The server for debugging and monitoring launches on your local machine on
-                               the given port.
+  --debug-server-port=<value>  The server for debugging and monitoring launches on your local machine on the given port.
+                               It will use a radom port if not specified.
   --file-logging               Logging Autify Connect Client log to a file instead of console.
   --verbose                    Make the operation more talkative.
   --web-workspace-id=<value>   Workspace ID of Autify for Web to create an ephemeral Access Point. If not specified, it
@@ -659,7 +659,8 @@ FLAGS
   --autify-connect=<value>                           Name of the Autify Connect Access Point (Only for test scenario
                                                      execution.)
   --autify-connect-client                            Start Autify Connect Client (Only for test scenario execution.)
-  --autify-connect-client-debug-server-port=<value>  [default: 3000] Port for Autify Connect Client debug server.
+  --autify-connect-client-debug-server-port=<value>  Port for Autify Connect Client debug server. A random port will be
+                                                     used if not specified.
   --autify-connect-client-file-logging               Logging Autify Connect Client log to a file instead of console.
   --autify-connect-client-verbose                    Verbose output for Autify Connect Client (Only for test scenario
                                                      execution.)

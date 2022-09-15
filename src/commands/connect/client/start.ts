@@ -17,7 +17,7 @@ export default class ConnectClientStart extends Command {
       default: false,
     }),
     "debug-server-port": Flags.integer({
-      description: `[default: ${ClientManager.DEFAULT_DEBUG_SERVER_PORT}] The server for debugging and monitoring launches on your local machine on the given port.`,
+      description: `The server for debugging and monitoring launches on your local machine on the given port. It will use a radom port if not specified.`,
     }),
     "web-workspace-id": Flags.integer({
       description:
@@ -38,7 +38,7 @@ export default class ConnectClientStart extends Command {
       webWorkspaceId: flags["web-workspace-id"],
     });
     this.log("Starting Autify Connect Client...");
-    await clientManager.spawn();
+    await clientManager.start();
     this.log("Waiting until Autify Connect Client is ready...");
     await clientManager.onceReady();
     this.log("Waiting for terminating...");

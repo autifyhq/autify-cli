@@ -76,7 +76,7 @@ export default class WebTestRun extends Command {
       dependsOn: ["autify-connect-client"],
     }),
     "autify-connect-client-debug-server-port": Flags.integer({
-      description: `[default: ${ClientManager.DEFAULT_DEBUG_SERVER_PORT}] Port for Autify Connect Client debug server.`,
+      description: `Port for Autify Connect Client debug server. A random port will be used if not specified.`,
       dependsOn: ["autify-connect-client"],
     }),
     os: Flags.string({ description: "OS to run the test" }),
@@ -180,7 +180,7 @@ export default class WebTestRun extends Command {
         });
         autifyConnectAccessPoint = autifyConnectClientManager.accessPointName;
         this.log("Starting Autify Connect Client...");
-        await autifyConnectClientManager.spawn();
+        await autifyConnectClientManager.start();
         this.log("Waiting until Autify Connect Client is ready...");
         await autifyConnectClientManager.onceReady();
         this.log("Autify Connect Client is ready!");

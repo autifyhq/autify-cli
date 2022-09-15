@@ -15,14 +15,12 @@ type DebugServerStatusResponse = Readonly<{
 }>;
 
 export class DebugServerClient {
-  private statusTimer?: NodeJS.Timer;
+  private statusTimer: NodeJS.Timer;
 
   constructor(
     private readonly port: number,
     private readonly clientEvents: ClientEvents
-  ) {}
-
-  public startStatusTimer(interval: number): void {
+  ) {
     this.statusTimer = setInterval(async () => {
       try {
         const response = await this.requestStatus();
@@ -30,7 +28,7 @@ export class DebugServerClient {
       } catch (error) {
         this.clientEvents.emit("error", error as Error);
       }
-    }, interval);
+    }, 1000);
   }
 
   public stopStatusTimer(): void {
