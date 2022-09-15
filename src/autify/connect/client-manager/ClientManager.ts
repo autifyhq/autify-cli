@@ -80,7 +80,7 @@ export class ClientManager {
     const key = get(options.configDir, "AUTIFY_CONNECT_ACCESS_POINT_KEY");
     if (!name || !key)
       throw new CLIError(
-        "Access Point is not set. Run `autify connect access-point set` first."
+        "Access Point is not saved. Run `autify connect access-point create/set` first."
       );
     const accessPoint = createStaticAccessPoint(name, key);
     return new ClientManager(accessPoint, options);
@@ -118,8 +118,8 @@ export class ClientManager {
     await this.once("terminating");
   }
 
-  public async onceExit(): Promise<number | null> {
-    this.logger.debug("onceExit");
+  public async onceDone(): Promise<number | null> {
+    this.logger.debug("onceDone");
     const {
       context: { processExit },
     } = await this.once("done");
@@ -142,7 +142,7 @@ export class ClientManager {
     try {
       this.logger.debug("exit");
       this.service.send("TERMINATE");
-      return await this.onceExit();
+      return await this.onceDone();
     } catch (error) {
       if (options?.ignoreError) {
         this.logger.warn(`Ignoring exit error: ${error}`);

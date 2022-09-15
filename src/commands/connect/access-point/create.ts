@@ -20,7 +20,7 @@ export default class ConnectAccessPointCreate extends Command {
     }),
     "web-workspace-id": Flags.integer({
       description:
-        "Workspace ID of Autify for Web to which the Access Point belong",
+        "Workspace ID of Autify for Web to which the Access Point will belong",
       exactlyOne: ["web-workspace-id"],
     }),
   };

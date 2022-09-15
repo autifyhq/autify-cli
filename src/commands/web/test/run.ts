@@ -40,13 +40,13 @@ export default class WebTestRun extends Command {
     "With URL replacements:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 -r http://example.com=http://example.net -r http://example.org=http://example.net",
     'Run a test with specifying the execution name:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --name "Sample execution"',
     "Run a test scenario with Autify Connect:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --autify-connect NAME",
+    "Run a test scenario with Autify Connect Client:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --wait --autify-connect-client",
   ];
 
   static flags = {
     name: Flags.string({
       char: "n",
-      description:
-        "Name of the test execution. (Only for test scenario execution.)",
+      description: "[Only for test scenario] Name of the test execution.",
     }),
     "url-replacements": Flags.string({
       char: "r",
@@ -56,34 +56,44 @@ export default class WebTestRun extends Command {
     }),
     "autify-connect": Flags.string({
       description:
-        "Name of the Autify Connect Access Point (Only for test scenario execution.)",
+        "[Only for test scenario] Name of the Autify Connect Access Point.",
       exclusive: ["autify-connect-client"],
     }),
     "autify-connect-client": Flags.boolean({
-      description:
-        "Start Autify Connect Client (Only for test scenario execution.)",
+      description: "[Only for test scenario] Start Autify Connect Client",
       exclusive: ["autify-connect"],
       dependsOn: ["wait"],
     }),
     "autify-connect-client-verbose": Flags.boolean({
       description:
-        "Verbose output for Autify Connect Client (Only for test scenario execution.)",
+        "[Only for test scenario] Verbose output for Autify Connect Client.",
       dependsOn: ["autify-connect-client"],
     }),
     "autify-connect-client-file-logging": Flags.boolean({
       description:
-        "Logging Autify Connect Client log to a file instead of console.",
+        "[Only for test scenario] Logging Autify Connect Client log to a file instead of console.",
       dependsOn: ["autify-connect-client"],
     }),
     "autify-connect-client-debug-server-port": Flags.integer({
-      description: `Port for Autify Connect Client debug server. A random port will be used if not specified.`,
+      description:
+        "[Only for test scenario] Port for Autify Connect Client debug server. A random port will be used if not specified.",
       dependsOn: ["autify-connect-client"],
     }),
-    os: Flags.string({ description: "OS to run the test" }),
-    "os-version": Flags.string({ description: "OS version to run the test" }),
-    browser: Flags.string({ description: "Browser to run the test" }),
-    device: Flags.string({ description: "Device to run the test" }),
-    "device-type": Flags.string({ description: "Device type to run the test" }),
+    os: Flags.string({
+      description: "[Only for test scenario] OS to run the test",
+    }),
+    "os-version": Flags.string({
+      description: "[Only for test scenario] OS version to run the test",
+    }),
+    browser: Flags.string({
+      description: "[Only for test scenario] Browser to run the test",
+    }),
+    device: Flags.string({
+      description: "[Only for test scenario] Device to run the test",
+    }),
+    "device-type": Flags.string({
+      description: "[Only for test scenario] Device type to run the test",
+    }),
     wait: Flags.boolean({
       char: "w",
       description: "Wait until the test finishes.",
@@ -102,7 +112,7 @@ export default class WebTestRun extends Command {
     }),
     "max-retry-count": Flags.integer({
       description:
-        "Maximum retry count. The command can take up to timeout * (max-retry-count + 1).",
+        "Maximum retry count while waiting. The command can take up to `timeout * (max-retry-count + 1)`. Only effective with `--wait`.",
       default: 0,
     }),
   };
