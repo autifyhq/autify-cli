@@ -4,7 +4,10 @@ import { ClientManager } from "../../../autify/connect/client-manager/ClientMana
 export default class ConnectClientStart extends Command {
   static description = "Start Autify Connect Client";
 
-  static examples = ["<%= config.bin %> <%= command.id %>"];
+  static examples = [
+    "With pre-created Access Point:\n<%= config.bin %> <%= command.id %>",
+    "With ephemeral Access Point of Autify for Web:\n<%= config.bin %> <%= command.id %> --web-workspace-id 000",
+  ];
 
   static flags = {
     verbose: Flags.boolean({
@@ -21,7 +24,7 @@ export default class ConnectClientStart extends Command {
     }),
     "web-workspace-id": Flags.integer({
       description:
-        "Workspace ID of Autify for Web to create an ephemeral Access Point. If not specified, it will use the one configured by `autify connect access-point set`, instead.",
+        "Workspace ID of Autify for Web to create an ephemeral Access Point. If not specified, it will use the one configured by `autify connect access-point create/set`, instead.",
     }),
   };
 
@@ -41,11 +44,11 @@ export default class ConnectClientStart extends Command {
     await clientManager.start();
     this.log("Waiting until Autify Connect Client is ready...");
     await clientManager.onceReady();
-    this.log("Waiting for terminating...");
+    this.log("Waiting for terminating (forever)...");
     await clientManager.onceTerminating();
     this.log("Waiting until Autify Connect Client exits...");
-    const exitCode = (await clientManager.onceExit()) ?? 1;
-    this.log(`Exiting this command with code ${exitCode}...`);
+    const exitCode = (await clientManager.onceDone()) ?? 1;
+    this.log(`Exiting this command with the same exit code(${exitCode})...`);
     this.exit(exitCode);
   }
 }
