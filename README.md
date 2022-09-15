@@ -52,7 +52,7 @@ See our official document: https://help.autify.com/docs/autify-command-line-inte
 
 ## `autify connect access-point create`
 
-[Experimental] Create an Autify Connect Access Point
+Create an Autify Connect Access Point
 
 ```
 USAGE
@@ -63,7 +63,7 @@ FLAGS
   --web-workspace-id=<value>  Workspace ID of Autify for Web to which the Access Point belong
 
 DESCRIPTION
-  [Experimental] Create an Autify Connect Access Point
+  Create an Autify Connect Access Point
 
 EXAMPLES
   $ autify connect access-point create --name NAME --web-workspace-id ID
@@ -71,7 +71,7 @@ EXAMPLES
 
 ## `autify connect access-point set`
 
-[Experimental] Set Autify Connect Access Point
+Set Autify Connect Access Point
 
 ```
 USAGE
@@ -81,7 +81,7 @@ FLAGS
   --name=<value>  (required) Name of the Autify Connect Access Point already created
 
 DESCRIPTION
-  [Experimental] Set Autify Connect Access Point
+  Set Autify Connect Access Point
 
 EXAMPLES
   Start interactive setup:
@@ -95,7 +95,7 @@ EXAMPLES
 
 ## `autify connect client install [VERSION]`
 
-[Experimental] Install Autify Connect Client
+Install Autify Connect Client
 
 ```
 USAGE
@@ -105,7 +105,7 @@ ARGUMENTS
   VERSION  [default: v0.6.2] Specify the target version of Autify Connect Client.
 
 DESCRIPTION
-  [Experimental] Install Autify Connect Client
+  Install Autify Connect Client
 
 EXAMPLES
   (Recommended) Install the supported version:
@@ -123,7 +123,7 @@ EXAMPLES
 
 ## `autify connect client start`
 
-[Experimental] Start Autify Connect Client
+Start Autify Connect Client
 
 ```
 USAGE
@@ -138,7 +138,7 @@ FLAGS
                                will use the one configured by `autify connect access-point set`, instead.
 
 DESCRIPTION
-  [Experimental] Start Autify Connect Client
+  Start Autify Connect Client
 
 EXAMPLES
   $ autify connect client start
@@ -658,14 +658,11 @@ FLAGS
   -w, --wait                                         Wait until the test finishes.
   --autify-connect=<value>                           Name of the Autify Connect Access Point (Only for test scenario
                                                      execution.)
-  --autify-connect-client                            [Experimental] Start Autify Connect Client (Only for test scenario
+  --autify-connect-client                            Start Autify Connect Client (Only for test scenario execution.)
+  --autify-connect-client-debug-server-port=<value>  [default: 3000] Port for Autify Connect Client debug server.
+  --autify-connect-client-file-logging               Logging Autify Connect Client log to a file instead of console.
+  --autify-connect-client-verbose                    Verbose output for Autify Connect Client (Only for test scenario
                                                      execution.)
-  --autify-connect-client-debug-server-port=<value>  [Experimental] [default: 3000] Port for Autify Connect Client debug
-                                                     server.
-  --autify-connect-client-file-logging               [Experimental] Logging Autify Connect Client log to a file instead
-                                                     of console.
-  --autify-connect-client-verbose                    [Experimental] Verbose output for Autify Connect Client (Only for
-                                                     test scenario execution.)
   --browser=<value>                                  Browser to run the test
   --device=<value>                                   Device to run the test
   --device-type=<value>                              Device type to run the test

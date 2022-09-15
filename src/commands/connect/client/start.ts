@@ -2,7 +2,7 @@ import { Command, Flags } from "@oclif/core";
 import { ClientManager } from "../../../autify/connect/client-manager/ClientManager";
 
 export default class ConnectClientStart extends Command {
-  static description = "[Experimental] Start Autify Connect Client";
+  static description = "Start Autify Connect Client";
 
   static examples = ["<%= config.bin %> <%= command.id %>"];
 

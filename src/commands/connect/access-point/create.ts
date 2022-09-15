@@ -7,7 +7,7 @@ import {
 import { get, getOrThrow } from "../../../config";
 
 export default class ConnectAccessPointCreate extends Command {
-  static description = "[Experimental] Create an Autify Connect Access Point";
+  static description = "Create an Autify Connect Access Point";
 
   static examples = [
     "<%= config.bin %> <%= command.id %> --name NAME --web-workspace-id ID",

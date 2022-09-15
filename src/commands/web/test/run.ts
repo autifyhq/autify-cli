@@ -61,22 +61,22 @@ export default class WebTestRun extends Command {
     }),
     "autify-connect-client": Flags.boolean({
       description:
-        "[Experimental] Start Autify Connect Client (Only for test scenario execution.)",
+        "Start Autify Connect Client (Only for test scenario execution.)",
       exclusive: ["autify-connect"],
       dependsOn: ["wait"],
     }),
     "autify-connect-client-verbose": Flags.boolean({
       description:
-        "[Experimental] Verbose output for Autify Connect Client (Only for test scenario execution.)",
+        "Verbose output for Autify Connect Client (Only for test scenario execution.)",
       dependsOn: ["autify-connect-client"],
     }),
     "autify-connect-client-file-logging": Flags.boolean({
       description:
-        "[Experimental] Logging Autify Connect Client log to a file instead of console.",
+        "Logging Autify Connect Client log to a file instead of console.",
       dependsOn: ["autify-connect-client"],
     }),
     "autify-connect-client-debug-server-port": Flags.integer({
-      description: `[Experimental] [default: ${ClientManager.DEFAULT_DEBUG_SERVER_PORT}] Port for Autify Connect Client debug server.`,
+      description: `[default: ${ClientManager.DEFAULT_DEBUG_SERVER_PORT}] Port for Autify Connect Client debug server.`,
       dependsOn: ["autify-connect-client"],
     }),
     os: Flags.string({ description: "OS to run the test" }),

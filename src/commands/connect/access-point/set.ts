@@ -6,7 +6,7 @@ import {
 } from "../../../autify/connect/accessPointConfig";
 
 export default class ConnectAccessPointSet extends Command {
-  static description = "[Experimental] Set Autify Connect Access Point";
+  static description = "Set Autify Connect Access Point";
 
   static examples = [
     "Start interactive setup:\n<%= config.bin %> <%= command.id %> --name=NAME",
