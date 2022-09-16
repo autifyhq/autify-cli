@@ -73,8 +73,19 @@ jobs:
   shell:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        target: [standalone-shell, cicd-shell]
+        include:
+          - os: ubuntu-latest
+            target: standalone-shell
+          - os: ubuntu-latest
+            target: cicd-shell
+          - os: macos-latest
+            target: standalone-shell
+          - os: macos-latest
+            target: cicd-shell
+          # - os: windows-latest
+          #  target: standalone-shell
+          - os: windows-latest
+            target: cicd-shell
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
