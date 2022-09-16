@@ -55,9 +55,10 @@ type S3FileOption = Readonly<{
   target: string;
   tarball?: "tar.gz" | "tar.xz";
   npm?: "autify-cli" | "autify-cli-integration-test";
+  script?: "install-standalone.sh" | "install-cicd.bash";
 }>;
 
-const s3File = ({ target, tarball, npm }: S3FileOption) => {
+const s3File = ({ target, tarball, npm, script }: S3FileOption) => {
   let file = `autify-v${version}-${sha}-`;
   switch (target) {
     case "win": {
@@ -73,6 +74,12 @@ const s3File = ({ target, tarball, npm }: S3FileOption) => {
     case "npm": {
       assert(npm);
       file = `autifyhq-${npm}-${version}.tgz`;
+      break;
+    }
+
+    case "shell": {
+      assert(script);
+      file = script;
       break;
     }
 
@@ -94,6 +101,15 @@ const uploadNpmPackage = (
   else if (npm === "autify-cli-integration-test")
     run("npm pack -w integration-test");
   const file = s3File({ target: "npm", npm });
+  run(
+    `aws s3 cp --acl public-read ${file} s3://${bucket}/${s3KeyPrefix}/${file}`
+  );
+};
+
+const uploadShell = (script: "install-standalone.sh" | "install-cicd.bash") => {
+  const prefix = `${folder}/versions/${version}/${sha}/autify-v${version}-${sha}`;
+  updateShellInstaller(script, prefix);
+  const file = s3File({ target: "shell", script });
   run(
     `aws s3 cp --acl public-read ${file} s3://${bucket}/${s3KeyPrefix}/${file}`
   );
@@ -124,6 +140,12 @@ const uploadCommand = (args: string[]) => {
     case "npm": {
       uploadNpmPackage("autify-cli");
       uploadNpmPackage("autify-cli-integration-test");
+      break;
+    }
+
+    case "shell": {
+      uploadShell("install-standalone.sh");
+      uploadShell("install-cicd.bash");
       break;
     }
 
@@ -219,8 +241,11 @@ const rollbackCommand = () => {
   publishBrew();
 };
 
-const downloadS3 = (cwd: string, { target, tarball, npm }: S3FileOption) => {
-  const file = s3File({ target, tarball, npm });
+const downloadS3 = (
+  cwd: string,
+  { target, tarball, npm, script }: S3FileOption
+) => {
+  const file = s3File({ target, tarball, npm, script });
   const key = `${s3KeyPrefix}/${file}`;
   const url = `https://${bucket}.s3.amazonaws.com/${key}`;
   run(`curl -s -O ${url}`, cwd);
@@ -253,16 +278,20 @@ const installMacos = (cwd: string) => {
   return join(homedir(), "usr/local/lib/autify/bin");
 };
 
-const installStandaloneShell = () => {
-  const prefix = `${folder}/versions/${version}/${sha}/autify-v${version}-${sha}`;
-  updateShellInstaller("install-standalone.sh", prefix);
-  run("cat install-standalone.sh | sh");
+const installStandaloneShell = (cwd: string) => {
+  const file = downloadS3(cwd, {
+    target: "shell",
+    script: "install-standalone.sh",
+  });
+  run(`cat ${file} | sh -xe`, cwd);
 };
 
 const installCicdShell = (cwd: string) => {
-  const prefix = `${folder}/versions/${version}/${sha}/autify-v${version}-${sha}`;
-  updateShellInstaller("install-cicd.bash", prefix, cwd);
-  run("cat install-cicd.bash | bash", cwd);
+  const file = downloadS3(cwd, {
+    target: "shell",
+    script: "install-cicd.bash",
+  });
+  run(`cat ${file} | bash -xe`, cwd);
   return join(cwd, "autify", "bin");
 };
 
@@ -301,7 +330,7 @@ const installCommand = (args: string[]) => {
     }
 
     case "standalone-shell": {
-      bin = installStandaloneShell();
+      bin = installStandaloneShell(temp);
       break;
     }
 
