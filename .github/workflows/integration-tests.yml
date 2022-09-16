@@ -70,22 +70,13 @@ jobs:
           AUTIFY_CONNECT_CLIENT_MODE: "fake"
       - run: npm run test:integration
 
-  shell:
+  standalone-shell:
     strategy:
       matrix:
-        include:
-          - os: ubuntu-latest
-            target: standalone-shell
-          - os: ubuntu-latest
-            target: cicd-shell
-          - os: macos-latest
-            target: standalone-shell
-          - os: macos-latest
-            target: cicd-shell
-          # - os: windows-latest
-          #  target: standalone-shell
-          - os: windows-latest
-            target: cicd-shell
+        os:
+          - ubuntu-latest
+          - macos-latest
+          # - windows-latest
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
@@ -96,13 +87,40 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: ./.github/actions/install
         with:
-          target: ${{ matrix.target }}
+          target: standalone-shell
       - run: echo test | autify web auth login
       - run: echo test | autify mobile auth login
       - run: autify connect client install
         env:
           AUTIFY_CONNECT_CLIENT_MODE: "fake"
       - run: npm run test:integration
+
+  cicd-shell:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/install
+        with:
+          target: cicd-shell
+        env:
+          AUTIFY_CLI_INTEGRATION_TEST_INSTALL: 1
+      - run: echo test | autify web auth login
+      - run: echo test | autify mobile auth login
+      - run: autify connect client install
+        env:
+          AUTIFY_CONNECT_CLIENT_MODE: "fake"
+      - run: autify-cli-integration-test
 
   brew:
     strategy:

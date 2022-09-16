@@ -159,6 +159,7 @@ const uploadCommand = (args: string[]) => {
 const updateShellInstaller = (file: string, prefix: string, cwd?: string) => {
   const content = readFileSync(file)
     .toString()
+    .replace("AUTIFY_CLI_VERSION=REPLACE", `AUTIFY_CLI_VERSION="${version}"`)
     .replace("AUTIFY_S3_BUCKET=REPLACE", `AUTIFY_S3_BUCKET="${bucket}"`)
     .replace("AUTIFY_S3_PREFIX=REPLACE", `AUTIFY_S3_PREFIX="${prefix}"`);
   writeFileSync(cwd ? join(cwd, file) : file, content);
@@ -180,6 +181,18 @@ const promoteShellInstaller = (file: string, channel: string) => {
   run(`aws s3 cp ${file} ${dest} --acl public-read`);
 };
 
+const promoteNpm = (
+  npm: "autify-cli" | "autify-cli-integration-test",
+  channel: string
+) => {
+  const file = downloadS3(".", { target: "npm", npm });
+  const regex = new RegExp(`${npm}-.+\\.tgz$`);
+  const destFile = file.replace(regex, `${npm}.tgz`);
+  const dest = `s3://${bucket}/${folder}/channels/${channel}/${destFile}`;
+  console.log(`Promoting npm package to ${dest}`);
+  run(`aws s3 cp ${file} ${dest} --acl public-read`);
+};
+
 const promoteS3 = () => {
   const indexes = channel === "stable" ? "--indexes" : "";
   const targets =
@@ -189,6 +202,8 @@ const promoteS3 = () => {
   );
   promoteShellInstaller("install-standalone.sh", channel);
   promoteShellInstaller("install-cicd.bash", channel);
+  promoteNpm("autify-cli", channel);
+  promoteNpm("autify-cli-integration-test", channel);
 };
 
 const promoteCommand = () => {
@@ -292,7 +307,8 @@ const installCicdShell = (cwd: string) => {
     script: "install-cicd.bash",
   });
   run(`cat ${file} | bash -xe`, cwd);
-  return join(cwd, "autify", "bin");
+  const autifyPath = join(cwd, "autify", "path");
+  return readFileSync(autifyPath).toString();
 };
 
 const installBrew = () => {
