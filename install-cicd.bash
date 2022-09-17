@@ -79,7 +79,7 @@ cd "$WORKSPACE"
 if [ -n "$AUTIFY_CLI_INTEGRATION_TEST_INSTALL" ]; then
   file_prefix=$(basename "$AUTIFY_S3_PREFIX")
   dir_prefix=$(dirname "$AUTIFY_S3_PREFIX")
-  if [ "$file_prefix" == "autify-" ]; then
+  if [ "$file_prefix" == "autify" ]; then
     # channel
     package="autifyhq-autify-cli-integration-test.tgz"
   else
