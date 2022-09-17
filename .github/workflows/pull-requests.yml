@@ -20,8 +20,12 @@ jobs:
     needs: [upload]
     uses: ./.github/workflows/integration-tests.yml
 
+  cicd-tests:
+    needs: [upload]
+    uses: ./.github/workflows/cicd-tests.yml
+
   approved:
-    needs: [integration-tests]
+    needs: [integration-tests, cicd-tests]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
