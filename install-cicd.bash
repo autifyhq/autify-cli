@@ -9,7 +9,7 @@ AUTIFY_S3_PREFIX=REPLACE
 
 WORKSPACE="$(pwd)"
 AUTIFY_DIR="$WORKSPACE/autify"
-AUTIFY_PATH="$AUTIFY_DIR/path" # Required PATHs to use the installed commands.
+AUTIFY_PATH="$AUTIFY_DIR/path" # Export PATHs to use the installed commands.
 
 if [ -n "$AUTIFY_CLI_INSTALL_USE_CACHE" ] && [ -d "$AUTIFY_DIR" ]; then
   echo "$AUTIFY_DIR exists. Reuse it as cache."
@@ -51,7 +51,6 @@ if [ "$OS" == "windows" ]; then
   EXE_FILE="$AUTIFY_DIR/installer.exe"
   curl "$URL" > "$EXE_FILE"
   cmd.exe /C "$(cygpath -w "$EXE_FILE") /S /D=$(cygpath -w "$AUTIFY_DIR")"
-  cygpath -w "$AUTIFY_DIR/bin" >> "$AUTIFY_PATH"
 else
   mkdir "$AUTIFY_DIR/bin"
   mkdir "$AUTIFY_DIR/lib"
@@ -72,11 +71,11 @@ else
   fi
 
   ln -s "$AUTIFY_DIR/lib/autify/bin/autify" "$AUTIFY_DIR/bin/autify"
-  echo "$AUTIFY_DIR/bin" >> "$AUTIFY_PATH"
 fi
 
 cd "$WORKSPACE"
 "$AUTIFY_DIR/bin/autify" --version
+BIN_PATHS=("$AUTIFY_DIR/bin")
 
 if [ -n "$AUTIFY_CLI_INTEGRATION_TEST_INSTALL" ]; then
   file_prefix=$(basename "$AUTIFY_S3_PREFIX")
@@ -93,9 +92,12 @@ if [ -n "$AUTIFY_CLI_INTEGRATION_TEST_INSTALL" ]; then
   cd "$AUTIFY_DIR"
   echo "Installing autify-cli-integration-test package from $package_url"
   npm install "$package_url"
-  if [ "$OS" == "windows" ]; then
-    cygpath -w "$AUTIFY_DIR/node_modules/.bin" >> "$AUTIFY_PATH"
-  else
-    echo "$AUTIFY_DIR/node_modules/.bin" >> "$AUTIFY_PATH"
-  fi
+  BIN_PATHS+=("$AUTIFY_DIR/node_modules/.bin")
 fi
+
+for path in "${BIN_PATHS[@]}"; do
+  if [ "$OS" == "windows" ]; then
+    cygpath -w "$path" >> "$AUTIFY_PATH"
+  fi
+  echo "$path" >> "$AUTIFY_PATH"
+done
