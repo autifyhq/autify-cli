@@ -24,6 +24,8 @@ elif [ "$(uname -s | cut -c 1-5)" == "Linux" ]; then
   OS=linux
 elif [ "$(uname -s | cut -c 1-5)" == "MINGW" ]; then
   OS=windows
+elif [ "$(uname -s | cut -c 1-4)" == "MSYS" ]; then
+  OS=windows
 else
   echoerr "Unsupported os: $(uname)"
   exit 1
