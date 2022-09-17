@@ -20,6 +20,7 @@ const normalize = (stdout: string) =>
       /debug server on http:\/\/localhost:\d+/g,
       "debug server on http://localhost:<random>"
     )
+    .replace(/.+Ignoring terminate error:.+\n/, "") // TODO: Remove once autifyconnect is fixed.
     .replace(/Your session ID is "[^"]+"/, 'Your session ID is "fake"');
 
 export const execAutifyCli = async (
