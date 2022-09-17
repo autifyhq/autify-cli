@@ -1,0 +1,74 @@
+name: CI/CD integration tests
+
+on:
+  workflow_call:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  get:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/setup
+      - id: run
+        run: npm run release get-installer-url
+    outputs:
+      installer-url: ${{ steps.run.outputs.installer-url }}
+
+  github-actions:
+    needs: [get]
+    runs-on: ubuntu-latest
+    env:
+      AUTIFY_CLI_INTEGRATION_TEST_INSTALL: 1
+      AUTIFY_TEST_WAIT_INTERVAL_SECOND: 0
+      AUTIFY_CONNECT_CLIENT_MODE: fake
+    steps:
+      - uses: actions/setup-node@v3
+
+      - id: web-test-run
+        uses: autifyhq/actions-web-test-run@main # TODO: Use v1
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://app.autify.com/projects/0000/scenarios/0000
+      - run: test "${{ steps.web-test-run.outputs.exit-code }}" = 0
+      - run: echo "${{ steps.web-test-run.outputs.log }}" | grep "Successfully started"
+      - run: echo "${{ steps.web-test-run.outputs.result-url }}" | grep -E 'https://app.autify.com/projects/[[:digit:]]+/'
+
+      - id: web-test-run-wait
+        uses: autifyhq/actions-web-test-run@main # TODO: Use v1
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://app.autify.com/projects/0000/scenarios/0000
+          wait: true
+      - run: test "${{ steps.web-test-run-wait.outputs.exit-code }}" = 0
+      - run: echo "${{ steps.web-test-run-wait.outputs.log }}" | grep "Test passed!"
+      - run: echo "${{ steps.web-test-run-wait.outputs.result-url }}" | grep -E 'https://app.autify.com/projects/[[:digit:]]+/'
+
+      - id: web-test-run-wait-autify-connect-client
+        uses: autifyhq/actions-web-test-run@main # TODO: Use v1
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://app.autify.com/projects/0000/scenarios/0000
+          wait: true
+          autify-connect-client: true
+      - run: test "${{ steps.web-test-run-wait-autify-connect-client.outputs.exit-code }}" = 0
+      - run: echo "${{ steps.web-test-run-wait-autify-connect-client.outputs.log }}" | grep "Autify Connect Client is ready!"
+      - run: echo "${{ steps.web-test-run-wait-autify-connect-client.outputs.log }}" | grep "Test passed!"
+      - run: echo "${{ steps.web-test-run-wait-autify-connect-client.outputs.result-url }}" | grep -E 'https://app.autify.com/projects/[[:digit:]]+/'
+
+  # circleci-orbs:
+
+  # jenkins-plugin:
+
+  # bitrise-steps:

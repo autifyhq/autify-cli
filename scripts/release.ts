@@ -461,6 +461,15 @@ const validateCommand = (args: string[]) => {
     throw new Error(`Invalid channel (${channel}) for branch: ${targetBranch}`);
 };
 
+const setOutput = (name: string, value: string) => {
+  console.log(`::set-output name=${name}::${value}`);
+};
+
+const getInstallerUrlCommand = () => {
+  const url = `https://${bucket}.s3.amazonaws.com/${s3KeyPrefix}/install-cicd.bash`;
+  setOutput("installer-url", url);
+};
+
 const main = () => {
   if (process.argv.length < 3) {
     fail("Usage: ts-node ./scripts/release.ts COMMAND ARGS");
@@ -511,6 +520,11 @@ const main = () => {
 
     case "validate": {
       validateCommand(args);
+      break;
+    }
+
+    case "get-installer-url": {
+      getInstallerUrlCommand();
       break;
     }
 
