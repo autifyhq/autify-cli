@@ -241,8 +241,10 @@ export class ClientManager {
     try {
       this.logger.debug("terminate");
       await this.debugServerClient?.requestTerminate();
-    } catch (error) {
-      this.logger.warn(`Ignoring terminate error: ${error}`);
+    } catch {
+      // TODO: Revert once `autifyconnect` is fixed.
+      // } catch (error) {
+      //  this.logger.warn(`Ignoring terminate error: ${error}`);
     }
   }
 
