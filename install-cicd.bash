@@ -75,7 +75,7 @@ fi
 
 cd "$WORKSPACE"
 "$AUTIFY_DIR/bin/autify" --version
-BIN_PATHS=("$AUTIFY_DIR/bin")
+echo "$AUTIFY_DIR/bin" >> "$AUTIFY_PATH"
 
 if [ -n "$AUTIFY_CLI_INTEGRATION_TEST_INSTALL" ]; then
   file_prefix=$(basename "$AUTIFY_S3_PREFIX")
@@ -92,12 +92,5 @@ if [ -n "$AUTIFY_CLI_INTEGRATION_TEST_INSTALL" ]; then
   cd "$AUTIFY_DIR"
   echo "Installing autify-cli-integration-test package from $package_url"
   npm install "$package_url"
-  BIN_PATHS+=("$AUTIFY_DIR/node_modules/.bin")
+  echo "$AUTIFY_DIR/node_modules/.bin" >> "$AUTIFY_PATH"
 fi
-
-for path in "${BIN_PATHS[@]}"; do
-  if [ "$OS" == "windows" ]; then
-    cygpath -w "$path" >> "$AUTIFY_PATH"
-  fi
-  echo "$path" >> "$AUTIFY_PATH"
-done
