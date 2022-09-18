@@ -116,11 +116,15 @@ jobs:
         env:
           AUTIFY_CLI_INTEGRATION_TEST_INSTALL: 1
       - run: echo test | autify web auth login
+        shell: bash
       - run: echo test | autify mobile auth login
+        shell: bash
       - run: autify connect client install
+        shell: bash
         env:
           AUTIFY_CONNECT_CLIENT_MODE: "fake"
       - run: autify-cli-integration-test
+        shell: bash
 
   brew:
     strategy:
