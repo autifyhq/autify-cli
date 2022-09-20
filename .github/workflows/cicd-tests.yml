@@ -20,7 +20,7 @@ jobs:
     outputs:
       installer-url: ${{ steps.run.outputs.installer-url }}
 
-  github-actions:
+  github-actions-web:
     needs: [get]
     runs-on: ubuntu-latest
     env:
@@ -68,6 +68,15 @@ jobs:
       - run: echo "${{ steps.web-test-run-wait-autify-connect-client.outputs.result-url }}" | grep -E 'https://app.autify.com/projects/[[:digit:]]+/'
 
   # circleci-orbs:
+  circleci-orb-web:
+    needs: [get]
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -X POST https://circleci.com/api/v2/project/gh/autifyhq/autify-cli/pipeline \
+          --header "Circle-Token: ${{ secrets.CIRCLE_CI_API_TOKEN }}" \
+          --header "content-type: application/json" \
+          --data '{"branch":"pull/162/head"}'
 
   # jenkins-plugin:
 
