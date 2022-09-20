@@ -42,6 +42,11 @@ export type ProcessExit = Readonly<{
   code: number | null;
   signal: NodeJS.Signals | null;
 }>;
+export class StateMachineTimeoutError extends CLIError {
+  constructor(state: string) {
+    super(`Autify Connect Manager faced timeout at ${state} state.`);
+  }
+}
 
 type ClientManagerOptions = Readonly<{
   configDir: string;
@@ -99,13 +104,18 @@ export class ClientManager {
   }
 
   public async start(): Promise<void> {
-    this.logger.debug("start");
-    const version = await this.getClientVersion();
-    const debugServerPort = this.options.debugServerPort ?? (await getPort());
-    this.logger.info(
-      `Starting Autify Connect Client (accessPoint: ${this.accessPointName}, debugServerPort: ${debugServerPort}, path: ${this.clientPath}, version: ${version})`
-    );
-    this.service.send("SPAWN", { debugServerPort });
+    try {
+      this.logger.debug("start");
+      const version = await this.getClientVersion();
+      const debugServerPort = this.options.debugServerPort ?? (await getPort());
+      this.logger.info(
+        `Starting Autify Connect Client (accessPoint: ${this.accessPointName}, debugServerPort: ${debugServerPort}, path: ${this.clientPath}, version: ${version})`
+      );
+      this.service.send("SPAWN", { debugServerPort });
+    } catch (error) {
+      this.service.send("FAIL", { error });
+      throw error;
+    }
   }
 
   public async onceReady(): Promise<void> {
@@ -141,6 +151,12 @@ export class ClientManager {
   }): Promise<number | null> {
     try {
       this.logger.debug("exit");
+      const snapshot = this.service.getSnapshot();
+      if (snapshot.done) {
+        this.logger.debug("Already exited.");
+        return snapshot.context.processExit?.code || null;
+      }
+
       this.service.send("TERMINATE");
       return await this.onceDone();
     } catch (error) {
@@ -184,6 +200,7 @@ export class ClientManager {
       terminate: () => this.terminate(),
       kill: () => this.kill(),
       cleanup: () => this.cleanup(),
+      errors: [],
     }).onTransition((state, event) => {
       if (!state.changed) return;
       this.logger.debug(
@@ -280,17 +297,24 @@ export class ClientManager {
         (state) =>
           state.matches(waitState) ||
           state.matches("done") ||
-          state.matches("timeout"),
+          state.matches("failed"),
         {
           timeout: Number.POSITIVE_INFINITY,
         }
       );
     } catch {
-      throw new CLIError("Unknown state transition.");
+      throw new CLIError(
+        `Unknown state transition: ${this.service.getSnapshot().value}`
+      );
     }
 
-    if (state.value === "timeout")
-      throw new CLIError(`Timed out while waiting for ${waitState}.`);
+    if (state.value === "failed")
+      this.logger.warn(`Failed (${state.context.errors})`);
+    const timeoutError = state.context.errors.find(
+      (error) => error instanceof StateMachineTimeoutError
+    );
+    if (timeoutError) throw timeoutError;
+
     return state;
   }
 

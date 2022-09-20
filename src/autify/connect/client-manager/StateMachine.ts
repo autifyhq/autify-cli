@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { assign, createMachine, interpret, Interpreter } from "xstate";
-import { ProcessExit } from "./ClientManager";
+import { StateMachineTimeoutError, ProcessExit } from "./ClientManager";
 
 type ClientStateMachineContext = {
   spawn: (debugServerPort: number) => void;
@@ -8,13 +8,14 @@ type ClientStateMachineContext = {
   kill: () => void;
   cleanup: () => Promise<void>;
   processExit?: ProcessExit;
-  timeout?: boolean;
+  errors: Error[];
 };
 
 type ClientStateMachineEvent =
   | { type: "SPAWN"; debugServerPort: number }
   | { type: "READY" }
   | { type: "TERMINATE" }
+  | { type: "FAIL"; error: Error }
   | { type: "EXIT"; processExit: ProcessExit };
 
 type ClientStateMachineState =
@@ -24,10 +25,7 @@ type ClientStateMachineState =
   | { value: "terminating"; context: ClientStateMachineContext }
   | { value: "killing"; context: ClientStateMachineContext }
   | { value: "timeout"; context: ClientStateMachineContext }
-  | {
-      value: "exited";
-      context: ClientStateMachineContext & { processExit: ProcessExit };
-    }
+  | { value: "cleanup"; context: ClientStateMachineContext }
   | {
       value: "done";
       context: ClientStateMachineContext & { processExit: ProcessExit };
@@ -59,6 +57,15 @@ export const createService = (
       init: {
         on: {
           SPAWN: { target: "starting" },
+          FAIL: {
+            target: "cleanup",
+            actions: assign({
+              errors: (context, event) => {
+                context.errors.push(event.error);
+                return context.errors;
+              },
+            }),
+          },
         },
       },
       starting: {
@@ -68,8 +75,9 @@ export const createService = (
         },
         on: {
           READY: { target: "ready" },
+          TERMINATE: { target: "terminating" },
           EXIT: {
-            target: "exited",
+            target: "cleanup",
             actions: assign({
               processExit: (_, event) => event.processExit,
             }),
@@ -79,7 +87,10 @@ export const createService = (
           3000: {
             target: "terminating",
             actions: assign({
-              timeout: (_) => true,
+              errors: (context) => {
+                context.errors.push(new StateMachineTimeoutError("starting"));
+                return context.errors;
+              },
             }),
           },
         },
@@ -88,7 +99,7 @@ export const createService = (
         on: {
           TERMINATE: { target: "terminating" },
           EXIT: {
-            target: "exited",
+            target: "cleanup",
             actions: assign({
               processExit: (_, event) => event.processExit,
             }),
@@ -102,7 +113,7 @@ export const createService = (
         on: {
           TERMINATE: { target: "killing" },
           EXIT: {
-            target: "exited",
+            target: "cleanup",
             actions: assign({
               processExit: (_, event) => event.processExit,
             }),
@@ -115,31 +126,51 @@ export const createService = (
       killing: {
         entry: (context) => context.kill(),
         on: {
-          TERMINATE: { target: "exited" },
+          TERMINATE: { target: "cleanup" },
           EXIT: {
-            target: "exited",
+            target: "cleanup",
             actions: assign({
               processExit: (_, event) => event.processExit,
             }),
           },
         },
         after: {
-          2000: { target: "timeout" },
+          2000: {
+            target: "failed",
+            actions: assign({
+              errors: (context) => {
+                context.errors.push(new StateMachineTimeoutError("killing"));
+                return context.errors;
+              },
+            }),
+          },
         },
       },
-      exited: {
+      cleanup: {
         invoke: {
           src: (context) => context.cleanup(),
           onDone: [
-            { target: "timeout", cond: (context) => context.timeout === true },
+            { target: "failed", cond: (context) => context.errors.length > 0 },
             { target: "done" },
           ],
+          onError: {
+            target: "failed",
+            actions: assign({
+              errors: (context, event) => {
+                context.errors.push(event.data);
+                return context.errors;
+              },
+            }),
+          },
         },
         after: {
           2000: {
-            target: "timeout",
+            target: "failed",
             actions: assign({
-              timeout: (_) => true,
+              errors: (context) => {
+                context.errors.push(new StateMachineTimeoutError("cleanup"));
+                return context.errors;
+              },
             }),
           },
         },
@@ -147,7 +178,7 @@ export const createService = (
       done: {
         type: "final",
       },
-      timeout: {
+      failed: {
         type: "final",
         entry: (context) => context.kill(),
       },
