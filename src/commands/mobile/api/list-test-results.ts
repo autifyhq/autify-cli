@@ -1,6 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import { MobileClient as Client } from "@autifyhq/autify-sdk";
-import { get, getOrThrow } from "../../../config";
+import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 
 export default class MobileApiListTestResults extends Command {
   static description = "List test results.";
@@ -30,9 +29,7 @@ export default class MobileApiListTestResults extends Command {
   public async run(): Promise<void> {
     const { flags } = await this.parse(MobileApiListTestResults);
     const { configDir, userAgent } = this.config;
-    const accessToken = getOrThrow(configDir, "AUTIFY_MOBILE_ACCESS_TOKEN");
-    const basePath = get(configDir, "AUTIFY_MOBILE_BASE_PATH");
-    const client = new Client(accessToken, { basePath, userAgent });
+    const client = getMobileClient(configDir, userAgent);
     const res = await client.listTestResults(
       flags["project-id"],
       flags.page,

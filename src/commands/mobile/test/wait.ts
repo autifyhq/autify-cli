@@ -1,11 +1,10 @@
-import { MobileClient } from "@autifyhq/autify-sdk";
 import { Command, Flags } from "@oclif/core";
 import emoji from "node-emoji";
 import { getWaitIntervalSecond } from "../../../autify/getWaitIntervalSecond";
+import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 import { getMobileTestResultUrl } from "../../../autify/mobile/getTestResultUrl";
 import { parseTestResultUrl } from "../../../autify/mobile/parseTestResultUrl";
 import { waitTestResult } from "../../../autify/mobile/waitTestResult";
-import { get, getOrThrow } from "../../../config";
 
 export default class MobileTestWait extends Command {
   static description = "Wait a test result until it finishes.";
@@ -40,10 +39,8 @@ export default class MobileTestWait extends Command {
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(MobileTestWait);
     const { configDir, userAgent } = this.config;
-    const accessToken = getOrThrow(configDir, "AUTIFY_MOBILE_ACCESS_TOKEN");
-    const basePath = get(configDir, "AUTIFY_MOBILE_BASE_PATH");
     const waitIntervalSecond = getWaitIntervalSecond(configDir);
-    const client = new MobileClient(accessToken, { basePath, userAgent });
+    const client = getMobileClient(configDir, userAgent);
     const { workspaceId, resultId } = parseTestResultUrl(
       args["test-result-url"]
     );

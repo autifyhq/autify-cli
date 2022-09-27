@@ -1,6 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import { WebClient as Client } from "@autifyhq/autify-sdk";
-import { get, getOrThrow } from "../../../config";
+import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiDeleteAccessPoint extends Command {
   static description = "You can delete an access point by passing in its name.";
@@ -22,9 +21,7 @@ export default class WebApiDeleteAccessPoint extends Command {
   public async run(): Promise<void> {
     const { flags } = await this.parse(WebApiDeleteAccessPoint);
     const { configDir, userAgent } = this.config;
-    const accessToken = getOrThrow(configDir, "AUTIFY_WEB_ACCESS_TOKEN");
-    const basePath = get(configDir, "AUTIFY_WEB_BASE_PATH");
-    const client = new Client(accessToken, { basePath, userAgent });
+    const client = getWebClient(configDir, userAgent);
     const res = await client.deleteAccessPoint(
       flags["project-id"],
       JSON.parse(flags["delete-access-point-request"])

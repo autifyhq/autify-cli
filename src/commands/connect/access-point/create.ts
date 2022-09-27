@@ -1,10 +1,9 @@
-import { WebClient } from "@autifyhq/autify-sdk";
 import { Command, Flags } from "@oclif/core";
 import {
   confirmOverwriteAccessPoint,
   saveAccessPoint,
 } from "../../../autify/connect/accessPointConfig";
-import { get, getOrThrow } from "../../../config";
+import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class ConnectAccessPointCreate extends Command {
   static description = "Create an Autify Connect Access Point";
@@ -33,9 +32,7 @@ export default class ConnectAccessPointCreate extends Command {
     await confirmOverwriteAccessPoint(configDir);
     const { name, "web-workspace-id": webWorkspaceId } = flags;
     if (webWorkspaceId) {
-      const accessToken = getOrThrow(configDir, "AUTIFY_WEB_ACCESS_TOKEN");
-      const basePath = get(configDir, "AUTIFY_WEB_BASE_PATH");
-      const client = new WebClient(accessToken, { basePath, userAgent });
+      const client = getWebClient(configDir, userAgent);
       const response = await client.createAccessPoint(webWorkspaceId, {
         name,
       });

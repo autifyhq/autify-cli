@@ -1,6 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import { WebClient as Client } from "@autifyhq/autify-sdk";
-import { get, getOrThrow } from "../../../config";
+import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiListResults extends Command {
   static description = "List results.";
@@ -31,9 +30,7 @@ export default class WebApiListResults extends Command {
   public async run(): Promise<void> {
     const { flags } = await this.parse(WebApiListResults);
     const { configDir, userAgent } = this.config;
-    const accessToken = getOrThrow(configDir, "AUTIFY_WEB_ACCESS_TOKEN");
-    const basePath = get(configDir, "AUTIFY_WEB_BASE_PATH");
-    const client = new Client(accessToken, { basePath, userAgent });
+    const client = getWebClient(configDir, userAgent);
     const res = await client.listResults(
       flags["project-id"],
       flags.page,

@@ -10,6 +10,7 @@ type Variable =
   | "AUTIFY_CONNECT_ACCESS_POINT_NAME"
   | "AUTIFY_CONNECT_ACCESS_POINT_KEY"
   | "AUTIFY_CONNECT_CLIENT_MODE"
+  | "AUTIFY_CLI_USER_AGENT_SUFFIX"
   | "AUTIFY_TEST_WAIT_INTERVAL_SECOND";
 
 const envFile = (dir: string) => path.resolve(dir, "config.env");
