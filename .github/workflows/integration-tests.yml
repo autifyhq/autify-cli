@@ -130,7 +130,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-latest
+          # `brew` has been removed from ubuntu-latest?
+          # - os: ubuntu-latest
           - os: macos-latest
       fail-fast: false
 
