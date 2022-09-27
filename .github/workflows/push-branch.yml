@@ -20,12 +20,12 @@ jobs:
     needs: [upload]
     uses: ./.github/workflows/integration-tests.yml
 
-  cicd-tests:
+  github-actions-tests:
     needs: [upload]
-    uses: ./.github/workflows/cicd-tests.yml
+    uses: ./.github/workflows/github-actions-tests.yml
 
   promote:
-    needs: [integration-tests, cicd-tests]
+    needs: [integration-tests, github-actions-tests]
     uses: ./.github/workflows/promote.yml
     secrets:
       BOT_APP_ID: ${{ secrets.BOT_APP_ID }}

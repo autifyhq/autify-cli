@@ -1,0 +1,198 @@
+name: GitHub Actions integration tests
+
+on:
+  workflow_call:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  get:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/setup
+      - id: run
+        run: npm run release get-installer-url
+    outputs:
+      installer-url: ${{ steps.run.outputs.installer-url }}
+
+  web-test-run:
+    needs: [get]
+    runs-on: ubuntu-latest
+    env:
+      AUTIFY_CLI_INTEGRATION_TEST_INSTALL: 1
+      AUTIFY_TEST_WAIT_INTERVAL_SECOND: 0
+      AUTIFY_CONNECT_CLIENT_MODE: fake
+    steps:
+      - uses: actions/setup-node@v3
+
+      - id: web-test-run
+        uses: autifyhq/actions-web-test-run@v2
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://app.autify.com/projects/0000/scenarios/0000
+      - run: test "${{ steps.web-test-run.outputs.exit-code }}" = 0
+      - run: echo "${{ steps.web-test-run.outputs.log }}" | grep "Successfully started"
+      - run: echo "${{ steps.web-test-run.outputs.result-url }}" | grep -E 'https://app.autify.com/projects/[[:digit:]]+/'
+
+      - id: web-test-run-wait
+        uses: autifyhq/actions-web-test-run@v2
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://app.autify.com/projects/0000/scenarios/0000
+          wait: true
+      - run: test "${{ steps.web-test-run-wait.outputs.exit-code }}" = 0
+      - run: echo "${{ steps.web-test-run-wait.outputs.log }}" | grep "Test passed!"
+      - run: echo "${{ steps.web-test-run-wait.outputs.result-url }}" | grep -E 'https://app.autify.com/projects/[[:digit:]]+/'
+
+      - id: web-test-run-wait-autify-connect-client
+        uses: autifyhq/actions-web-test-run@v2
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://app.autify.com/projects/0000/scenarios/0000
+          wait: true
+          autify-connect-client: true
+      - run: test "${{ steps.web-test-run-wait-autify-connect-client.outputs.exit-code }}" = 0
+      - run: echo "${{ steps.web-test-run-wait-autify-connect-client.outputs.log }}" | grep "Autify Connect Client is ready!"
+      - run: echo "${{ steps.web-test-run-wait-autify-connect-client.outputs.log }}" | grep "Test passed!"
+      - run: echo "${{ steps.web-test-run-wait-autify-connect-client.outputs.result-url }}" | grep -E 'https://app.autify.com/projects/[[:digit:]]+/'
+
+  mobile-test-run:
+    needs: [get]
+    runs-on: ubuntu-latest
+    env:
+      AUTIFY_CLI_INTEGRATION_TEST_INSTALL: 1
+      AUTIFY_TEST_WAIT_INTERVAL_SECOND: 0
+    steps:
+      - uses: actions/setup-node@v3
+
+      - id: mobile-test-run
+        uses: autifyhq/actions-mobile-test-run@v2
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://mobile-app.autify.com/projects/AAA/test_plans/BBB
+          build-id: CCC
+      - run: test ${{ steps.mobile-test-run.outputs.exit-code }} = 0
+      - run: echo "${{ steps.mobile-test-run.outputs.log }}" | grep "Successfully started"
+      - run: test -n "${{ steps.mobile-test-run.outputs.build-id }}"
+      - run: echo ${{ steps.mobile-test-run.outputs.result-url }} | grep -E 'https://mobile-app.autify.com/projects/[^/]+/results/[^/]+'
+
+      - id: mobile-test-run-wait
+        uses: autifyhq/actions-mobile-test-run@v2
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://mobile-app.autify.com/projects/AAA/test_plans/BBB
+          build-id: CCC
+          wait: true
+      - run: test ${{ steps.mobile-test-run-wait.outputs.exit-code }} = 0
+      - run: echo "${{ steps.mobile-test-run-wait.outputs.log }}" | grep "Successfully started"
+      - run: echo "${{ steps.mobile-test-run-wait.outputs.log }}" | grep "Test passed!"
+      - run: test -n "${{ steps.mobile-test-run-wait.outputs.build-id }}"
+      - run: echo ${{ steps.mobile-test-run-wait.outputs.result-url }} | grep -E 'https://mobile-app.autify.com/projects/[^/]+/results/[^/]+'
+
+      - id: mobile-test-run-android
+        uses: autifyhq/actions-mobile-test-run@v2
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://mobile-app.autify.com/projects/AAA/test_plans/BBB
+          build-path: ./android.apk
+      - run: test ${{ steps.mobile-test-run-android.outputs.exit-code }} = 0
+      - run: echo "${{ steps.mobile-test-run-android.outputs.log }}" | grep "Successfully uploaded"
+      - run: echo "${{ steps.mobile-test-run-android.outputs.log }}" | grep "Successfully started"
+      - run: test -n "${{ steps.mobile-test-run-android.outputs.build-id }}"
+      - run: echo ${{ steps.mobile-test-run-android.outputs.result-url }} | grep -E 'https://mobile-app.autify.com/projects/[^/]+/results/[^/]+'
+
+      - id: mobile-test-run-android-wait
+        uses: autifyhq/actions-mobile-test-run@v2
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://mobile-app.autify.com/projects/AAA/test_plans/BBB
+          build-path: ./android.apk
+          wait: true
+      - run: test ${{ steps.mobile-test-run-android-wait.outputs.exit-code }} = 0
+      - run: echo "${{ steps.mobile-test-run-android-wait.outputs.log }}" | grep "Successfully uploaded"
+      - run: echo "${{ steps.mobile-test-run-android-wait.outputs.log }}" | grep "Successfully started"
+      - run: echo "${{ steps.mobile-test-run-android-wait.outputs.log }}" | grep "Test passed!"
+      - run: test -n "${{ steps.mobile-test-run-android-wait.outputs.build-id }}"
+      - run: echo ${{ steps.mobile-test-run-android-wait.outputs.result-url }} | grep -E 'https://mobile-app.autify.com/projects/[^/]+/results/[^/]+'
+
+      - id: mobile-test-run-ios
+        uses: autifyhq/actions-mobile-test-run@v2
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://mobile-app.autify.com/projects/AAA/test_plans/BBB
+          build-path: ./ios.app
+      - run: test ${{ steps.mobile-test-run-ios.outputs.exit-code }} = 0
+      - run: echo "${{ steps.mobile-test-run-ios.outputs.log }}" | grep "Successfully uploaded"
+      - run: echo "${{ steps.mobile-test-run-ios.outputs.log }}" | grep "Successfully started"
+      - run: test -n "${{ steps.mobile-test-run-ios.outputs.build-id }}"
+      - run: echo ${{ steps.mobile-test-run-ios.outputs.result-url }} | grep -E 'https://mobile-app.autify.com/projects/[^/]+/results/[^/]+'
+
+      - id: mobile-test-run-ios-wait
+        uses: autifyhq/actions-mobile-test-run@v2
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://mobile-app.autify.com/projects/AAA/test_plans/BBB
+          build-path: ./ios.app
+          wait: true
+      - run: test ${{ steps.mobile-test-run-ios-wait.outputs.exit-code }} = 0
+      - run: echo "${{ steps.mobile-test-run-ios-wait.outputs.log }}" | grep "Successfully uploaded"
+      - run: echo "${{ steps.mobile-test-run-ios-wait.outputs.log }}" | grep "Successfully started"
+      - run: echo "${{ steps.mobile-test-run-ios-wait.outputs.log }}" | grep "Test passed!"
+      - run: test -n "${{ steps.mobile-test-run-ios-wait.outputs.build-id }}"
+      - run: echo ${{ steps.mobile-test-run-ios-wait.outputs.result-url }} | grep -E 'https://mobile-app.autify.com/projects/[^/]+/results/[^/]+'
+
+  mobile-build-upload:
+    needs: [get]
+    runs-on: ubuntu-latest
+    env:
+      AUTIFY_CLI_INTEGRATION_TEST_INSTALL: 1
+      AUTIFY_TEST_WAIT_INTERVAL_SECOND: 0
+    steps:
+      - uses: actions/setup-node@v3
+
+      - id: mobile-build-upload-ios
+        uses: autifyhq/actions-mobile-build-upload@v2
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          workspace-id: AAA
+          build-path: ./ios.app
+      - run: test ${{ steps.mobile-build-upload-ios.outputs.exit-code }} = 0
+      - run: echo "${{ steps.mobile-build-upload-ios.outputs.log }}" | grep "Successfully uploaded"
+      - run: test -n ${{ steps.mobile-build-upload-ios.outputs.build-id }}
+
+      - id: mobile-build-upload-android
+        uses: autifyhq/actions-mobile-build-upload@v2
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          workspace-id: AAA
+          build-path: ./android.apk
+      - run: test ${{ steps.mobile-build-upload-android.outputs.exit-code }} = 0
+      - run: echo "${{ steps.mobile-build-upload-android.outputs.log }}" | grep "Successfully uploaded"
+      - run: test -n ${{ steps.mobile-build-upload-android.outputs.build-id }}
