@@ -726,13 +726,12 @@ FLAGS
                                                      test execution.
   -v, --verbose                                      Verbose output
   -w, --wait                                         Wait until the test finishes.
-  --autify-connect=<value>                           [Only for test scenario] Name of the Autify Connect Access Point.
-  --autify-connect-client                            [Only for test scenario] Start Autify Connect Client
-  --autify-connect-client-debug-server-port=<value>  [Only for test scenario] Port for Autify Connect Client debug
-                                                     server. A random port will be used if not specified.
-  --autify-connect-client-file-logging               [Only for test scenario] Logging Autify Connect Client log to a
-                                                     file instead of console.
-  --autify-connect-client-verbose                    [Only for test scenario] Verbose output for Autify Connect Client.
+  --autify-connect=<value>                           Name of the Autify Connect Access Point.
+  --autify-connect-client                            Start Autify Connect Client
+  --autify-connect-client-debug-server-port=<value>  Port for Autify Connect Client debug server. A random port will be
+                                                     used if not specified.
+  --autify-connect-client-file-logging               Logging Autify Connect Client log to a file instead of console.
+  --autify-connect-client-verbose                    Verbose output for Autify Connect Client.
   --browser=<value>                                  [Only for test scenario] Browser to run the test
   --device=<value>                                   [Only for test scenario] Device to run the test
   --device-type=<value>                              [Only for test scenario] Device type to run the test
