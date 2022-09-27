@@ -44,7 +44,8 @@ const writeCommandSource = (service: string, apiMethod: MethodDeclaration) => {
       parameterType !== "string" &&
       parameterType !== "any"
     ) {
-      args.push(`JSON.parse(${arg})`);
+      if (required) args.push(`JSON.parse(${arg})`);
+      else args.push(`${arg} ? JSON.parse(${arg}) : undefined`);
     } else {
       args.push(arg);
     }
