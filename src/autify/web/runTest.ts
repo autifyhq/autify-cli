@@ -105,17 +105,20 @@ export const runTest = async (
       );
     if (name)
       throw new CLIError(`Running TestPlan doesn't support --name: ${name}`);
-    if (autifyConnectAccessPoint)
-      throw new CLIError(
-        "Running TestPlan doesn't support Autify Connect Access Point"
-      );
     const urlReplacementIds = [];
     for await (const urlReplacement of urlReplacements ?? []) {
       const res = await client.createUrlReplacement(testPlanId, urlReplacement);
       urlReplacementIds.push(res.data.id);
     }
 
-    const res = await client.executeSchedule(testPlanId);
+    const res = await client.executeSchedule(testPlanId, {
+      ...(autifyConnectAccessPoint && {
+        // eslint-disable-next-line camelcase
+        autify_connect: {
+          name: autifyConnectAccessPoint,
+        },
+      }),
+    });
     for await (const urlReplacementId of urlReplacementIds) {
       await client.deleteUrlReplacement(testPlanId, urlReplacementId);
     }

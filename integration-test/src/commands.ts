@@ -3,6 +3,7 @@ export const androidBuildPath = "android.apk";
 
 const webTestScenarioUrl =
   "https://app.autify.com/projects/743/scenarios/91437";
+const webTestPlanUrl = "https://app.autify.com/projects/743/test_plans/169408";
 const mobileAndroidTestPlanUrl =
   "https://mobile-app.autify.com/projects/4yyFEL/test_plans/Wptd97";
 const mobileIosTestPlanUrl =
@@ -44,6 +45,12 @@ const replaceWebTestScenarioUrl = (arg: string) => {
   return regExp.test(arg) ? webTestScenarioUrl : arg;
 };
 
+const replaceWebTestPlanUrl = (arg: string) => {
+  const regExp =
+    /^https:\/\/app.autify.com\/projects\/\d+\/test_plans\/\d+\/?$/;
+  return regExp.test(arg) ? webTestPlanUrl : arg;
+};
+
 const replaceMobileTetsPlanUrl = (arg: string, os: "android" | "ios") => {
   const regExp =
     /^https:\/\/mobile-app.autify.com\/projects\/[^/]+\/test_plans\/[^/]+\/?$/;
@@ -78,7 +85,9 @@ const isIos = (args: string[]) => args.some((a) => a.endsWith(".app"));
 
 const replaceConstants = (args: string[]) => {
   if (args[0] === "web") {
-    return args.map((a) => replaceWebTestScenarioUrl(a));
+    return args
+      .map((a) => replaceWebTestScenarioUrl(a))
+      .map((a) => replaceWebTestPlanUrl(a));
   }
 
   if (args[0] === "mobile") {
