@@ -35,12 +35,15 @@ See our official document: https://help.autify.com/docs/autify-command-line-inte
 - [`autify mobile test run TEST-PLAN-URL`](#autify-mobile-test-run-test-plan-url)
 - [`autify mobile test wait TEST-RESULT-URL`](#autify-mobile-test-wait-test-result-url)
 - [`autify update [CHANNEL]`](#autify-update-channel)
+- [`autify web api create-access-point`](#autify-web-api-create-access-point)
 - [`autify web api create-url-replacement`](#autify-web-api-create-url-replacement)
+- [`autify web api delete-access-point`](#autify-web-api-delete-access-point)
 - [`autify web api delete-url-replacement`](#autify-web-api-delete-url-replacement)
 - [`autify web api describe-result`](#autify-web-api-describe-result)
 - [`autify web api describe-scenario`](#autify-web-api-describe-scenario)
 - [`autify web api execute-scenarios`](#autify-web-api-execute-scenarios)
 - [`autify web api execute-schedule`](#autify-web-api-execute-schedule)
+- [`autify web api list-access-points`](#autify-web-api-list-access-points)
 - [`autify web api list-capabilities`](#autify-web-api-list-capabilities)
 - [`autify web api list-results`](#autify-web-api-list-results)
 - [`autify web api list-scenarios`](#autify-web-api-list-scenarios)
@@ -399,6 +402,26 @@ EXAMPLES
 
 _See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v3.0.0/src/commands/update.ts)_
 
+## `autify web api create-access-point`
+
+You can generate a new access point by passing in its name.
+
+```
+USAGE
+  $ autify web api create-access-point --project-id <value> --create-access-point-request <value>
+
+FLAGS
+  --create-access-point-request=<value>  (required) The name of the access point to be created
+  --project-id=<value>                   (required) For example, 1 for the following URL:
+                                         https://app.autify.com/projects/1/scenarios
+
+DESCRIPTION
+  You can generate a new access point by passing in its name.
+
+EXAMPLES
+  $ autify web api create-access-point
+```
+
 ## `autify web api create-url-replacement`
 
 Create a new url replacement for the test plan
@@ -417,6 +440,26 @@ DESCRIPTION
 
 EXAMPLES
   $ autify web api create-url-replacement
+```
+
+## `autify web api delete-access-point`
+
+You can delete an access point by passing in its name.
+
+```
+USAGE
+  $ autify web api delete-access-point --project-id <value> --delete-access-point-request <value>
+
+FLAGS
+  --delete-access-point-request=<value>  (required) The name of the access point to be deleted
+  --project-id=<value>                   (required) For example, 1 for the following URL:
+                                         https://app.autify.com/projects/1/scenarios
+
+DESCRIPTION
+  You can delete an access point by passing in its name.
+
+EXAMPLES
+  $ autify web api delete-access-point
 ```
 
 ## `autify web api delete-url-replacement`
@@ -504,16 +547,37 @@ Run a test plan. (Note: "Schedule" is called as "TestPlan" now.)
 
 ```
 USAGE
-  $ autify web api execute-schedule --schedule-id <value>
+  $ autify web api execute-schedule --schedule-id <value> [--execute-schedule-request <value>]
 
 FLAGS
-  --schedule-id=<value>  (required) For example, 3 for the following URL: https://app.autify.com/projects/1/test_plans/3
+  --execute-schedule-request=<value>  The options to execute a test plan.
+  --schedule-id=<value>               (required) For example, 3 for the following URL:
+                                      https://app.autify.com/projects/1/test_plans/3
 
 DESCRIPTION
   Run a test plan. (Note: "Schedule" is called as "TestPlan" now.)
 
 EXAMPLES
   $ autify web api execute-schedule
+```
+
+## `autify web api list-access-points`
+
+List access points for the project.
+
+```
+USAGE
+  $ autify web api list-access-points --project-id <value> [--page <value>]
+
+FLAGS
+  --page=<value>        The number of page returns.
+  --project-id=<value>  (required) For example, 1 for the following URL: https://app.autify.com/projects/1/scenarios
+
+DESCRIPTION
+  List access points for the project.
+
+EXAMPLES
+  $ autify web api list-access-points
 ```
 
 ## `autify web api list-capabilities`
