@@ -1,11 +1,10 @@
 import { Command, Flags } from "@oclif/core";
 import emoji from "node-emoji";
-import { WebClient } from "@autifyhq/autify-sdk";
-import { get, getOrThrow } from "../../../config";
 import { parseTestResultUrl } from "../../../autify/web/parseTestResultUrl";
 import { waitTestResult } from "../../../autify/web/waitTestResult";
 import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
 import { getWaitIntervalSecond } from "../../../autify/getWaitIntervalSecond";
+import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebTestWait extends Command {
   static description = "Wait a test result until it finishes.";
@@ -40,10 +39,8 @@ export default class WebTestWait extends Command {
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(WebTestWait);
     const { configDir, userAgent } = this.config;
-    const accessToken = getOrThrow(configDir, "AUTIFY_WEB_ACCESS_TOKEN");
-    const basePath = get(configDir, "AUTIFY_WEB_BASE_PATH");
     const waitIntervalSecond = getWaitIntervalSecond(configDir);
-    const client = new WebClient(accessToken, { basePath, userAgent });
+    const client = getWebClient(configDir, userAgent);
     const { workspaceId, resultId } = parseTestResultUrl(
       args["test-result-url"]
     );

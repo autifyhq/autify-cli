@@ -1,9 +1,8 @@
-import { MobileClient } from "@autifyhq/autify-sdk";
 import { Command, Flags } from "@oclif/core";
 import emoji from "node-emoji";
 import { getBuildDetailUrl } from "../../../autify/mobile/getBuildDetailUrl";
+import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 import { uploadBuild } from "../../../autify/mobile/uploadBuild";
-import { get, getOrThrow } from "../../../config";
 
 export default class MobileBuildUpload extends Command {
   static enableJsonFlag = true;
@@ -37,9 +36,7 @@ export default class MobileBuildUpload extends Command {
     const buildPath = args["build-path"];
     const workspaceId = flags["workspace-id"];
     const { configDir, userAgent } = this.config;
-    const accessToken = getOrThrow(configDir, "AUTIFY_MOBILE_ACCESS_TOKEN");
-    const basePath = get(configDir, "AUTIFY_MOBILE_BASE_PATH");
-    const client = new MobileClient(accessToken, { basePath, userAgent });
+    const client = getMobileClient(configDir, userAgent);
     const [buildId, os] = await uploadBuild(client, workspaceId, buildPath);
     const buildDetailUrl = getBuildDetailUrl(
       configDir,

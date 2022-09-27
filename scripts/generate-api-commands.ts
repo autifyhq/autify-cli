@@ -19,6 +19,7 @@ const kebabize = (str: string) =>
   );
 
 const writeCommandSource = (service: string, apiMethod: MethodDeclaration) => {
+  const Service = pascallize(service);
   const commandClassName =
     pascallize(service) + "Api" + pascallize(apiMethod.getName());
   const jsDoc = apiMethod.getJsDocs()[0];
@@ -53,7 +54,6 @@ const writeCommandSource = (service: string, apiMethod: MethodDeclaration) => {
 
   const flagsString = flags.join("\n");
   const argsString = args.join(", ");
-  const clientClass = `${pascallize(service)}Client`;
   project
     .createSourceFile(
       `./src/commands/${service}/api/${kebabize(apiMethod.getName())}.ts`,
@@ -62,8 +62,7 @@ const writeCommandSource = (service: string, apiMethod: MethodDeclaration) => {
           .write(
             `
 import {Command, Flags} from '@oclif/core'
-import {${clientClass} as Client} from '@autifyhq/autify-sdk'
-import {get, getOrThrow} from '../../../config'
+import {get${Service}Client} from '../../../autify/${service}/get${Service}Client'
 
 export default class ${commandClassName} extends Command {
   static description = '${description.trim()}'
@@ -79,9 +78,7 @@ ${flagsString}
   public async run(): Promise<void> {
     const {flags} = await this.parse(${commandClassName})
     const {configDir, userAgent} = this.config
-    const accessToken = getOrThrow(configDir, 'AUTIFY_${service.toUpperCase()}_ACCESS_TOKEN')
-    const basePath = get(configDir, 'AUTIFY_${service.toUpperCase()}_BASE_PATH')
-    const client = new Client(accessToken, {basePath, userAgent})
+    const client = get${Service}Client(configDir, userAgent);
     const res = await client.${apiMethod.getName()}(${argsString})
     console.log(JSON.stringify(res.data, null, 2))
   }

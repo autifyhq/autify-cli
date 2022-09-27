@@ -5,7 +5,7 @@ import { ChildProcessWithoutNullStreams, spawn } from "node:child_process";
 import { env } from "node:process";
 import { EventEmitter } from "node:stream";
 import { Logger } from "winston";
-import { get, getOrThrow } from "../../../config";
+import { get } from "../../../config";
 import {
   AccessPoint,
   createEphemeralAccessPointForWeb,
@@ -29,6 +29,7 @@ import {
 import { join } from "node:path";
 import TypedEmitter from "typed-emitter";
 import getPort from "get-port";
+import { getWebClient } from "../../web/getWebClient";
 
 export type ClientEvents = TypedEmitter<{
   log: (msg: string) => void;
@@ -65,9 +66,7 @@ export class ClientManager {
   ): Promise<ClientManager> {
     if (options.webWorkspaceId) {
       const { configDir, userAgent, webWorkspaceId } = options;
-      const accessToken = getOrThrow(configDir, "AUTIFY_WEB_ACCESS_TOKEN");
-      const basePath = get(configDir, "AUTIFY_WEB_BASE_PATH");
-      const client = new WebClient(accessToken, { basePath, userAgent });
+      const client = getWebClient(configDir, userAgent);
       return this.createWithEphemeralAccessPointForWeb(
         client,
         webWorkspaceId,

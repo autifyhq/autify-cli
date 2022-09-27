@@ -1,6 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import { WebClient as Client } from "@autifyhq/autify-sdk";
-import { get, getOrThrow } from "../../../config";
+import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiCreateUrlReplacement extends Command {
   static description = "Create a new url replacement for the test plan";
@@ -22,9 +21,7 @@ export default class WebApiCreateUrlReplacement extends Command {
   public async run(): Promise<void> {
     const { flags } = await this.parse(WebApiCreateUrlReplacement);
     const { configDir, userAgent } = this.config;
-    const accessToken = getOrThrow(configDir, "AUTIFY_WEB_ACCESS_TOKEN");
-    const basePath = get(configDir, "AUTIFY_WEB_BASE_PATH");
-    const client = new Client(accessToken, { basePath, userAgent });
+    const client = getWebClient(configDir, userAgent);
     const res = await client.createUrlReplacement(
       flags["test-plan-id"],
       JSON.parse(flags["create-url-replacement-request"])

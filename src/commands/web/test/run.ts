@@ -1,13 +1,12 @@
 import { Command, Flags } from "@oclif/core";
 import emoji from "node-emoji";
-import { WebClient } from "@autifyhq/autify-sdk";
-import { get, getOrThrow } from "../../../config";
 import { runTest } from "../../../autify/web/runTest";
 import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
 import WebTestWait from "./wait";
 import { CLIError } from "@oclif/errors";
 import { parseAutifyTestUrl } from "../../../autify/web/parseAutifyTestUrl";
 import { ClientManager } from "../../../autify/connect/client-manager/ClientManager";
+import { getWebClient } from "../../../autify/web/getWebClient";
 
 const parseUrlReplacements = (urlReplacements: string[]) => {
   return urlReplacements.map((s) => {
@@ -147,9 +146,7 @@ export default class WebTestRun extends Command {
         )}`
       );
     const { configDir, cacheDir, userAgent } = this.config;
-    const accessToken = getOrThrow(configDir, "AUTIFY_WEB_ACCESS_TOKEN");
-    const basePath = get(configDir, "AUTIFY_WEB_BASE_PATH");
-    const client = new WebClient(accessToken, { basePath, userAgent });
+    const client = getWebClient(configDir, userAgent);
 
     const parsedTest = parseAutifyTestUrl(args["scenario-or-test-plan-url"]);
     const { workspaceId } = parsedTest;
