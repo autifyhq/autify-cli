@@ -7,6 +7,7 @@ import {
   createWriteStream,
   existsSync,
   mkdirSync,
+  readdirSync,
   renameSync,
   rmSync,
 } from "node:fs";
@@ -21,7 +22,7 @@ import { get } from "../../config";
 // Update whenever to bump supported version.
 export const AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION = "v0.6.3";
 
-export type ClientMode = "fake" | "real";
+type ClientMode = "fake" | "real";
 
 const getMode = (configDir: string): ClientMode => {
   const mode = get(configDir, "AUTIFY_CONNECT_CLIENT_MODE");
@@ -54,21 +55,29 @@ const realBaseUrl =
   "https://autifyconnect.s3.ap-northeast-1.amazonaws.com/autifyconnect/versions";
 const fakeBaseUrl =
   "https://autifyconnect.s3.ap-northeast-1.amazonaws.com/fake/versions";
-const getUrl = (mode: ClientMode, version: string) => {
+export const getConnectClientSourceUrl = (
+  configDir: string,
+  version: string
+): { url: URL; expectedVersion: string | undefined } => {
+  const customUrl = get(configDir, "AUTIFY_CONNECT_CLIENT_SOURCE_URL");
+  if (customUrl)
+    return {
+      url: new URL(customUrl),
+      expectedVersion: undefined,
+    };
+  const mode = getMode(configDir);
   const baseUrl = mode === "fake" ? fakeBaseUrl : realBaseUrl;
   const prefix = mode === "fake" ? "autifyconnect-fake" : "autifyconnect";
   const os = getOs();
   const arch = getArch();
   const ext = getExt();
-  return new URL(`${baseUrl}/${version}/${prefix}_${os}_${arch}.${ext}`);
+  return {
+    url: new URL(`${baseUrl}/${version}/${prefix}_${os}_${arch}.${ext}`),
+    expectedVersion: version,
+  };
 };
 
-const download = async (
-  workspaceDir: string,
-  mode: ClientMode,
-  version: string
-) => {
-  const url = getUrl(mode, version);
+const download = async (workspaceDir: string, url: URL) => {
   const downloadPath = join(workspaceDir, basename(url.pathname));
   const response = await fetch(url);
   if (!response.ok)
@@ -79,28 +88,26 @@ const download = async (
 };
 
 const extract = async (downloadPath: string) => {
-  const file = basename(downloadPath);
   const dir = dirname(downloadPath);
-  const binaryName = file.startsWith("autifyconnect-fake")
-    ? "autifyconnect-fake"
-    : "autifyconnect";
-  if (file.endsWith(".tar.gz")) {
+  if (downloadPath.endsWith(".tar.gz")) {
     const streamPipeline = promisify(pipeline);
     await streamPipeline(createReadStream(downloadPath), tar.x({ cwd: dir }));
-    return join(dir, binaryName);
-  }
-
-  if (file.endsWith(".zip")) {
+  } else if (downloadPath.endsWith(".zip")) {
     const streamPipeline = promisify(pipeline);
     await streamPipeline(
       createReadStream(downloadPath),
       // eslint-disable-next-line new-cap
       Extract({ path: dir })
     );
-    return join(dir, `${binaryName}.exe`);
+  } else {
+    throw new CLIError(`Unsupported file format: ${downloadPath}`);
   }
 
-  throw new CLIError(`Unsupported file format: ${downloadPath}`);
+  const files = readdirSync(dir);
+  const binary = files.find((file) => file.startsWith("autifyconnect"));
+  if (!binary)
+    throw new CLIError(`Cannot find any autifyconnect binary in ${dir}`);
+  return join(dir, binary);
 };
 
 export class ConnectClientVersionMismatchError extends CLIError {
@@ -113,10 +120,10 @@ export class ConnectClientVersionMismatchError extends CLIError {
 
 export const validateVersion = async (
   versionString: string,
-  version: string
+  version: string | undefined
 ): Promise<void> => {
-  // No need to validate version if it's installed as "stable".
-  if (version === "stable") return;
+  // No need to validate version if it's installed as "stable" or undefined.
+  if (!version || version === "stable") return;
   // Format example: Autify Connect version v0.6.1, build ca0972e
   if (!versionString.includes(version + ","))
     throw new ConnectClientVersionMismatchError(version, versionString);
@@ -126,8 +133,7 @@ const getWorkspaceDir = (cacheDir: string) =>
   join(cacheDir, "autifyconnect-install-workspace");
 
 export const getInstallPath = (configDir: string, cacheDir: string): string => {
-  const mode = getMode(configDir);
-  const binaryName = mode === "fake" ? "autifyconnect-fake" : "autifyconnect";
+  const binaryName = "autifyconnect";
   return getOs() === "windows"
     ? join(cacheDir, `${binaryName}.exe`)
     : join(cacheDir, binaryName);
@@ -151,15 +157,15 @@ export const getInstallVersion = async (path: string): Promise<string> => {
 export const installClient = async (
   configDir: string,
   cacheDir: string,
-  version: string
+  url: URL,
+  version: string | undefined
 ): Promise<{ version: string; path: string }> => {
-  const mode = getMode(configDir);
   const workspaceDir = getWorkspaceDir(cacheDir);
   // Clean up workspace in case something is left by previous command.
   if (existsSync(workspaceDir))
     rmSync(workspaceDir, { recursive: true, force: true });
   mkdirSync(workspaceDir);
-  const downloadPath = await download(workspaceDir, mode, version);
+  const downloadPath = await download(workspaceDir, url);
   const extractPath = await extract(downloadPath);
   // Pre-install validation
   const preInstalledVersionString = await getInstallVersion(extractPath);
