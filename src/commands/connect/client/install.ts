@@ -1,6 +1,7 @@
 import { CliUx, Command } from "@oclif/core";
 import {
   AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION,
+  getConnectClientSourceUrl,
   installClient,
 } from "../../../autify/connect/installClient";
 
@@ -26,15 +27,20 @@ export default class ConnectClientInstall extends Command {
   public async run(): Promise<void> {
     const { args } = await this.parse(ConnectClientInstall);
     const { configDir, cacheDir } = this.config;
+    const { url, expectedVersion } = getConnectClientSourceUrl(
+      configDir,
+      args.version as string
+    );
     CliUx.ux.action.start(
-      `Installing Autify Connect Client (version: ${args.version})`,
+      `Installing Autify Connect Client from ${url})`,
       "installing",
       { stdout: true }
     );
     const { version, path } = await installClient(
       configDir,
       cacheDir,
-      args.version as string
+      url,
+      expectedVersion
     );
     CliUx.ux.action.stop();
     this.log(
