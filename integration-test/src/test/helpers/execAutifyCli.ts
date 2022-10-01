@@ -7,7 +7,7 @@ import { env } from "node:process";
 const normalize = (stdout: string) =>
   stdout
     .replace(/\[\d{2}:\d{2}:\d{2}]/g, "[HH:MM:SS]")
-    .replace(/path: .+autifyconnect(\.exe)?,/g, "path: /path/to/autifyconnect,")
+    .replace(/path: .+autifyconnect[^,]*,/g, "path: /path/to/autifyconnect,")
     .replace(
       /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/g,
       "YYYY-MM-DDTHH:MM:SS.MMMZ"

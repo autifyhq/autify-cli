@@ -124,10 +124,10 @@ const autifyWithProxy = async (originalArgs: string[]) => {
   const autify = getAutifyCli();
   const proc = spawn(autify, args, {
     env: {
+      AUTIFY_CONNECT_CLIENT_MODE: "fake",
       ...env,
       AUTIFY_WEB_BASE_PATH: `http://localhost:${webProxy.port}/api/v1/`,
       AUTIFY_MOBILE_BASE_PATH: `http://localhost:${mobileProxy.port}/api/v1/`,
-      AUTIFY_CONNECT_CLIENT_MODE: "fake",
     },
     stdio: "inherit",
     shell: true,
