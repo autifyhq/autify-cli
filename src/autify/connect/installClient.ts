@@ -20,7 +20,7 @@ import tar from "tar";
 import { get } from "../../config";
 
 // Update whenever to bump supported version.
-export const AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION = "v0.6.3";
+export const AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION = "v0.6.12";
 
 type ClientMode = "fake" | "real";
 
@@ -133,7 +133,8 @@ const getWorkspaceDir = (cacheDir: string) =>
   join(cacheDir, "autifyconnect-install-workspace");
 
 export const getInstallPath = (configDir: string, cacheDir: string): string => {
-  const binaryName = "autifyconnect";
+  const mode = getMode(configDir);
+  const binaryName = mode === "fake" ? "autifyconnect-fake" : "autifyconnect";
   return getOs() === "windows"
     ? join(cacheDir, `${binaryName}.exe`)
     : join(cacheDir, binaryName);
