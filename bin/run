@@ -2,9 +2,4 @@
 
 const oclif = require('@oclif/core')
 
-oclif.run().then(require('@oclif/core/flush')).catch(error => {
-  const oclifHandler = require('@oclif/core/handle')
-  // Workaround until this PR is released https://github.com/axios/axios/pull/4624
-  if (error.response?.data) console.error(JSON.stringify(error.response?.data, null, 2))
-  return oclifHandler(error)
-})
+oclif.run().then(require('@oclif/core/flush')).catch(require('@oclif/core/handle'))
