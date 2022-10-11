@@ -28,7 +28,8 @@
   "remoteUser": "node",
   "mounts": [
     "source=${env:HOME}${env:USERPROFILE}/.aws,target=/home/node/.aws,type=bind",
-    "source=${env:HOME}${env:USERPROFILE}/.config/autify,target=/home/node/.config/autify,type=bind"
+    "source=${env:HOME}${env:USERPROFILE}/.config/autify,target=/home/node/.config/autify,type=bind",
+    "source=${env:HOME}${env:USERPROFILE}/.config/gh,target=/home/node/.config/gh,type=bind"
   ],
   "features": {
     "github-cli": "latest",
