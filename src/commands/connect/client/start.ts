@@ -26,6 +26,10 @@ export default class ConnectClientStart extends Command {
       description:
         "Workspace ID of Autify for Web to create an ephemeral Access Point. If not specified, it will use the one configured by `autify connect access-point create/set`, instead.",
     }),
+    "extra-arguments": Flags.string({
+      description:
+        'Extra command line arguments you want to pass to Autify Connect Client e.g. "--experiment-tunnel-proxy http://proxy".',
+    }),
   };
 
   public async run(): Promise<void> {
@@ -39,6 +43,7 @@ export default class ConnectClientStart extends Command {
       fileLogging: flags["file-logging"],
       debugServerPort: flags["debug-server-port"],
       webWorkspaceId: flags["web-workspace-id"],
+      extraArguments: flags["extra-arguments"],
     });
     this.log("Starting Autify Connect Client...");
     await clientManager.start();
