@@ -28,7 +28,7 @@
     "archiver": "^5.3.1",
     "envfile": "^6.18.0",
     "get-port": "^5.1.1",
-    "inquirer": "^8.2.4",
+    "inquirer": "^8.2.5",
     "listr": "^0.14.3",
     "node-emoji": "^1.11.0",
     "node-fetch": "^2.6.7",
