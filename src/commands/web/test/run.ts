@@ -76,6 +76,11 @@ export default class WebTestRun extends Command {
         "Port for Autify Connect Client debug server. A random port will be used if not specified.",
       dependsOn: ["autify-connect-client"],
     }),
+    "autify-connect-client-extra-arguments": Flags.string({
+      description:
+        'Extra command line arguments you want to pass to Autify Connect Client e.g. "--experiment-tunnel-proxy http://proxy".',
+      dependsOn: ["autify-connect-client"],
+    }),
     os: Flags.string({
       description: "[Only for test scenario] OS to run the test",
     }),
@@ -182,6 +187,7 @@ export default class WebTestRun extends Command {
           fileLogging: flags["autify-connect-client-file-logging"],
           debugServerPort: flags["autify-connect-client-debug-server-port"],
           webWorkspaceId: workspaceId,
+          extraArguments: flags["autify-connect-client-extra-arguments"],
         });
         autifyConnectAccessPoint = autifyConnectClientManager.accessPointName;
         this.log("Starting Autify Connect Client...");

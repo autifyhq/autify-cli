@@ -30,6 +30,7 @@ import { join } from "node:path";
 import TypedEmitter from "typed-emitter";
 import getPort from "get-port";
 import { getWebClient } from "../../web/getWebClient";
+import { parse } from "shell-quote";
 
 export type ClientEvents = TypedEmitter<{
   log: (msg: string) => void;
@@ -55,6 +56,7 @@ type ClientManagerOptions = Readonly<{
   verbose?: boolean;
   fileLogging?: boolean;
   debugServerPort?: number;
+  extraArguments?: string;
 }>;
 
 export class ClientManager {
@@ -231,6 +233,13 @@ export class ClientManager {
         debugServerPort.toString(),
       ];
       if (this.options.verbose) args.push("--verbose");
+      if (this.options.extraArguments) {
+        const xs = parse(this.options.extraArguments).filter(
+          (entry): entry is string => typeof entry === "string"
+        );
+        args.push(...xs);
+      }
+
       this.childProcess = spawn(this.clientPath, args, {
         env: {
           ...env,

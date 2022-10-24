@@ -105,7 +105,7 @@ USAGE
   $ autify connect client install [VERSION]
 
 ARGUMENTS
-  VERSION  [default: v0.6.12] Specify the target version of Autify Connect Client.
+  VERSION  [default: v0.6.16] Specify the target version of Autify Connect Client.
 
 DESCRIPTION
   Install Autify Connect Client
@@ -131,10 +131,13 @@ Start Autify Connect Client
 ```
 USAGE
   $ autify connect client start [--verbose] [--file-logging] [--debug-server-port <value>] [--web-workspace-id <value>]
+    [--extra-arguments <value>]
 
 FLAGS
   --debug-server-port=<value>  The server for debugging and monitoring launches on your local machine on the given port.
                                It will use a radom port if not specified.
+  --extra-arguments=<value>    Extra command line arguments you want to pass to Autify Connect Client e.g.
+                               "--experiment-tunnel-proxy http://proxy".
   --file-logging               Logging Autify Connect Client log to a file instead of console.
   --verbose                    Make the operation more talkative.
   --web-workspace-id=<value>   Workspace ID of Autify for Web to create an ephemeral Access Point. If not specified, it
@@ -171,7 +174,7 @@ DESCRIPTION
   Display help for autify.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.15/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.16/src/commands/help.ts)_
 
 ## `autify mobile api describe-test-result`
 
@@ -712,8 +715,9 @@ Run a scenario or test plan.
 USAGE
   $ autify web test run [SCENARIO-OR-TEST-PLAN-URL] [-n <value>] [-r <value>] [--autify-connect <value> |
     --autify-connect-client] [--autify-connect-client-verbose ] [--autify-connect-client-file-logging ]
-    [--autify-connect-client-debug-server-port <value> ] [--os <value>] [--os-version <value>] [--browser <value>]
-    [--device <value>] [--device-type <value>] [-w] [-t <value>] [-v] [--max-retry-count <value>]
+    [--autify-connect-client-debug-server-port <value> ] [--autify-connect-client-extra-arguments <value> ] [--os
+    <value>] [--os-version <value>] [--browser <value>] [--device <value>] [--device-type <value>] [-w] [-t <value>]
+    [-v] [--max-retry-count <value>]
 
 ARGUMENTS
   SCENARIO-OR-TEST-PLAN-URL  Scenario URL or Test plan URL e.g.
@@ -730,6 +734,8 @@ FLAGS
   --autify-connect-client                            Start Autify Connect Client
   --autify-connect-client-debug-server-port=<value>  Port for Autify Connect Client debug server. A random port will be
                                                      used if not specified.
+  --autify-connect-client-extra-arguments=<value>    Extra command line arguments you want to pass to Autify Connect
+                                                     Client e.g. "--experiment-tunnel-proxy http://proxy".
   --autify-connect-client-file-logging               Logging Autify Connect Client log to a file instead of console.
   --autify-connect-client-verbose                    Verbose output for Autify Connect Client.
   --browser=<value>                                  [Only for test scenario] Browser to run the test
