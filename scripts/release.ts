@@ -462,7 +462,8 @@ const validateCommand = (args: string[]) => {
 };
 
 const setOutput = (name: string, value: string) => {
-  console.log(`::set-output name=${name}::${value}`);
+  if (!process.env.GITHUB_OUTPUT) throw new Error("GITHUB_OUTPUT is empty");
+  writeFileSync(process.env.GITHUB_OUTPUT, `${name}=${value}`, { flag: "a" });
 };
 
 const getInstallerUrlCommand = () => {
