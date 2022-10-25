@@ -137,7 +137,7 @@ FLAGS
   --debug-server-port=<value>  The server for debugging and monitoring launches on your local machine on the given port.
                                It will use a radom port if not specified.
   --extra-arguments=<value>    Extra command line arguments you want to pass to Autify Connect Client e.g.
-                               "--experiment-tunnel-proxy http://proxy".
+                               "--experimental-tunnel-proxy http://proxy".
   --file-logging               Logging Autify Connect Client log to a file instead of console.
   --verbose                    Make the operation more talkative.
   --web-workspace-id=<value>   Workspace ID of Autify for Web to create an ephemeral Access Point. If not specified, it
@@ -735,7 +735,7 @@ FLAGS
   --autify-connect-client-debug-server-port=<value>  Port for Autify Connect Client debug server. A random port will be
                                                      used if not specified.
   --autify-connect-client-extra-arguments=<value>    Extra command line arguments you want to pass to Autify Connect
-                                                     Client e.g. "--experiment-tunnel-proxy http://proxy".
+                                                     Client e.g. "--experimental-tunnel-proxy http://proxy".
   --autify-connect-client-file-logging               Logging Autify Connect Client log to a file instead of console.
   --autify-connect-client-verbose                    Verbose output for Autify Connect Client.
   --browser=<value>                                  [Only for test scenario] Browser to run the test
