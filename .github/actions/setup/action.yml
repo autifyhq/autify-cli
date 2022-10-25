@@ -15,19 +15,19 @@ runs:
         registry-url: "https://registry.npmjs.org"
     - run: npm install
       shell: bash
-    - uses: aws-actions/configure-aws-credentials@v1
+    - uses: aws-actions/configure-aws-credentials@v1-node16
       if: ${{ inputs.aws-credentials == 'upload' }}
       with:
         role-to-assume: arn:aws:iam::434848343351:role/autify-cli-upload-only-role
         role-session-name: github-actions
         aws-region: us-west-2
-    - uses: aws-actions/configure-aws-credentials@v1
+    - uses: aws-actions/configure-aws-credentials@v1-node16
       if: ${{ inputs.aws-credentials == 'main' }}
       with:
         role-to-assume: arn:aws:iam::434848343351:role/autify-cli-beta-release-role
         role-session-name: github-actions
         aws-region: us-west-2
-    - uses: aws-actions/configure-aws-credentials@v1
+    - uses: aws-actions/configure-aws-credentials@v1-node16
       if: ${{ startsWith(inputs.aws-credentials, 'releases/') || inputs.aws-credentials == 'publish' }}
       with:
         role-to-assume: arn:aws:iam::434848343351:role/autify-cli-release-role
