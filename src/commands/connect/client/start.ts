@@ -28,7 +28,7 @@ export default class ConnectClientStart extends Command {
     }),
     "extra-arguments": Flags.string({
       description:
-        'Extra command line arguments you want to pass to Autify Connect Client e.g. "--experiment-tunnel-proxy http://proxy".',
+        'Extra command line arguments you want to pass to Autify Connect Client e.g. "--experimental-tunnel-proxy http://proxy".',
     }),
   };
 

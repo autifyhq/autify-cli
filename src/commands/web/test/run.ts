@@ -78,7 +78,7 @@ export default class WebTestRun extends Command {
     }),
     "autify-connect-client-extra-arguments": Flags.string({
       description:
-        'Extra command line arguments you want to pass to Autify Connect Client e.g. "--experiment-tunnel-proxy http://proxy".',
+        'Extra command line arguments you want to pass to Autify Connect Client e.g. "--experimental-tunnel-proxy http://proxy".',
       dependsOn: ["autify-connect-client"],
     }),
     os: Flags.string({
