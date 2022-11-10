@@ -105,7 +105,7 @@ USAGE
   $ autify connect client install [VERSION]
 
 ARGUMENTS
-  VERSION  [default: v0.6.16] Specify the target version of Autify Connect Client.
+  VERSION  [default: v0.7.2] Specify the target version of Autify Connect Client.
 
 DESCRIPTION
   Install Autify Connect Client
@@ -137,7 +137,7 @@ FLAGS
   --debug-server-port=<value>  The server for debugging and monitoring launches on your local machine on the given port.
                                It will use a radom port if not specified.
   --extra-arguments=<value>    Extra command line arguments you want to pass to Autify Connect Client e.g.
-                               "--experimental-tunnel-proxy http://proxy".
+                               "--tunnel-proxy http://proxy".
   --file-logging               Logging Autify Connect Client log to a file instead of console.
   --verbose                    Make the operation more talkative.
   --web-workspace-id=<value>   Workspace ID of Autify for Web to create an ephemeral Access Point. If not specified, it
@@ -174,7 +174,7 @@ DESCRIPTION
   Display help for autify.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.17/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.18/src/commands/help.ts)_
 
 ## `autify mobile api describe-test-result`
 
@@ -735,7 +735,7 @@ FLAGS
   --autify-connect-client-debug-server-port=<value>  Port for Autify Connect Client debug server. A random port will be
                                                      used if not specified.
   --autify-connect-client-extra-arguments=<value>    Extra command line arguments you want to pass to Autify Connect
-                                                     Client e.g. "--experimental-tunnel-proxy http://proxy".
+                                                     Client e.g. "--tunnel-proxy http://proxy".
   --autify-connect-client-file-logging               Logging Autify Connect Client log to a file instead of console.
   --autify-connect-client-verbose                    Verbose output for Autify Connect Client.
   --browser=<value>                                  [Only for test scenario] Browser to run the test

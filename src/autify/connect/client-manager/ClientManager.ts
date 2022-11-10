@@ -229,7 +229,7 @@ export class ClientManager {
       const args = [
         "--log-format",
         "json",
-        "--experimental-debug-server-port",
+        "--debug-server-port",
         debugServerPort.toString(),
       ];
       if (this.options.verbose) args.push("--verbose");

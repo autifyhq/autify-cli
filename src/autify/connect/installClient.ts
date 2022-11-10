@@ -20,7 +20,7 @@ import tar from "tar";
 import { get } from "../../config";
 
 // Update whenever to bump supported version.
-export const AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION = "v0.6.16";
+export const AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION = "v0.7.2";
 
 type ClientMode = "fake" | "real";
 
