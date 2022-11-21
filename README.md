@@ -403,7 +403,7 @@ EXAMPLES
     $ autify update --available
 ```
 
-_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v3.0.6/src/commands/update.ts)_
+_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v3.0.7/src/commands/update.ts)_
 
 ## `autify web api create-access-point`
 
