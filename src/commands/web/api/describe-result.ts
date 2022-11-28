@@ -2,7 +2,7 @@ import { Command, Flags } from "@oclif/core";
 import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiDescribeResult extends Command {
-  static description = "Get a result.";
+  static description = "Get a test result.";
 
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
