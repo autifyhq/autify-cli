@@ -487,7 +487,7 @@ EXAMPLES
 
 ## `autify web api describe-result`
 
-Get a result.
+Get a test result.
 
 ```
 USAGE
@@ -498,7 +498,7 @@ FLAGS
   --result-id=<value>   (required) For example, 4 for the following URL: https://app.autify.com/projects/1/results/4
 
 DESCRIPTION
-  Get a result.
+  Get a test result.
 
 EXAMPLES
   $ autify web api describe-result
@@ -546,7 +546,7 @@ EXAMPLES
 
 ## `autify web api execute-schedule`
 
-Run a test plan. (Note: "Schedule" is called as "TestPlan" now.)
+"Schedule" is called as "Test Plan" now.\ If you want to run a test plan, use this endpoint.
 
 ```
 USAGE
@@ -558,7 +558,7 @@ FLAGS
                                       https://app.autify.com/projects/1/test_plans/3
 
 DESCRIPTION
-  Run a test plan. (Note: "Schedule" is called as "TestPlan" now.)
+  "Schedule" is called as "Test Plan" now.\ If you want to run a test plan, use this endpoint.
 
 EXAMPLES
   $ autify web api execute-schedule
@@ -606,7 +606,7 @@ EXAMPLES
 
 ## `autify web api list-results`
 
-List results.
+List test results.
 
 ```
 USAGE
@@ -619,7 +619,7 @@ FLAGS
   --test-plan-id=<value>  Test plan ID used to filter results.
 
 DESCRIPTION
-  List results.
+  List test results.
 
 EXAMPLES
   $ autify web api list-results
