@@ -105,7 +105,7 @@ USAGE
   $ autify connect client install [VERSION]
 
 ARGUMENTS
-  VERSION  [default: v0.7.2] Specify the target version of Autify Connect Client.
+  VERSION  [default: v1.0.0] Specify the target version of Autify Connect Client.
 
 DESCRIPTION
   Install Autify Connect Client
