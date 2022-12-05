@@ -1,8 +1,8 @@
 diff --git a/node_modules/oclif/lib/commands/pack/win.js b/node_modules/oclif/lib/commands/pack/win.js
-index 4e7875c..1b36b17 100644
+index 5a34323..904c071 100644
 --- a/node_modules/oclif/lib/commands/pack/win.js
 +++ b/node_modules/oclif/lib/commands/pack/win.js
-@@ -7,15 +7,26 @@ const upload_util_1 = require("../../upload-util");
+@@ -11,15 +11,26 @@ const exec = (0, node_util_1.promisify)(child_process_1.exec);
  const scripts = {
      /* eslint-disable no-useless-escape */
      // eslint-disable-next-line unicorn/no-useless-undefined
@@ -37,16 +37,16 @@ index 4e7875c..1b36b17 100644
      sh: (config) => `#!/bin/sh
  basedir=$(dirname "$(echo "$0" | sed -e 's,\\\\,/,g')")
 diff --git a/node_modules/oclif/lib/tarballs/bin.js b/node_modules/oclif/lib/tarballs/bin.js
-index 835eb02..1c6a026 100644
+index 6e7762a..820a1b1 100644
 --- a/node_modules/oclif/lib/tarballs/bin.js
 +++ b/node_modules/oclif/lib/tarballs/bin.js
-@@ -8,23 +8,38 @@ async function writeBinScripts({ config, baseWorkspace, nodeVersion }) {
+@@ -9,23 +9,38 @@ async function writeBinScripts({ config, baseWorkspace, nodeVersion }) {
      const clientHomeEnvVar = config.scopedEnvVarKey('OCLIF_CLIENT_HOME');
      const writeWin32 = async () => {
          const { bin } = config;
--        await qq.write([baseWorkspace, 'bin', `${config.bin}.cmd`], `@echo off
+-        await fs.promises.writeFile(path.join(baseWorkspace, 'bin', `${config.bin}.cmd`), `@echo off
 -setlocal enableextensions
-+        await qq.write([baseWorkspace, 'bin', `${config.bin}.cmd`], `@ECHO off
++        await fs.promises.writeFile(path.join(baseWorkspace, 'bin', `${config.bin}.cmd`), `@ECHO off
 +GOTO start
 +:find_dp0
 +SET dp0=%~dp0
@@ -93,14 +93,14 @@ index 835eb02..1c6a026 100644
          // await qq.write([output, 'bin', config.bin], `#!/bin/sh
          // basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 diff --git a/node_modules/oclif/lib/tarballs/build.js b/node_modules/oclif/lib/tarballs/build.js
-index ffbbd21..f85f38a 100644
+index 6dc6c06..c75e8fc 100644
 --- a/node_modules/oclif/lib/tarballs/build.js
 +++ b/node_modules/oclif/lib/tarballs/build.js
-@@ -62,6 +62,7 @@ async function build(c, options = {}) {
-             await qq.cp(lockpath, '.');
-             await qq.x('npm install --production');
+@@ -61,6 +61,7 @@ async function build(c, options = {}) {
+             await fs.copy(lockpath, path.join(c.workspace(), path.basename(lockpath)));
+             await exec('npm install --production', { cwd: c.workspace() });
          }
-+        await qq.x('NODE_ENV=production patch-package --patch-dir ../../patches');
++        await exec('NODE_ENV=production patch-package --patch-dir ../../patches', { cwd: c.workspace() });
      };
      const pretarball = async () => {
-         qq.cd(c.workspace());
+         const pjson = await fs.readJSON(path.join(c.workspace(), 'package.json'));
