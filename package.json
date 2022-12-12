@@ -35,7 +35,7 @@
     "node-stream-zip": "^1.15.0",
     "per-env": "^1.0.2",
     "shell-quote": "^1.7.4",
-    "tar": "^6.1.12",
+    "tar": "^6.1.13",
     "tempy": "^3.0.0",
     "tsimportlib": "^0.0.3",
     "unzip-stream": "^0.3.1",
