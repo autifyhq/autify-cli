@@ -45,7 +45,7 @@
     "xstate": "^4.35.2"
   },
   "devDependencies": {
-    "@autifyhq/autify-cli-integration-test": "^0.25.0-beta.0",
+    "@autifyhq/autify-cli-integration-test": "*",
     "@oclif/test": "^2.2.20",
     "@types/archiver": "^5.3.1",
     "@types/chai": "^4.3.4",
