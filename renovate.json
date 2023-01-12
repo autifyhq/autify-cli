@@ -4,7 +4,8 @@
   "packageRules": [
     {
       "matchDatasources": ["npm"],
-      "groupName": "all npm update"
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all non major npm update"
     }
   ]
 }
