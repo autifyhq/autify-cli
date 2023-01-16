@@ -31,7 +31,7 @@
     "inquirer": "^8.2.5",
     "listr": "^0.14.3",
     "node-emoji": "^1.11.0",
-    "node-fetch": "^2.6.7",
+    "node-fetch": "^2.6.8",
     "node-stream-zip": "^1.15.0",
     "per-env": "^1.0.2",
     "shell-quote": "^1.7.4",
