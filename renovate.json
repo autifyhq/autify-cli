@@ -8,5 +8,6 @@
       "groupName": "all non major npm update"
     }
   ],
-  "rangeStrategy": "bump"
+  "rangeStrategy": "bump",
+  "prConcurrentLimit": 20
 }
