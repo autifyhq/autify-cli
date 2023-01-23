@@ -7,5 +7,6 @@
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "all non major npm update"
     }
-  ]
+  ],
+  "rangeStrategy": "bump"
 }
