@@ -25,7 +25,7 @@ See our official document: https://help.autify.com/docs/autify-command-line-inte
 - [`autify connect access-point set`](#autify-connect-access-point-set)
 - [`autify connect client install [VERSION]`](#autify-connect-client-install-version)
 - [`autify connect client start`](#autify-connect-client-start)
-- [`autify help [COMMAND]`](#autify-help-command)
+- [`autify help [COMMANDS]`](#autify-help-commands)
 - [`autify mobile api describe-test-result`](#autify-mobile-api-describe-test-result)
 - [`autify mobile api list-test-results`](#autify-mobile-api-list-test-results)
 - [`autify mobile api run-test-plan`](#autify-mobile-api-run-test-plan)
@@ -156,16 +156,16 @@ EXAMPLES
     $ autify connect client start --web-workspace-id 000
 ```
 
-## `autify help [COMMAND]`
+## `autify help [COMMANDS]`
 
 Display help for autify.
 
 ```
 USAGE
-  $ autify help [COMMAND] [-n]
+  $ autify help [COMMANDS] [-n]
 
 ARGUMENTS
-  COMMAND  Command to show help for.
+  COMMANDS  Command to show help for.
 
 FLAGS
   -n, --nested-commands  Include all nested commands in the output.
@@ -174,7 +174,7 @@ DESCRIPTION
   Display help for autify.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.22/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.2.1/src/commands/help.ts)_
 
 ## `autify mobile api describe-test-result`
 
@@ -403,7 +403,7 @@ EXAMPLES
     $ autify update --available
 ```
 
-_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v3.0.11/src/commands/update.ts)_
+_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v3.1.0/src/commands/update.ts)_
 
 ## `autify web api create-access-point`
 
