@@ -6,6 +6,10 @@
       "matchDatasources": ["npm"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "all non major npm update"
+    },
+    {
+      "matchPackageNames": ["@types/express"],
+      "allowedVersions": ">=4.17.17"
     }
   ],
   "rangeStrategy": "bump",
