@@ -36,7 +36,7 @@
     "which": "^2.0.2"
   },
   "devDependencies": {
-    "@types/express": "^4.17.15",
+    "@types/express": "^4.17.16",
     "@types/jest": "^28.1.8",
     "@types/node": "^16.18.11",
     "@types/which": "^2.0.1",
