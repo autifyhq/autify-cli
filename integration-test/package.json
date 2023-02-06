@@ -36,9 +36,9 @@
     "which": "^2.0.2"
   },
   "devDependencies": {
-    "@types/express": "^4.17.15",
+    "@types/express": "^4.17.17",
     "@types/jest": "^28.1.8",
-    "@types/node": "^16.18.11",
+    "@types/node": "^16.18.12",
     "@types/which": "^2.0.1",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
