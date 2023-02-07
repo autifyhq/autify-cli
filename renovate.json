@@ -13,5 +13,5 @@
     }
   ],
   "rangeStrategy": "bump",
-  "prConcurrentLimit": 20
+  "prConcurrentLimit": 3
 }
