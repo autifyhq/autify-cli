@@ -174,7 +174,7 @@ DESCRIPTION
   Display help for autify.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.2.2/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.2.4/src/commands/help.ts)_
 
 ## `autify mobile api describe-test-result`
 
@@ -403,7 +403,7 @@ EXAMPLES
     $ autify update --available
 ```
 
-_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v3.1.1/src/commands/update.ts)_
+_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v3.1.3/src/commands/update.ts)_
 
 ## `autify web api create-access-point`
 
