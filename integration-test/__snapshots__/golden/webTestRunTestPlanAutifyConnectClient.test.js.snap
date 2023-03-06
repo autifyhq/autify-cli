@@ -5,18 +5,18 @@ Object {
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-[Autify Connect Manager]  YYYY-MM-DDTHH:MM:SS.MMMZ	info	Ephemeral Access Point was created: autify-cli-4e5f836c-390b-4ca7-9974-a8c3171da087
+[Autify Connect Manager]  YYYY-MM-DDTHH:MM:SS.MMMZ	info	Ephemeral Access Point was created: autify-cli-b6d9c73a-5fd6-4ae9-846b-8ff31e8c4d53
 Starting Autify Connect Client...
-[Autify Connect Manager]  YYYY-MM-DDTHH:MM:SS.MMMZ	info	Starting Autify Connect Client (accessPoint: autify-cli-4e5f836c-390b-4ca7-9974-a8c3171da087, debugServerPort: <random>, path: /path/to/autifyconnect, version: Autify Connect version v1.0.0, build ff5dfc4)
+[Autify Connect Manager]  YYYY-MM-DDTHH:MM:SS.MMMZ	info	Starting Autify Connect Client (accessPoint: autify-cli-b6d9c73a-5fd6-4ae9-846b-8ff31e8c4d53, debugServerPort: <random>, path: /path/to/autifyconnect, version: Autify Connect version v1.0.6, build 9d635e6)
 Waiting until Autify Connect Client is ready...
 [Autify Connect Client]   YYYY-MM-DDTHH:MM:SS.MMMZ	info	start serving a debug server on http://localhost:<random>
 [Autify Connect Client]   YYYY-MM-DDTHH:MM:SS.MMMZ	info	Starting to establish a secure connection with the Autify connect server. Your session ID is \\"fake\\".
 [Autify Connect Client]   YYYY-MM-DDTHH:MM:SS.MMMZ	info	Successfully connected!
 Autify Connect Client is ready!
-✅ Successfully started: https://app.autify.com/projects/743/results/1444853 (Capability is configured by test plan)
-🕐 Waiting for the test result: https://app.autify.com/projects/743/results/1444853
+✅ Successfully started: https://app.autify.com/projects/743/results/1803920 (Capability is configured by test plan)
+🕐 Waiting for the test result: https://app.autify.com/projects/743/results/1803920
 [HH:MM:SS] Waiting... (timeout: 300 s) [started]
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
@@ -29,11 +29,11 @@ Autify Connect Client is ready!
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 👍 Passed , TestCases: 👍 Passed 
 [HH:MM:SS] Waiting... (timeout: 300 s) [completed]
-✅ Test passed!: https://app.autify.com/projects/743/results/1444853
+✅ Test passed!: https://app.autify.com/projects/743/results/1803920
 Waiting until Autify Connect Client exits...
 [Autify Connect Client]   YYYY-MM-DDTHH:MM:SS.MMMZ	info	Interrupt received.
 [Autify Connect Client]   YYYY-MM-DDTHH:MM:SS.MMMZ	info	Shutdown completed.
-[Autify Connect Manager]  YYYY-MM-DDTHH:MM:SS.MMMZ	info	Ephemeral Access Point was deleted: autify-cli-4e5f836c-390b-4ca7-9974-a8c3171da087
+[Autify Connect Manager]  YYYY-MM-DDTHH:MM:SS.MMMZ	info	Ephemeral Access Point was deleted: autify-cli-b6d9c73a-5fd6-4ae9-846b-8ff31e8c4d53
 [Autify Connect Manager]  YYYY-MM-DDTHH:MM:SS.MMMZ	info	Autify Connect Client exited (code: 0, signal: null)
 Autify Connect Client exited.
 [HPM] server close signal received: closing proxy server
