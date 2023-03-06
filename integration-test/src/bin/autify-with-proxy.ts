@@ -126,8 +126,8 @@ const autifyWithProxy = async (originalArgs: string[]) => {
     env: {
       AUTIFY_CONNECT_CLIENT_MODE: "fake",
       ...env,
-      AUTIFY_WEB_BASE_PATH: `http://localhost:${webProxy.port}/api/v1/`,
-      AUTIFY_MOBILE_BASE_PATH: `http://localhost:${mobileProxy.port}/api/v1/`,
+      AUTIFY_WEB_BASE_PATH: `http://127.0.0.1:${webProxy.port}/api/v1/`,
+      AUTIFY_MOBILE_BASE_PATH: `http://127.0.0.1:${mobileProxy.port}/api/v1/`,
     },
     stdio: "inherit",
     shell: true,
