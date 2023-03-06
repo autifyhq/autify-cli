@@ -54,7 +54,7 @@ export class DebugServerClient {
     const timeout = setTimeout(() => controller.abort(), 1000);
     let response;
     try {
-      response = await fetch(`http://localhost:${this.port}${path}`, {
+      response = await fetch(`http://127.0.0.1:${this.port}${path}`, {
         method,
         signal: controller.signal,
       });

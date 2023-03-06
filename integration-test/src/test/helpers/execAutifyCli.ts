@@ -15,7 +15,7 @@ const normalize = (stdout: string) =>
     .replace(/debugServerPort: \d+,/g, "debugServerPort: <random>,")
     .replace(
       /debug server on http:\/\/localhost:\d+/g,
-      "debug server on http://localhost:<random>"
+      "debug server on http://127.0.0.1:<random>"
     )
     .replace(/Your session ID is "[^"]+"/, 'Your session ID is "fake"');
 
