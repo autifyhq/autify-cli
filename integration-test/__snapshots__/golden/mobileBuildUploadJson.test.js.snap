@@ -6,7 +6,7 @@ Object {
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
 {
-  \\"buildId\\": \\"PWueBM\\"
+  \\"buildId\\": \\"neurPL\\"
 }
 [HPM] server close signal received: closing proxy server
 ",

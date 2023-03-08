@@ -5,9 +5,29 @@ Object {
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/QBtLoD
-🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/QBtLoD
+✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/WEt6zV
+🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/WEt6zV
 [HH:MM:SS] Waiting... (timeout: 300 s) [started]
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
@@ -24,9 +44,12 @@ Object {
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 👍 Passed 
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 👍 Passed 
 [HH:MM:SS] → TestPlan: 👍 Passed , TestCases: 👍 Passed 
 [HH:MM:SS] Waiting... (timeout: 300 s) [completed]
-✅ Test passed!: https://mobile-app.autify.com/projects/4yyFEL/results/QBtLoD
+✅ Test passed!: https://mobile-app.autify.com/projects/4yyFEL/results/WEt6zV
 [HPM] server close signal received: closing proxy server
 ",
 }
