@@ -5,9 +5,9 @@ Object {
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully started: https://app.autify.com/projects/743/results/1109245 (Capability is Linux Chrome 104.0)
+✅ Successfully started: https://app.autify.com/projects/743/results/1812962 (Capability is Linux Chrome 110.0)
 To wait for the test result, run the command below:
-💻 $ autify web test wait https://app.autify.com/projects/743/results/1109245
+💻 $ autify web test wait https://app.autify.com/projects/743/results/1812962
 [HPM] server close signal received: closing proxy server
 ",
 }
