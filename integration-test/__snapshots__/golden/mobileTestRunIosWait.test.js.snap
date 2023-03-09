@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_plans/BBB --build-path /path/to/MyApp.app --wait 1`] = `
-Object {
+{
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully uploaded ios.app (ID: 90u6QG). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=ios&selectedBuildId=90u6QG&page=1
-✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/b5tREo
-🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/b5tREo
+✅ Successfully uploaded ios.app (ID: VZu42D). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=ios&selectedBuildId=VZu42D&page=1
+✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/2ytGzb
+🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/2ytGzb
 [HH:MM:SS] Waiting... (timeout: 300 s) [started]
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
@@ -139,32 +139,6 @@ Object {
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
@@ -243,7 +217,7 @@ Object {
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 👍 Passed 
 [HH:MM:SS] → TestPlan: 👍 Passed , TestCases: 👍 Passed 
 [HH:MM:SS] Waiting... (timeout: 300 s) [completed]
-✅ Test passed!: https://mobile-app.autify.com/projects/4yyFEL/results/b5tREo
+✅ Test passed!: https://mobile-app.autify.com/projects/4yyFEL/results/2ytGzb
 [HPM] server close signal received: closing proxy server
 ",
 }

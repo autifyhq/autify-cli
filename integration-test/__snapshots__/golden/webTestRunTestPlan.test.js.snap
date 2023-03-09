@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`autify web test run https://app.autify.com/projects/0000/test_plans/0000 1`] = `
-Object {
+{
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully started: https://app.autify.com/projects/743/results/1812959 (Capability is configured by test plan)
+✅ Successfully started: https://app.autify.com/projects/743/results/1818290 (Capability is configured by test plan)
 To wait for the test result, run the command below:
-💻 $ autify web test wait https://app.autify.com/projects/743/results/1812959
+💻 $ autify web test wait https://app.autify.com/projects/743/results/1818290
 [HPM] server close signal received: closing proxy server
 ",
 }

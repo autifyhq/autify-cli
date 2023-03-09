@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`autify mobile build upload /path/to/app-debug.apk --workspace-id AAA --json 1`] = `
-Object {
+{
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
 {
-  \\"buildId\\": \\"neurPL\\"
+  "buildId": "90u6MG"
 }
 [HPM] server close signal received: closing proxy server
 ",

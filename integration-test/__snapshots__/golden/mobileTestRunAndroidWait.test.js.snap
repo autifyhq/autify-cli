@@ -1,18 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_plans/BBB --build-path /path/to/app-debug.apk --wait 1`] = `
-Object {
+{
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully uploaded android.apk (ID: EoueBq). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=android&selectedBuildId=EoueBq&page=1
-✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/lDte2D
-🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/lDte2D
+✅ Successfully uploaded android.apk (ID: PWuEn9). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=android&selectedBuildId=PWuEn9&page=1
+✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/5OtGoX
+🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/5OtGoX
 [HH:MM:SS] Waiting... (timeout: 300 s) [started]
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
@@ -32,7 +43,7 @@ Object {
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 👍 Passed 
 [HH:MM:SS] → TestPlan: 👍 Passed , TestCases: 👍 Passed 
 [HH:MM:SS] Waiting... (timeout: 300 s) [completed]
-✅ Test passed!: https://mobile-app.autify.com/projects/4yyFEL/results/lDte2D
+✅ Test passed!: https://mobile-app.autify.com/projects/4yyFEL/results/5OtGoX
 [HPM] server close signal received: closing proxy server
 ",
 }

@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`autify mobile build upload /path/to/ios.app --workspace-id AAA 1`] = `
-Object {
+{
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully uploaded ios.app (ID: G3uKmJ). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=ios&selectedBuildId=G3uKmJ&page=1
+✅ Successfully uploaded ios.app (ID: Deu61W). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=ios&selectedBuildId=Deu61W&page=1
 [HPM] server close signal received: closing proxy server
 ",
 }
