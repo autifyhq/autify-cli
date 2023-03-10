@@ -48,7 +48,8 @@ const waitUntil = async <T>(
       nonTTYRenderer: "verbose",
     }
   );
-  return (await task.run()).result;
+  const res = await task.run();
+  return res.result;
 };
 
 type Status = Awaited<
