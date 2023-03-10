@@ -1,4 +1,4 @@
-import { Command, Flags } from "@oclif/core";
+import { Command, Args, Flags } from "@oclif/core";
 import { CLIError } from "@oclif/errors";
 import emoji from "node-emoji";
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
@@ -48,14 +48,13 @@ export default class MobileTestRun extends Command {
     }),
   };
 
-  static args = [
-    {
-      name: "test-plan-url",
+  static args = {
+    "test-plan-url": Args.string({
       description:
         "Test plan URL e.g. https://mobile-app.autify.com/projects/<ID>/test_plans/<ID>",
       required: true,
-    },
-  ];
+    }),
+  };
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(MobileTestRun);
@@ -67,7 +66,8 @@ export default class MobileTestRun extends Command {
     if (buildPath) {
       const uploadArgs = ["--workspace-id", workspaceId, buildPath];
       const uploadCommand = new MobileBuildUpload(uploadArgs, this.config);
-      buildId = (await uploadCommand.run()).buildId;
+      const res = await uploadCommand.run();
+      buildId = res.buildId;
     }
 
     const runTestPlanOnce = async () => {

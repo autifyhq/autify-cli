@@ -1,4 +1,4 @@
-import { Command, Flags } from "@oclif/core";
+import { Command, Args, Flags } from "@oclif/core";
 import emoji from "node-emoji";
 import { getWaitIntervalSecond } from "../../../autify/getWaitIntervalSecond";
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
@@ -27,14 +27,13 @@ export default class MobileTestWait extends Command {
     }),
   };
 
-  static args = [
-    {
-      name: "test-result-url",
+  static args = {
+    "test-result-url": Args.string({
       description:
         "Test result URL e.g. https://mobile-app.autify.com/projects/<ID>/results/<ID>",
       required: true,
-    },
-  ];
+    }),
+  };
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(MobileTestWait);

@@ -18,7 +18,7 @@
   ],
   "dependencies": {
     "@autifyhq/autify-sdk": "^0.12.0",
-    "@oclif/core": "^1.26.1",
+    "@oclif/core": "^2.6.2",
     "@oclif/errors": "^1.3.6",
     "@oclif/plugin-help": "^5.2.4",
     "@oclif/plugin-not-found": "^2.3.18",
@@ -163,6 +163,11 @@
     "prepare": "per-env || true",
     "prepare:development": "husky install",
     "prepare:production": "true"
+  },
+  "overrides": {
+    "eslint-plugin-unicorn": "^41.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0"
   },
   "lint-staged": {
     "**/*.{md,json,yml,js,cjs}": "prettier --write",
