@@ -1,4 +1,4 @@
-import { Command, Flags } from "@oclif/core";
+import { Command, Args, Flags } from "@oclif/core";
 import emoji from "node-emoji";
 import { parseTestResultUrl } from "../../../autify/web/parseTestResultUrl";
 import { waitTestResult } from "../../../autify/web/waitTestResult";
@@ -27,14 +27,13 @@ export default class WebTestWait extends Command {
     }),
   };
 
-  static args = [
-    {
-      name: "test-result-url",
+  static args = {
+    "test-result-url": Args.string({
       description:
         "Test result URL e.g. https://app.autify.com/projects/<ID>/results/<ID>",
       required: true,
-    },
-  ];
+    }),
+  };
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(WebTestWait);

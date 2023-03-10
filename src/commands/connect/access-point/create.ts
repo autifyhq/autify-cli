@@ -24,7 +24,7 @@ export default class ConnectAccessPointCreate extends Command {
     }),
   };
 
-  static args = [];
+  static args = {};
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(ConnectAccessPointCreate);

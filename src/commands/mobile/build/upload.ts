@@ -1,4 +1,4 @@
-import { Command, Flags } from "@oclif/core";
+import { Command, Args, Flags } from "@oclif/core";
 import emoji from "node-emoji";
 import { getBuildDetailUrl } from "../../../autify/mobile/getBuildDetailUrl";
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
@@ -23,13 +23,12 @@ export default class MobileBuildUpload extends Command {
     }),
   };
 
-  static args = [
-    {
-      name: "build-path",
+  static args = {
+    "build-path": Args.string({
       description: "File path to the iOS app (*.app) or Android app (*.apk).",
       required: true,
-    },
-  ];
+    }),
+  };
 
   public async run(): Promise<{ buildId: string }> {
     const { args, flags } = await this.parse(MobileBuildUpload);

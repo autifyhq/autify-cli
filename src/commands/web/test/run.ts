@@ -1,4 +1,4 @@
-import { Command, Flags } from "@oclif/core";
+import { Command, Args, Flags } from "@oclif/core";
 import emoji from "node-emoji";
 import { runTest } from "../../../autify/web/runTest";
 import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
@@ -119,14 +119,13 @@ export default class WebTestRun extends Command {
     }),
   };
 
-  static args = [
-    {
-      name: "scenario-or-test-plan-url",
+  static args = {
+    "scenario-or-test-plan-url": Args.string({
       description:
         "Scenario URL or Test plan URL e.g. https://app.autify.com/projects/<ID>/(scenarios|test_plans)/<ID>",
       required: true,
-    },
-  ];
+    }),
+  };
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(WebTestRun);
