@@ -18,7 +18,6 @@ const parseUrlReplacements = (urlReplacements: string[]) => {
 };
 
 const urlReplacementsToString = (
-  // eslint-disable-next-line camelcase
   urlReplacements: { pattern_url: string; replacement_url: string }[]
 ) => {
   return urlReplacements
