@@ -105,7 +105,7 @@ USAGE
   $ autify connect client install [VERSION]
 
 ARGUMENTS
-  VERSION  [default: v1.0.0] Specify the target version of Autify Connect Client.
+  VERSION  [default: v1.0.2] Specify the target version of Autify Connect Client.
 
 DESCRIPTION
   Install Autify Connect Client
@@ -282,7 +282,7 @@ Upload a build file
 
 ```
 USAGE
-  $ autify mobile build upload [BUILD-PATH] -w <value> [--json]
+  $ autify mobile build upload BUILD-PATH -w <value> [--json]
 
 ARGUMENTS
   BUILD-PATH  File path to the iOS app (*.app) or Android app (*.apk).
@@ -314,7 +314,7 @@ Run a test plan.
 
 ```
 USAGE
-  $ autify mobile test run [TEST-PLAN-URL] [--build-id <value> | --build-path <value>] [-w] [-t <value>] [-v]
+  $ autify mobile test run TEST-PLAN-URL [--build-id <value> | --build-path <value>] [-w] [-t <value>] [-v]
     [--max-retry-count <value>]
 
 ARGUMENTS
@@ -352,7 +352,7 @@ Wait a test result until it finishes.
 
 ```
 USAGE
-  $ autify mobile test wait [TEST-RESULT-URL] [-t <value>] [-v]
+  $ autify mobile test wait TEST-RESULT-URL [-t <value>] [-v]
 
 ARGUMENTS
   TEST-RESULT-URL  Test result URL e.g. https://mobile-app.autify.com/projects/<ID>/results/<ID>
@@ -713,7 +713,7 @@ Run a scenario or test plan.
 
 ```
 USAGE
-  $ autify web test run [SCENARIO-OR-TEST-PLAN-URL] [-n <value>] [-r <value>] [--autify-connect <value> |
+  $ autify web test run SCENARIO-OR-TEST-PLAN-URL [-n <value>] [-r <value>] [--autify-connect <value> |
     --autify-connect-client] [--autify-connect-client-verbose ] [--autify-connect-client-file-logging ]
     [--autify-connect-client-debug-server-port <value> ] [--autify-connect-client-extra-arguments <value> ] [--os
     <value>] [--os-version <value>] [--browser <value>] [--device <value>] [--device-type <value>] [-w] [-t <value>]
@@ -790,7 +790,7 @@ Wait a test result until it finishes.
 
 ```
 USAGE
-  $ autify web test wait [TEST-RESULT-URL] [-t <value>] [-v]
+  $ autify web test wait TEST-RESULT-URL [-t <value>] [-v]
 
 ARGUMENTS
   TEST-RESULT-URL  Test result URL e.g. https://app.autify.com/projects/<ID>/results/<ID>
