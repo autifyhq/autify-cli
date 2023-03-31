@@ -725,7 +725,7 @@ ARGUMENTS
 
 FLAGS
   -n, --name=<value>                                 [Only for test scenario] Name of the test execution.
-  -r, --url-replacements=<value>...                  URL replacements. Example: http://example.com=http://example.net
+  -r, --url-replacements=<value>...                  URL replacements. Example: "http://example.com http://example.net"
   -t, --timeout=<value>                              [default: 300] Timeout seconds when waiting for the finish of the
                                                      test execution.
   -v, --verbose                                      Verbose output
@@ -769,7 +769,7 @@ EXAMPLES
   With URL replacements:
 
     $ autify web test run https://app.autify.com/projects/0000/scenarios/0000 -r \
-      http://example.com=http://example.net -r http://example.org=http://example.net
+      "http://example.com http://example.net" -r "http://example.org http://example.net"
 
   Run a test with specifying the execution name:
 
