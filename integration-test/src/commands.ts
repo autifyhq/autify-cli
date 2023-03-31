@@ -16,18 +16,23 @@ const concatFlagAndValue = (args: string[]) => {
   let flag = null;
   for (const arg of args) {
     if (flag !== null) {
-      if (arg.startsWith("--")) {
+      if (arg.startsWith("-")) {
         newArgs.push(flag);
         flag = arg;
         continue;
       } else {
-        newArgs.push(`${flag}=${arg}`);
+        if (flag === "-r" || flag === "--url-replacements") {
+          newArgs.push(`${flag}="${arg}"`);
+        } else {
+          newArgs.push(`${flag}=${arg}`);
+        }
+
         flag = null;
         continue;
       }
     }
 
-    if (arg.startsWith("--")) {
+    if (arg.startsWith("-")) {
       flag = arg;
       continue;
     }
