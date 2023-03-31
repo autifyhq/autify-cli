@@ -8,15 +8,6 @@ import { parseAutifyTestUrl } from "../../../autify/web/parseAutifyTestUrl";
 import { ClientManager } from "../../../autify/connect/client-manager/ClientManager";
 import { getWebClient } from "../../../autify/web/getWebClient";
 
-const parseUrlReplacements = (urlReplacements: string[]) => {
-  return urlReplacements.map((s) => {
-    // eslint-disable-next-line camelcase
-    const [pattern_url, replacement_url] = s.split("=");
-    // eslint-disable-next-line camelcase
-    return { pattern_url, replacement_url };
-  });
-};
-
 const urlReplacementsToString = (
   urlReplacements: { pattern_url: string; replacement_url: string }[]
 ) => {
@@ -35,7 +26,7 @@ export default class WebTestRun extends Command {
     "Run a test plan:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/test_plans/0000",
     "Run and wait a test scenario:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --wait --timeout 600",
     'Run a test scenario with a specific capability:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --os "Windows Server" --browser Edge',
-    "With URL replacements:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 -r http://example.com=http://example.net -r http://example.org=http://example.net",
+    'With URL replacements:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 -r "http://example.com http://example.net" -r "http://example.org http://example.net"',
     'Run a test with specifying the execution name:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --name "Sample execution"',
     "Run a test scenario with Autify Connect:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --autify-connect NAME",
     "Run a test scenario with Autify Connect Client:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --wait --autify-connect-client",
@@ -49,7 +40,7 @@ export default class WebTestRun extends Command {
     "url-replacements": Flags.string({
       char: "r",
       description:
-        "URL replacements. Example: http://example.com=http://example.net",
+        'URL replacements. Example: "http://example.com http://example.net"',
       multiple: true,
     }),
     "autify-connect": Flags.string({
@@ -137,7 +128,7 @@ export default class WebTestRun extends Command {
       // eslint-disable-next-line camelcase
       device_type: flags["device-type"],
     };
-    const urlReplacements = parseUrlReplacements(
+    const urlReplacements = this.parseUrlReplacements(
       flags["url-replacements"] ?? []
     );
     if (urlReplacements.length > 0)
@@ -244,5 +235,38 @@ export default class WebTestRun extends Command {
 
       throw error;
     }
+  }
+
+  private parseUrlReplacements(urlReplacements: string[]) {
+    return urlReplacements.map((s) => {
+      // eslint-disable-next-line camelcase
+      let pattern_url: string;
+      // eslint-disable-next-line camelcase
+      let replacement_url: string;
+      let rest: string[];
+
+      if (s.includes(" ")) {
+        // eslint-disable-next-line camelcase
+        [pattern_url, replacement_url] = s.split(" ");
+      } else if (s.includes("=")) {
+        // eslint-disable-next-line camelcase
+        [pattern_url, ...rest] = s.split("=");
+        // eslint-disable-next-line camelcase
+        replacement_url = rest.join("=");
+
+        this.warn(
+          `Using = as a delimiter for --url-replacements (-r) option is deprecated. ` +
+            // eslint-disable-next-line camelcase
+            `Use space instead (--url-replacements "${pattern_url} ${replacement_url}").`
+        );
+      } else {
+        throw new CLIError(
+          `Can't parse ${s} as --url-replacements option. Please make sure it has a space as a delimiter and surrounded by quotes. (e.g. --url-replacements "https://example.com https://example.net")`
+        );
+      }
+
+      // eslint-disable-next-line camelcase
+      return { pattern_url, replacement_url };
+    });
   }
 }
