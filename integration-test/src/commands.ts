@@ -73,13 +73,6 @@ const replaceMobileAndroidBuildPath = (arg: string) =>
 const replaceMobileIosBuildPath = (arg: string) =>
   arg.replace(/^(--[^=]+=)?.+\.app$/, `$1${iosBuildPath}`);
 
-const sortParameters = (args: string[]) => {
-  // Currently assuming the first three arguments are for command and the rest are parameters.
-  const command = args.slice(0, 3);
-  const parameters = args.slice(3);
-  return [...command, ...parameters.sort()];
-};
-
 // Assuming ios command contains .app
 const isIos = (args: string[]) => args.some((a) => a.endsWith(".app"));
 
@@ -107,4 +100,4 @@ const replaceConstants = (args: string[]) => {
 };
 
 export const normalizeCommand = (args: string[]): string[] =>
-  replaceConstants(sortParameters(concatFlagAndValue(args)));
+  replaceConstants(concatFlagAndValue(args));
