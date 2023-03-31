@@ -5,9 +5,9 @@ exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully uploaded android.apk (ID: 8DubWy). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=android&selectedBuildId=8DubWy&page=1
-✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/kAtO3k
-🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/kAtO3k
+✅ Successfully uploaded android.apk (ID: Jmuo0W). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=android&selectedBuildId=Jmuo0W&page=1
+✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/VPtjRy
+🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/VPtjRy
 [HH:MM:SS] Waiting... (timeout: 300 s) [started]
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
@@ -23,6 +23,12 @@ exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
@@ -43,7 +49,7 @@ exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 👍 Passed 
 [HH:MM:SS] → TestPlan: 👍 Passed , TestCases: 👍 Passed 
 [HH:MM:SS] Waiting... (timeout: 300 s) [completed]
-✅ Test passed!: https://mobile-app.autify.com/projects/4yyFEL/results/kAtO3k
+✅ Test passed!: https://mobile-app.autify.com/projects/4yyFEL/results/VPtjRy
 [HPM] server close signal received: closing proxy server
 ",
 }

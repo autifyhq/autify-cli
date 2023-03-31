@@ -5,7 +5,7 @@ exports[`autify mobile build upload /path/to/ios.app --workspace-id AAA 1`] = `
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully uploaded ios.app (ID: 7Vumnl). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=ios&selectedBuildId=7Vumnl&page=1
+✅ Successfully uploaded ios.app (ID: gquzyg). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=ios&selectedBuildId=gquzyg&page=1
 [HPM] server close signal received: closing proxy server
 ",
 }

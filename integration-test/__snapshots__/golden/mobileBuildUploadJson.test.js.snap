@@ -6,7 +6,7 @@ exports[`autify mobile build upload /path/to/app-debug.apk --workspace-id AAA --
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
 {
-  "buildId": "zWu3yj"
+  "buildId": "8DubdA"
 }
 [HPM] server close signal received: closing proxy server
 ",
