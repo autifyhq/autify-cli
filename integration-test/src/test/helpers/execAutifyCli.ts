@@ -21,7 +21,8 @@ const normalize = (stdout: string) =>
       /debug server on http:\/\/127.0.0.1:\d+/g,
       "debug server on http://127.0.0.1:<random>"
     )
-    .replace(/Your session ID is "[^"]+"/, 'Your session ID is "fake"');
+    .replace(/Your session ID is "[^"]+"/, 'Your session ID is "fake"')
+    .replace(/»/g, "›");
 
 export const execAutifyCli = async (
   args: string
@@ -30,6 +31,6 @@ export const execAutifyCli = async (
   const { stdout, stderr } = await promisify(exec)(command, { env });
   return {
     stdout: normalize(stripAnsi(stdout)),
-    stderr: stripAnsi(stderr),
+    stderr: normalize(stripAnsi(stderr)),
   };
 };
