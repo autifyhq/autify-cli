@@ -23,6 +23,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - run: git config --global core.longpaths true
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -40,6 +41,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - run: git config --global core.longpaths true
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -107,6 +109,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - run: git config --global core.longpaths true
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
