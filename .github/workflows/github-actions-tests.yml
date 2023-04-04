@@ -67,6 +67,28 @@ jobs:
       - run: echo "${{ steps.web-test-run-wait-autify-connect-client.outputs.log }}" | grep "Test passed!"
       - run: echo "${{ steps.web-test-run-wait-autify-connect-client.outputs.result-url }}" | grep -E 'https://app.autify.com/projects/[[:digit:]]+/'
 
+      - id: web-test-run-url-replacements
+        uses: autifyhq/actions-web-test-run@v2
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://app.autify.com/projects/0000/scenarios/0000
+          url-replacements: https://example.com https://example.net?foo=bar
+      - run: |
+          echo "${{ steps.web-test-run-url-replacements.outputs.log }}" | grep "Using URL replacements: https://example.com => https://example.net?foo=bar"
+
+      - id: web-test-run-url-replacements-deprecated
+        uses: autifyhq/actions-web-test-run@v2
+        with:
+          access-token: token
+          autify-path: autify-with-proxy
+          autify-cli-installer-url: ${{ needs.get.outputs.installer-url }}
+          autify-test-url: https://app.autify.com/projects/0000/scenarios/0000
+          url-replacements: https://example.com=https://example.net?foo=bar
+      - run: |
+          echo "${{ steps.web-test-run-url-replacements.outputs.log }}" | grep "Using URL replacements: https://example.com => https://example.net?foo=bar"
+
   mobile-test-run:
     needs: [get]
     runs-on: ubuntu-latest
