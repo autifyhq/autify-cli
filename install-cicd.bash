@@ -91,6 +91,6 @@ if [ -n "$AUTIFY_CLI_INTEGRATION_TEST_INSTALL" ]; then
 
   cd "$AUTIFY_DIR"
   echo "Installing autify-cli-integration-test package from $package_url"
-  npm install "$package_url"
+  npm install "$package_url" --prefix "$AUTIFY_DIR"
   echo "$AUTIFY_DIR/node_modules/.bin" >> "$AUTIFY_PATH"
 fi
