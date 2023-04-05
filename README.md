@@ -768,8 +768,8 @@ EXAMPLES
 
   With URL replacements:
 
-    $ autify web test run https://app.autify.com/projects/0000/scenarios/0000 -r \
-      "http://example.com http://example.net" -r "http://example.org http://example.net"
+    $ autify web test run https://app.autify.com/projects/0000/scenarios/0000 -r "http://example.com \
+      http://example.net" -r "http://example.org http://example.net"
 
   Run a test with specifying the execution name:
 
