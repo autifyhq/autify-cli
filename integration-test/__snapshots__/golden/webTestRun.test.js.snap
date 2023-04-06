@@ -5,9 +5,9 @@ exports[`autify web test run https://app.autify.com/projects/0000/scenarios/0000
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully started: https://app.autify.com/projects/743/results/1899681 (Capability is Linux Chrome 110.0)
+✅ Successfully started: https://app.autify.com/projects/743/results/1920731 (Capability is Linux Chrome 111.0)
 To wait for the test result, run the command below:
-💻 $ autify web test wait https://app.autify.com/projects/743/results/1899681
+💻 $ autify web test wait https://app.autify.com/projects/743/results/1920731
 [HPM] server close signal received: closing proxy server
 ",
 }

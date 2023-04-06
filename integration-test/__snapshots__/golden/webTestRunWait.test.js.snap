@@ -5,9 +5,13 @@ exports[`autify web test run https://app.autify.com/projects/0000/scenarios/0000
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully started: https://app.autify.com/projects/743/results/1899675 (Capability is Linux Chrome 110.0)
-🕐 Waiting for the test result: https://app.autify.com/projects/743/results/1899675
+✅ Successfully started: https://app.autify.com/projects/743/results/1920729 (Capability is Linux Chrome 111.0)
+🕐 Waiting for the test result: https://app.autify.com/projects/743/results/1920729
 [HH:MM:SS] Waiting... (timeout: 300 s) [started]
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
@@ -20,7 +24,7 @@ exports[`autify web test run https://app.autify.com/projects/0000/scenarios/0000
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 👍 Passed , TestCases: 👍 Passed 
 [HH:MM:SS] Waiting... (timeout: 300 s) [completed]
-✅ Test passed!: https://app.autify.com/projects/743/results/1899675
+✅ Test passed!: https://app.autify.com/projects/743/results/1920729
 [HPM] server close signal received: closing proxy server
 ",
 }

@@ -5,10 +5,10 @@ exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/d3tvjg
-🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/d3tvjg
+✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/jztZqV
+🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/jztZqV
 [HH:MM:SS] Waiting... (timeout: 300 s) [started]
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
@@ -26,12 +26,9 @@ exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 👍 Passed 
 [HH:MM:SS] → TestPlan: 👍 Passed , TestCases: 👍 Passed 
 [HH:MM:SS] Waiting... (timeout: 300 s) [completed]
-✅ Test passed!: https://mobile-app.autify.com/projects/4yyFEL/results/d3tvjg
+✅ Test passed!: https://mobile-app.autify.com/projects/4yyFEL/results/jztZqV
 [HPM] server close signal received: closing proxy server
 ",
 }

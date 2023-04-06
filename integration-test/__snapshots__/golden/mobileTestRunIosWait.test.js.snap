@@ -5,9 +5,9 @@ exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_
   "stderr": "",
   "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
 [HPM] Proxy created: /  -> https://mobile-app.autify.com
-✅ Successfully uploaded ios.app (ID: q3u3OW). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=ios&selectedBuildId=q3u3OW&page=1
-✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/b5tRlW
-🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/b5tRlW
+✅ Successfully uploaded ios.app (ID: q3u3PO). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=ios&selectedBuildId=q3u3PO&page=1
+✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/Gqt3r1
+🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/Gqt3r1
 [HH:MM:SS] Waiting... (timeout: 300 s) [started]
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
@@ -139,55 +139,6 @@ exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
-[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
@@ -260,22 +211,12 @@ exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 👍 Passed 
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 👍 Passed 
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 👍 Passed 
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 👍 Passed 
 [HH:MM:SS] → TestPlan: 👍 Passed , TestCases: 👍 Passed 
 [HH:MM:SS] Waiting... (timeout: 300 s) [completed]
-✅ Test passed!: https://mobile-app.autify.com/projects/4yyFEL/results/b5tRlW
+✅ Test passed!: https://mobile-app.autify.com/projects/4yyFEL/results/Gqt3r1
 [HPM] server close signal received: closing proxy server
 ",
 }
