@@ -21,12 +21,7 @@ const concatFlagAndValue = (args: string[]) => {
         flag = arg;
         continue;
       } else {
-        if (flag === "-r" || flag === "--url-replacements") {
-          newArgs.push(`${flag}="${arg}"`);
-        } else {
-          newArgs.push(`${flag}=${arg}`);
-        }
-
+        newArgs.push(`${flag}=${arg}`);
         flag = null;
         continue;
       }
