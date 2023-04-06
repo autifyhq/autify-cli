@@ -98,7 +98,7 @@ jobs:
           autify-test-url: https://app.autify.com/projects/0000/scenarios/0000
           url-replacements: https://example.com https://example.net?foo=bar,https://example.net https://example.com?foo=bar
       - run: |
-          echo "${{ steps.web-test-run-url-replacements.outputs.log }}" | grep "Using URL replacements: https://example.com => https://example.net?foo=bar, https://example.net => https://example.com?foo=bar"
+          echo "${{ steps.web-test-run-url-replacements-multiple.outputs.log }}" | grep "Using URL replacements: https://example.com => https://example.net?foo=bar, https://example.net => https://example.com?foo=bar"
 
   mobile-test-run:
     needs: [get]
