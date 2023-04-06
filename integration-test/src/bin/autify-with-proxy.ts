@@ -24,7 +24,11 @@ const getPollyMode = (): PollyMode => {
 };
 
 const getAutifyCli = (): string => {
-  const autify = AUTIFY_CLI_PATH ?? "autify";
+  let autify = AUTIFY_CLI_PATH ?? "autify";
+  if (process.platform === "win32") {
+    autify += ".cmd";
+  }
+
   if (!existsSync(autify) && !which.sync(autify))
     throw new Error(`Invalid autify-cli path: ${autify}`);
   return autify;
@@ -130,7 +134,6 @@ const autifyWithProxy = async (originalArgs: string[]) => {
       AUTIFY_MOBILE_BASE_PATH: `http://127.0.0.1:${mobileProxy.port}/api/v1/`,
     },
     stdio: "inherit",
-    shell: true,
   });
   return new Promise<ProcStatus>((resolve, reject) => {
     proc.on("close", async (code, signal) => {
