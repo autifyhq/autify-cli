@@ -1,5 +1,5 @@
 import { Command } from "@oclif/core";
-import * as inquirer from "inquirer";
+import inquirer from "inquirer";
 import { set } from "../../../config.js";
 
 export default class MobileAuthLogin extends Command {

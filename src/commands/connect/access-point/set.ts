@@ -1,5 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import * as inquirer from "inquirer";
+import inquirer from "inquirer";
 import {
   confirmOverwriteAccessPoint,
   saveAccessPoint,
