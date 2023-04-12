@@ -11,6 +11,7 @@ import { argv, env, exit } from "node:process";
 import { existsSync } from "node:fs";
 import which from "which";
 import { normalizeCommand } from "../commands.js";
+import { fileURLToPath } from "node:url";
 
 Polly.register(NodeHttpAdapter);
 Polly.register(FSPersister);
@@ -71,8 +72,7 @@ const filterRecording = ({ request, response }: HarEntry) => {
 
 const createPolly = async (args: string[]) => {
   const mode = getPollyMode();
-  // eslint-disable-next-line unicorn/prefer-module
-  const scriptDir = __dirname;
+  const scriptDir = fileURLToPath(new URL(".", import.meta.url));
   const recordingsDir = path.join(
     scriptDir,
     "..",

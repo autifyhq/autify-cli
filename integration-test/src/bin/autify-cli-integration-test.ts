@@ -1,9 +1,9 @@
 import { execSync } from "node:child_process";
 import path from "node:path";
 import { argv, env } from "node:process";
+import { fileURLToPath } from "node:url";
 
-// eslint-disable-next-line unicorn/prefer-module
-const scriptDir = __dirname;
+const scriptDir = fileURLToPath(new URL(".", import.meta.url));
 const rootDir = path.join(scriptDir, "..", "..");
 const isRecord = Boolean(env.AUTIFY_CLI_INTEGRATION_TEST_RECORD);
 const command = isRecord ? "test:record" : "test";
