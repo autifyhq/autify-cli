@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/filename-case */
-import { get } from "../config";
+import { get } from "../config.js";
 
 const DEFAULT_INTERVAL_SECOND = 1;
 

@@ -1,11 +1,11 @@
 import { Command, Args, Flags } from "@oclif/core";
 import { CLIError } from "@oclif/errors";
 import emoji from "node-emoji";
-import { getMobileClient } from "../../../autify/mobile/getMobileClient";
-import { getMobileTestResultUrl } from "../../../autify/mobile/getTestResultUrl";
-import { parseTestPlanUrl } from "../../../autify/mobile/parseTestPlanUrl";
-import MobileBuildUpload from "../build/upload";
-import MobileTestWait from "./wait";
+import { getMobileClient } from "../../../autify/mobile/getMobileClient.js";
+import { getMobileTestResultUrl } from "../../../autify/mobile/getTestResultUrl.js";
+import { parseTestPlanUrl } from "../../../autify/mobile/parseTestPlanUrl.js";
+import MobileBuildUpload from "../build/upload.js";
+import MobileTestWait from "./wait.js";
 
 export default class MobileTestRun extends Command {
   static description = "Run a test plan.";

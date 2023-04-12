@@ -3,7 +3,7 @@ import {
   AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION,
   getConnectClientSourceUrl,
   installClient,
-} from "../../../autify/connect/installClient";
+} from "../../../autify/connect/installClient.js";
 
 export default class ConnectClientInstall extends Command {
   static description = "Install Autify Connect Client";

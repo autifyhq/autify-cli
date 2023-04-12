@@ -2,8 +2,8 @@ import { Command, Flags } from "@oclif/core";
 import {
   confirmOverwriteAccessPoint,
   saveAccessPoint,
-} from "../../../autify/connect/accessPointConfig";
-import { getWebClient } from "../../../autify/web/getWebClient";
+} from "../../../autify/connect/accessPointConfig.js";
+import { getWebClient } from "../../../autify/web/getWebClient.js";
 
 export default class ConnectAccessPointCreate extends Command {
   static description = "Create an Autify Connect Access Point";

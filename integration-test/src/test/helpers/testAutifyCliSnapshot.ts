@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/filename-case */
-import { execAutifyCli } from "../helpers/execAutifyCli";
+import { execAutifyCli } from "../helpers/execAutifyCli.js";
 
 export const testAutifyCliSnapshot = (command: string): void => {
   test(`autify ${command}`, async () => {

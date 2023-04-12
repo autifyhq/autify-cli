@@ -1,5 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import { getWebClient } from "../../../autify/web/getWebClient";
+import { getWebClient } from "../../../autify/web/getWebClient.js";
 
 export default class WebApiListAccessPoints extends Command {
   static description = "List access points for the project.";

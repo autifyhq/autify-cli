@@ -3,7 +3,7 @@ import * as inquirer from "inquirer";
 import {
   confirmOverwriteAccessPoint,
   saveAccessPoint,
-} from "../../../autify/connect/accessPointConfig";
+} from "../../../autify/connect/accessPointConfig.js";
 
 export default class ConnectAccessPointSet extends Command {
   static description = "Set Autify Connect Access Point";

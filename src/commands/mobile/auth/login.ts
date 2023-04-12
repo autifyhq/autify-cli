@@ -1,6 +1,6 @@
 import { Command } from "@oclif/core";
 import * as inquirer from "inquirer";
-import { set } from "../../../config";
+import { set } from "../../../config.js";
 
 export default class MobileAuthLogin extends Command {
   static description = "Login to Autify for Mobile";

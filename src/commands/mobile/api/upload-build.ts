@@ -1,5 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import { getMobileClient } from "../../../autify/mobile/getMobileClient";
+import { getMobileClient } from "../../../autify/mobile/getMobileClient.js";
 
 export default class MobileApiUploadBuild extends Command {
   static description = "Upload the build file.";

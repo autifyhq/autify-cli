@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/filename-case */
 import { MobileClient } from "@autifyhq/autify-sdk";
 import { CLIError } from "@oclif/errors";
-import { inspectBuildFile } from "./inspectBuildFile";
+import { inspectBuildFile } from "./inspectBuildFile.js";
 
 export const uploadBuild = async (
   client: MobileClient,

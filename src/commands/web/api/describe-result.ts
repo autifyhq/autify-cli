@@ -1,5 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import { getWebClient } from "../../../autify/web/getWebClient";
+import { getWebClient } from "../../../autify/web/getWebClient.js";
 
 export default class WebApiDescribeResult extends Command {
   static description = "Get a test result.";

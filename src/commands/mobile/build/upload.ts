@@ -1,8 +1,8 @@
 import { Command, Args, Flags } from "@oclif/core";
 import emoji from "node-emoji";
-import { getBuildDetailUrl } from "../../../autify/mobile/getBuildDetailUrl";
-import { getMobileClient } from "../../../autify/mobile/getMobileClient";
-import { uploadBuild } from "../../../autify/mobile/uploadBuild";
+import { getBuildDetailUrl } from "../../../autify/mobile/getBuildDetailUrl.js";
+import { getMobileClient } from "../../../autify/mobile/getMobileClient.js";
+import { uploadBuild } from "../../../autify/mobile/uploadBuild.js";
 
 export default class MobileBuildUpload extends Command {
   static enableJsonFlag = true;

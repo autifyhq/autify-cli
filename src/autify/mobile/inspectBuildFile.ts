@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
 import { lstatSync } from "node:fs";
-import { createZip } from "./createZip";
+import { createZip } from "./createZip.js";
 
 const isIosApp = (buildPath: string) => {
   return (

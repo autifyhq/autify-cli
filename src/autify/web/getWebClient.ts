@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { WebClient } from "@autifyhq/autify-sdk";
-import { get, getOrThrow } from "../../config";
+import { get, getOrThrow } from "../../config.js";
 
 export const getWebClient = (
   configDir: string,

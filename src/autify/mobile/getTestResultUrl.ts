@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { MOBILE_BASE_PATH } from "@autifyhq/autify-sdk";
-import { get } from "../../config";
+import { get } from "../../config.js";
 
 export const getMobileTestResultUrl = (
   configDir: string,

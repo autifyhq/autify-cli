@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
 import { WebClient } from "@autifyhq/autify-sdk";
-import { TestPlan, TestScenario } from "./parseAutifyTestUrl";
+import { TestPlan, TestScenario } from "./parseAutifyTestUrl.js";
 
 type CapabilityOption = Parameters<
   WebClient["executeScenarios"]

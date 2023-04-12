@@ -10,7 +10,7 @@ import path from "node:path";
 import { argv, env, exit } from "node:process";
 import { existsSync } from "node:fs";
 import which from "which";
-import { normalizeCommand } from "../commands";
+import { normalizeCommand } from "../commands.js";
 
 Polly.register(NodeHttpAdapter);
 Polly.register(FSPersister);

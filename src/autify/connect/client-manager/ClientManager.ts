@@ -3,33 +3,33 @@ import { WebClient } from "@autifyhq/autify-sdk";
 import { CLIError } from "@oclif/errors";
 import { ChildProcessWithoutNullStreams, spawn } from "node:child_process";
 import { env } from "node:process";
-import { EventEmitter } from "node:stream";
+import { EventEmitter } from "node:events";
 import { Logger } from "winston";
-import { get } from "../../../config";
+import { get } from "../../../config.js";
 import {
   AccessPoint,
   createEphemeralAccessPointForWeb,
   createStaticAccessPoint,
-} from "./AccessPoint";
+} from "./AccessPoint.js";
 import {
   AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION,
   ConnectClientVersionMismatchError,
   getInstallPath,
   getInstallVersion,
   validateVersion,
-} from "../installClient";
-import { waitFor } from "xstate/lib/waitFor";
-import { DebugServerClient } from "./DebugServerClient";
-import { ClientStateMachineService, createService } from "./StateMachine";
+} from "../installClient.js";
+import { waitFor } from "xstate/lib/waitFor.js";
+import { DebugServerClient } from "./DebugServerClient.js";
+import { ClientStateMachineService, createService } from "./StateMachine.js";
 import {
   createClientLogger,
   createManagerLogger,
   setupClientOutputLogger,
-} from "./Logger";
+} from "./Logger.js";
 import { join } from "node:path";
 import TypedEmitter from "typed-emitter";
 import getPort from "get-port";
-import { getWebClient } from "../../web/getWebClient";
+import { getWebClient } from "../../web/getWebClient.js";
 import { parse } from "shell-quote";
 
 export type ClientEvents = TypedEmitter<{

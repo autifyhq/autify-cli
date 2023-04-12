@@ -17,7 +17,7 @@ import { basename, dirname, join } from "node:path";
 import { Extract } from "unzip-stream";
 import { execFile } from "node:child_process";
 import tar from "tar";
-import { get } from "../../config";
+import { get } from "../../config.js";
 
 // Update whenever to bump supported version.
 export const AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION = "v1.0.2";

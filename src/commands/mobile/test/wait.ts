@@ -1,10 +1,10 @@
 import { Command, Args, Flags } from "@oclif/core";
 import emoji from "node-emoji";
-import { getWaitIntervalSecond } from "../../../autify/getWaitIntervalSecond";
-import { getMobileClient } from "../../../autify/mobile/getMobileClient";
-import { getMobileTestResultUrl } from "../../../autify/mobile/getTestResultUrl";
-import { parseTestResultUrl } from "../../../autify/mobile/parseTestResultUrl";
-import { waitTestResult } from "../../../autify/mobile/waitTestResult";
+import { getWaitIntervalSecond } from "../../../autify/getWaitIntervalSecond.js";
+import { getMobileClient } from "../../../autify/mobile/getMobileClient.js";
+import { getMobileTestResultUrl } from "../../../autify/mobile/getTestResultUrl.js";
+import { parseTestResultUrl } from "../../../autify/mobile/parseTestResultUrl.js";
+import { waitTestResult } from "../../../autify/mobile/waitTestResult.js";
 
 export default class MobileTestWait extends Command {
   static description = "Wait a test result until it finishes.";

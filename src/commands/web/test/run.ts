@@ -1,12 +1,12 @@
 import { Command, Args, Flags } from "@oclif/core";
 import emoji from "node-emoji";
-import { runTest } from "../../../autify/web/runTest";
-import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
-import WebTestWait from "./wait";
+import { runTest } from "../../../autify/web/runTest.js";
+import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl.js";
+import WebTestWait from "./wait.js";
 import { CLIError } from "@oclif/errors";
-import { parseAutifyTestUrl } from "../../../autify/web/parseAutifyTestUrl";
-import { ClientManager } from "../../../autify/connect/client-manager/ClientManager";
-import { getWebClient } from "../../../autify/web/getWebClient";
+import { parseAutifyTestUrl } from "../../../autify/web/parseAutifyTestUrl.js";
+import { ClientManager } from "../../../autify/connect/client-manager/ClientManager.js";
+import { getWebClient } from "../../../autify/web/getWebClient.js";
 
 const urlReplacementsToString = (
   urlReplacements: { pattern_url: string; replacement_url: string }[]

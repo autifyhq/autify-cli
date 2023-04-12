@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
 import inquirer from "inquirer";
-import { get, set } from "../../config";
+import { get, set } from "../../config.js";
 
 export const confirmOverwriteAccessPoint = async (
   configDir: string

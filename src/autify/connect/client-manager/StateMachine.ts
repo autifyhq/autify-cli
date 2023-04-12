@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { assign, createMachine, interpret, Interpreter } from "xstate";
-import { StateMachineTimeoutError, ProcessExit } from "./ClientManager";
+import { StateMachineTimeoutError, ProcessExit } from "./ClientManager.js";
 
 type ClientStateMachineContext = {
   spawn: (debugServerPort: number) => void;
