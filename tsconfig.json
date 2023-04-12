@@ -2,7 +2,8 @@
   "compilerOptions": {
     "declaration": true,
     "importHelpers": true,
-    "module": "commonjs",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "outDir": "dist",
     "rootDir": "src",
     "strict": true,
@@ -12,5 +13,8 @@
     "lib": ["es2021"],
     "types": ["chai", "inquirer", "listr", "node", "node-emoji"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "ts-node": {
+    "esm": true
+  }
 }

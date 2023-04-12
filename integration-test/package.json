@@ -8,6 +8,7 @@
     "autify-mobile-generate-fake-app": "bin/autify-mobile-generate-fake-app.js",
     "autify-with-proxy": "bin/autify-with-proxy.js"
   },
+  "type": "module",
   "homepage": "https://github.com/autifyhq/autify-cli",
   "license": "MIT",
   "repository": {
