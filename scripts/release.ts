@@ -8,7 +8,7 @@ import {
 } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
-import pkg from "../package.json";
+import pkg from "../package.json" assert { type: "json" };
 
 const { version, oclif: oclifConfig } = pkg;
 
