@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require("../dist/bin/autify-cli-integration-test.js");
+import "../dist/bin/autify-cli-integration-test.js";
