@@ -27,7 +27,7 @@
     "abort-controller": "^3.0.0",
     "archiver": "^5.3.1",
     "envfile": "^6.18.0",
-    "get-port": "^5.1.1",
+    "get-port": "^6.1.2",
     "inquirer": "^8.2.5",
     "listr": "^0.14.3",
     "node-emoji": "^1.11.0",
