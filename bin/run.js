@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-const oclif = require("@oclif/core");
+import { run, Errors, flush } from "@oclif/core";
 
-oclif
-  .run()
-  .then(require("@oclif/core/flush"))
+run(process.argv.slice(2), import.meta.url)
+  .then(flush)
   .catch((error) => {
-    const oclifHandler = require("@oclif/core/handle");
+    const oclifHandler = Errors.handle;
     if (error.response?.data)
       error.message = `${error.message}: ${JSON.stringify(
         error.response.data
