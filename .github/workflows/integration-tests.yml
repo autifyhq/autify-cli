@@ -7,6 +7,9 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  NODE_OPTIONS: --experimental-vm-modules
+
 jobs:
   tarball:
     strategy:
