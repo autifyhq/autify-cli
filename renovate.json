@@ -5,7 +5,8 @@
     {
       "matchDatasources": ["npm"],
       "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "all non major npm update"
+      "groupName": "all non major npm update",
+      "prPriority": 10
     },
     {
       "matchPackageNames": ["@types/express"],
