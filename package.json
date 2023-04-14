@@ -165,7 +165,7 @@
     "prepare:production": "true"
   },
   "overrides": {
-    "eslint-plugin-unicorn": "^41.0.1",
+    "eslint-plugin-unicorn": "^46.0.0",
     "@typescript-eslint/parser": "^5.58.0",
     "@typescript-eslint/eslint-plugin": "^5.58.0"
   },
