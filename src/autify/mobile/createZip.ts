@@ -5,10 +5,12 @@ import { execFileSync } from "node:child_process";
 import { createWriteStream, lstatSync } from "node:fs";
 import { basename, dirname, resolve } from "node:path";
 import which from "which";
-import { dynamicImport } from "tsimportlib";
 import archiver from "archiver";
 import { once } from "node:events";
 import StreamZip from "node-stream-zip";
+import { tmpdir } from "node:os";
+import { mkdtemp } from "node:fs/promises";
+import { join } from "node:path";
 
 const checkBuildPath = (buildPath: string) => {
   if (!lstatSync(buildPath).isDirectory()) {
@@ -24,12 +26,10 @@ const findZip = () => which.sync("zip", { nothrow: true });
 
 export const createZip = async (buildPath: string): Promise<string> => {
   const [parentPath, name] = checkBuildPath(buildPath);
-  const { temporaryFile } = (await dynamicImport(
-    "tempy",
-    // eslint-disable-next-line unicorn/prefer-module
-    module
-  )) as typeof import("tempy");
-  const zipFile = temporaryFile({ name: "build.zip" });
+  const zipFile = join(
+    await mkdtemp(join(tmpdir(), "autify-cli-")),
+    "build.zip"
+  );
   const zip = findZip();
   if (zip) {
     execFileSync(zip, ["-r", zipFile, name], { cwd: parentPath });

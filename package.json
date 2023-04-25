@@ -36,8 +36,6 @@
     "per-env": "^1.0.2",
     "shell-quote": "^1.8.1",
     "tar": "^6.1.13",
-    "tempy": "^3.0.0",
-    "tsimportlib": "^0.0.3",
     "unzip-stream": "^0.3.1",
     "uuid": "^9.0.0",
     "which": "^3.0.0",
