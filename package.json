@@ -175,7 +175,7 @@
     ]
   },
   "engines": {
-    "node": ">=v18.16.0"
+    "node": ">=v18.16.1"
   },
   "bugs": "https://github.com/autifyhq/autify-cli/issues",
   "keywords": [
