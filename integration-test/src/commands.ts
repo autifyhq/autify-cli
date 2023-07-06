@@ -99,5 +99,9 @@ const replaceConstants = (args: string[]) => {
   return args;
 };
 
+const DEFAULT_ARGUMENTS = new Set(["-t=300"]);
+
 export const normalizeCommand = (args: string[]): string[] =>
-  replaceConstants(concatFlagAndValue(args));
+  replaceConstants(concatFlagAndValue(args)).filter(
+    (arg) => !DEFAULT_ARGUMENTS.has(arg)
+  );
