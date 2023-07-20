@@ -57,7 +57,7 @@ const capabilityToString = ({
   device_type,
 }: CapabilityOption) => {
   return [os, os_version, browser, browser_version, device, device_type]
-    .filter((s) => Boolean(s))
+    .filter(Boolean)
     .join(" ");
 };
 /* eslint-enable camelcase */
