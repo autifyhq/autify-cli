@@ -4,10 +4,13 @@ const project = new Project({});
 
 const getFlagType = (parameterType: string) => {
   switch (parameterType) {
-    case "number":
+    case "number": {
       return "Flags.integer";
-    default:
+    }
+
+    default: {
       return "Flags.string";
+    }
   }
 };
 

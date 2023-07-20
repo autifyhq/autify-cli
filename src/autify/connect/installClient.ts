@@ -111,7 +111,10 @@ const extract = async (downloadPath: string) => {
 };
 
 export class ConnectClientVersionMismatchError extends CLIError {
-  constructor(readonly expected: string, readonly reality: string) {
+  constructor(
+    readonly expected: string,
+    readonly reality: string
+  ) {
     super(
       `Autify Connect Client version mismatch: ${reality} !== ${expected} (expected)`
     );

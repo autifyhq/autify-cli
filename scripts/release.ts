@@ -529,8 +529,9 @@ const main = () => {
       break;
     }
 
-    default:
+    default: {
       fail(`Invalid command: ${command}`);
+    }
   }
 };
 
