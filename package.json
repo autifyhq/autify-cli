@@ -164,8 +164,8 @@
   },
   "overrides": {
     "eslint-plugin-unicorn": "^47.0.0",
-    "@typescript-eslint/parser": "^5.62.0",
-    "@typescript-eslint/eslint-plugin": "^5.62.0"
+    "@typescript-eslint/parser": "^6.1.0",
+    "@typescript-eslint/eslint-plugin": "^6.1.0"
   },
   "lint-staged": {
     "**/*.{md,json,yml,js,cjs}": "prettier --write",
