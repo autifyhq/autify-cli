@@ -25,7 +25,7 @@
     "@oclif/plugin-update": "^3.2.4",
     "@oclif/plugin-warn-if-update-available": "^2.1.1",
     "abort-controller": "^3.0.0",
-    "archiver": "^5.3.2",
+    "archiver": "^6.0.1",
     "envfile": "^6.18.0",
     "get-port": "^5.1.1",
     "inquirer": "^8.2.6",
