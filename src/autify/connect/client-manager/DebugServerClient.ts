@@ -15,7 +15,7 @@ type DebugServerStatusResponse = Readonly<{
 }>;
 
 export class DebugServerClient {
-  private statusTimer: NodeJS.Timer;
+  private statusTimer: NodeJS.Timeout;
 
   constructor(
     private readonly port: number,
