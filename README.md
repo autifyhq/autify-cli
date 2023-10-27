@@ -136,8 +136,8 @@ Start Autify Connect Client
 
 ```
 USAGE
-  $ autify connect client start [--verbose] [--file-logging] [--debug-server-port <value>] [--web-workspace-id <value>]
-    [--extra-arguments <value>]
+  $ autify connect client start [--debug-server-port <value>] [--extra-arguments <value>] [--file-logging] [--verbose]
+    [--web-workspace-id <value>]
 
 FLAGS
   --debug-server-port=<value>  The server for debugging and monitoring launches on your local machine on the given port.
@@ -190,7 +190,7 @@ Get a test result.
 
 ```
 USAGE
-  $ autify mobile api describe-test-result --project-id <value> --id <value>
+  $ autify mobile api describe-test-result --id <value> --project-id <value>
 
 FLAGS
   --id=<value>          (required) Test Result ID.
@@ -235,7 +235,7 @@ Run a test plan
 
 ```
 USAGE
-  $ autify mobile api run-test-plan --test-plan-id <value> --run-test-plan-request <value>
+  $ autify mobile api run-test-plan --run-test-plan-request <value> --test-plan-id <value>
 
 FLAGS
   --run-test-plan-request=<value>  (required) The build_id to execute the test plan.
@@ -256,7 +256,7 @@ Upload the build file.
 
 ```
 USAGE
-  $ autify mobile api upload-build --project-id <value> --file <value>
+  $ autify mobile api upload-build --file <value> --project-id <value>
 
 FLAGS
   --file=<value>        (required) Build file.
@@ -334,8 +334,8 @@ Run a test plan.
 
 ```
 USAGE
-  $ autify mobile test run TEST-PLAN-URL [--build-id <value> | --build-path <value>] [-w] [-t <value>] [-v]
-    [--max-retry-count <value>]
+  $ autify mobile test run TEST-PLAN-URL [--build-id <value> | --build-path <value>] [--max-retry-count <value>] [-t
+    <value>] [-v] [-w]
 
 ARGUMENTS
   TEST-PLAN-URL  Test plan URL e.g. https://mobile-app.autify.com/projects/<ID>/test_plans/<ID>
@@ -435,7 +435,7 @@ You can generate a new access point by passing in its name.
 
 ```
 USAGE
-  $ autify web api create-access-point --project-id <value> --create-access-point-request <value>
+  $ autify web api create-access-point --create-access-point-request <value> --project-id <value>
 
 FLAGS
   --create-access-point-request=<value>  (required) The name of the access point to be created
@@ -457,7 +457,7 @@ Create a new url replacement for the test plan
 
 ```
 USAGE
-  $ autify web api create-url-replacement --test-plan-id <value> --create-url-replacement-request <value>
+  $ autify web api create-url-replacement --create-url-replacement-request <value> --test-plan-id <value>
 
 FLAGS
   --create-url-replacement-request=<value>  (required) The url to replace
@@ -479,7 +479,7 @@ You can delete an access point by passing in its name.
 
 ```
 USAGE
-  $ autify web api delete-access-point --project-id <value> --delete-access-point-request <value>
+  $ autify web api delete-access-point --delete-access-point-request <value> --project-id <value>
 
 FLAGS
   --delete-access-point-request=<value>  (required) The name of the access point to be deleted
@@ -565,7 +565,7 @@ You can execute any scenarios in your workspace using any execution environments
 
 ```
 USAGE
-  $ autify web api execute-scenarios --project-id <value> --execute-scenarios-request <value>
+  $ autify web api execute-scenarios --execute-scenarios-request <value> --project-id <value>
 
 FLAGS
   --execute-scenarios-request=<value>  (required) The scenarios and settings to execute
@@ -631,7 +631,7 @@ List available Capabilities.
 
 ```
 USAGE
-  $ autify web api list-capabilities --project-id <value> [--os <value>] [--browser <value>] [--device-type <value>]
+  $ autify web api list-capabilities --project-id <value> [--browser <value>] [--device-type <value>] [--os <value>]
 
 FLAGS
   --browser=<value>      browser name to filter
@@ -719,7 +719,7 @@ Update a url replacement for the test plan
 
 ```
 USAGE
-  $ autify web api update-url-replacement --test-plan-id <value> --url-replacement-id <value> --update-url-replacement-request
+  $ autify web api update-url-replacement --test-plan-id <value> --update-url-replacement-request <value> --url-replacement-id
     <value>
 
 FLAGS
@@ -767,11 +767,11 @@ Run a scenario or test plan.
 
 ```
 USAGE
-  $ autify web test run SCENARIO-OR-TEST-PLAN-URL [-n <value>] [-r <value>] [--autify-connect <value> |
-    --autify-connect-client] [--autify-connect-client-verbose ] [--autify-connect-client-file-logging ]
-    [--autify-connect-client-debug-server-port <value> ] [--autify-connect-client-extra-arguments <value> ] [--os
-    <value>] [--os-version <value>] [--browser <value>] [--device <value>] [--device-type <value>] [-w] [-t <value>]
-    [-v] [--max-retry-count <value>]
+  $ autify web test run SCENARIO-OR-TEST-PLAN-URL [--autify-connect <value> | --autify-connect-client]
+    [--autify-connect-client-debug-server-port <value> ] [--autify-connect-client-extra-arguments <value> ]
+    [--autify-connect-client-file-logging ] [--autify-connect-client-verbose ] [--browser <value>] [--device <value>]
+    [--device-type <value>] [--max-retry-count <value>] [-n <value>] [--os <value>] [--os-version <value>] [-t <value>]
+    [-r <value>] [-v] [-w]
 
 ARGUMENTS
   SCENARIO-OR-TEST-PLAN-URL  Scenario URL or Test plan URL e.g.
