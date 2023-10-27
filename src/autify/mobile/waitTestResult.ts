@@ -3,7 +3,7 @@ import { MobileClient } from "@autifyhq/autify-sdk";
 import { CLIError } from "@oclif/errors";
 import Listr, { ListrTaskWrapper } from "listr";
 import { setInterval } from "node:timers/promises";
-import emoji from "node-emoji";
+import { get } from "node-emoji";
 
 const waitUntil = async <T>(
   callback: (task: ListrTaskWrapper<{ result: T }>) => Promise<T>,
@@ -48,14 +48,13 @@ type Status = Awaited<
 >["data"]["status"];
 
 const emojiStatus = (status?: Status) => {
-  if (status === "queuing") return emoji.get("cyclone") + " Queuing";
-  if (status === "waiting")
-    return emoji.get("hourglass_flowing_sand") + " Waiting";
-  if (status === "running") return emoji.get("car") + " Running";
-  if (status === "passed") return emoji.get("+1") + " Passed ";
-  if (status === "failed") return emoji.get("rotating_light") + " Failed ";
-  if (status === "skipped") return emoji.get("zzz") + " Skipped";
-  return emoji.get("grey_question") + " None   ";
+  if (status === "queuing") return get("cyclone") + " Queuing";
+  if (status === "waiting") return get("hourglass_flowing_sand") + " Waiting";
+  if (status === "running") return get("car") + " Running";
+  if (status === "passed") return get("+1") + " Passed ";
+  if (status === "failed") return get("rotating_light") + " Failed ";
+  if (status === "skipped") return get("zzz") + " Skipped";
+  return get("grey_question") + " None   ";
 };
 
 const describeTestResult =

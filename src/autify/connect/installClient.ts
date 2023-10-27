@@ -92,6 +92,7 @@ const extract = async (downloadPath: string) => {
   const dir = dirname(downloadPath);
   if (downloadPath.endsWith(".tar.gz")) {
     const streamPipeline = promisify(pipeline);
+    /* eslint-disable import/no-named-as-default-member */
     await streamPipeline(createReadStream(downloadPath), tar.x({ cwd: dir }));
   } else if (downloadPath.endsWith(".zip")) {
     const streamPipeline = promisify(pipeline);

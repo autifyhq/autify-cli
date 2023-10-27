@@ -1,5 +1,5 @@
 import { Args, Command, Flags } from "@oclif/core";
-import emoji from "node-emoji";
+import { get } from "node-emoji";
 
 import { getBuildDetailUrl } from "../../../autify/mobile/getBuildDetailUrl";
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
@@ -45,7 +45,7 @@ export default class MobileBuildUpload extends Command {
       buildId
     );
     this.log(
-      `${emoji.get(
+      `${get(
         "white_check_mark"
       )} Successfully uploaded ${buildPath} (ID: ${buildId}). See ${buildDetailUrl}`
     );

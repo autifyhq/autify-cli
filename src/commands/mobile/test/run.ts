@@ -1,6 +1,6 @@
 import { Args, Command, Flags } from "@oclif/core";
 import { CLIError } from "@oclif/errors";
-import emoji from "node-emoji";
+import { get } from "node-emoji";
 
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 import { getMobileTestResultUrl } from "../../../autify/mobile/getTestResultUrl";
@@ -83,9 +83,7 @@ export default class MobileTestRun extends Command {
         res.data.id
       );
       this.log(
-        `${emoji.get(
-          "white_check_mark"
-        )} Successfully started: ${testResultUrl}`
+        `${get("white_check_mark")} Successfully started: ${testResultUrl}`
       );
       return testResultUrl;
     };
@@ -116,18 +114,14 @@ export default class MobileTestRun extends Command {
         else if (i === maxRetryCount) throw error;
         else {
           this.log(
-            `${emoji.get("repeat")} Retrying... (attempt: ${
-              i + 1
-            }/${maxRetryCount})`
+            `${get("repeat")} Retrying... (attempt: ${i + 1}/${maxRetryCount})`
           );
           testResultUrl = await runTestPlanOnce();
         }
       }
     } else {
       this.log("To wait for the test result, run the command below:");
-      this.log(
-        `${emoji.get("computer")} $ autify mobile test wait ${testResultUrl}`
-      );
+      this.log(`${get("computer")} $ autify mobile test wait ${testResultUrl}`);
     }
   }
 }

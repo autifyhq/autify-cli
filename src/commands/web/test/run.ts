@@ -1,6 +1,6 @@
 import { Args, Command, Flags } from "@oclif/core";
 import { CLIError } from "@oclif/errors";
-import emoji from "node-emoji";
+import { get } from "node-emoji";
 
 import { ClientManager } from "../../../autify/connect/client-manager/ClientManager";
 import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
@@ -134,7 +134,7 @@ export default class WebTestRun extends Command {
     );
     if (urlReplacements.length > 0)
       this.log(
-        `${emoji.get("memo")} Using URL replacements: ${urlReplacementsToString(
+        `${get("memo")} Using URL replacements: ${urlReplacementsToString(
           urlReplacements
         )}`
       );
@@ -160,7 +160,7 @@ export default class WebTestRun extends Command {
         resultId
       );
       this.log(
-        `${emoji.get(
+        `${get(
           "white_check_mark"
         )} Successfully started: ${testResultUrl} (Capability is ${capability})`
       );
@@ -212,7 +212,7 @@ export default class WebTestRun extends Command {
           else if (i === maxRetryCount) throw error;
           else {
             this.log(
-              `${emoji.get("repeat")} Retrying... (attempt: ${
+              `${get("repeat")} Retrying... (attempt: ${
                 i + 1
               }/${maxRetryCount})`
             );
@@ -221,9 +221,7 @@ export default class WebTestRun extends Command {
         }
       } else {
         this.log("To wait for the test result, run the command below:");
-        this.log(
-          `${emoji.get("computer")} $ autify web test wait ${testResultUrl}`
-        );
+        this.log(`${get("computer")} $ autify web test wait ${testResultUrl}`);
       }
     } catch (error) {
       if (autifyConnectClientManager) {

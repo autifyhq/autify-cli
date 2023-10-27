@@ -1,5 +1,5 @@
 import { Args, Command, Flags } from "@oclif/core";
-import emoji from "node-emoji";
+import { get } from "node-emoji";
 
 import { getWaitIntervalSecond } from "../../../autify/getWaitIntervalSecond";
 import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
@@ -45,9 +45,7 @@ export default class WebTestWait extends Command {
       args["test-result-url"]
     );
     const testResultUrl = getWebTestResultUrl(configDir, workspaceId, resultId);
-    this.log(
-      `${emoji.get("clock1")} Waiting for the test result: ${testResultUrl}`
-    );
+    this.log(`${get("clock1")} Waiting for the test result: ${testResultUrl}`);
     const { data, isPassed } = await waitTestResult(
       client,
       workspaceId,
@@ -59,15 +57,13 @@ export default class WebTestWait extends Command {
       }
     );
     if (isPassed) {
-      this.log(
-        `${emoji.get("white_check_mark")} Test passed!: ${testResultUrl}`
-      );
+      this.log(`${get("white_check_mark")} Test passed!: ${testResultUrl}`);
       this.exit();
     } else {
       this.log(
-        `${emoji.get(
-          "x"
-        )} Test didn't pass. See ${testResultUrl}: ${JSON.stringify(data)}`
+        `${get("x")} Test didn't pass. See ${testResultUrl}: ${JSON.stringify(
+          data
+        )}`
       );
       this.exit(1);
     }

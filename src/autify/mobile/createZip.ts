@@ -9,7 +9,7 @@ import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
 import StreamZip from "node-stream-zip";
-import which from "which";
+import { sync } from "which";
 
 const checkBuildPath = (buildPath: string) => {
   if (!lstatSync(buildPath).isDirectory()) {
@@ -21,7 +21,7 @@ const checkBuildPath = (buildPath: string) => {
   return [parentPath, name];
 };
 
-const findZip = () => which.sync("zip", { nothrow: true });
+const findZip = () => sync("zip", { nothrow: true });
 
 export const createZip = async (buildPath: string): Promise<string> => {
   const [parentPath, name] = checkBuildPath(buildPath);

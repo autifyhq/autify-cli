@@ -9,7 +9,7 @@ import { existsSync } from "node:fs";
 import { AddressInfo } from "node:net";
 import path from "node:path";
 import { argv, env, exit } from "node:process";
-import which from "which";
+import { sync } from "which";
 
 import { normalizeCommand } from "../commands";
 
@@ -29,7 +29,7 @@ const getAutifyCli = (): string => {
     autify += ".cmd";
   }
 
-  if (!existsSync(autify) && !which.sync(autify))
+  if (!existsSync(autify) && !sync(autify))
     throw new Error(`Invalid autify-cli path: ${autify}`);
   return autify;
 };
