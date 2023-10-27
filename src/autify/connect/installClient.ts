@@ -1,7 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
-import { arch, env, platform } from "node:process";
-import fetch from "node-fetch";
+import { execFile } from "node:child_process";
 import {
   createReadStream,
   createWriteStream,
@@ -11,12 +10,14 @@ import {
   renameSync,
   rmSync,
 } from "node:fs";
+import { basename, dirname, join } from "node:path";
+import { arch, env, platform } from "node:process";
 import { pipeline } from "node:stream";
 import { promisify } from "node:util";
-import { basename, dirname, join } from "node:path";
-import { Extract } from "unzip-stream";
-import { execFile } from "node:child_process";
+import fetch from "node-fetch";
 import tar from "tar";
+import { Extract } from "unzip-stream";
+
 import { get } from "../../config";
 
 // Update whenever to bump supported version.
@@ -58,12 +59,12 @@ const fakeBaseUrl =
 export const getConnectClientSourceUrl = (
   configDir: string,
   version: string
-): { url: URL; expectedVersion: string | undefined } => {
+): { expectedVersion: string | undefined; url: URL } => {
   const customUrl = get(configDir, "AUTIFY_CONNECT_CLIENT_SOURCE_URL");
   if (customUrl)
     return {
-      url: new URL(customUrl),
       expectedVersion: undefined,
+      url: new URL(customUrl),
     };
   const mode = getMode(configDir);
   const baseUrl = mode === "fake" ? fakeBaseUrl : realBaseUrl;
@@ -72,8 +73,8 @@ export const getConnectClientSourceUrl = (
   const arch = getArch();
   const ext = getExt();
   return {
-    url: new URL(`${baseUrl}/${version}/${prefix}_${os}_${arch}.${ext}`),
     expectedVersion: version,
+    url: new URL(`${baseUrl}/${version}/${prefix}_${os}_${arch}.${ext}`),
   };
 };
 
@@ -163,11 +164,11 @@ export const installClient = async (
   cacheDir: string,
   url: URL,
   version: string | undefined
-): Promise<{ version: string; path: string }> => {
+): Promise<{ path: string; version: string }> => {
   const workspaceDir = getWorkspaceDir(cacheDir);
   // Clean up workspace in case something is left by previous command.
   if (existsSync(workspaceDir))
-    rmSync(workspaceDir, { recursive: true, force: true });
+    rmSync(workspaceDir, { force: true, recursive: true });
   mkdirSync(workspaceDir);
   const downloadPath = await download(workspaceDir, url);
   const extractPath = await extract(downloadPath);
@@ -181,7 +182,7 @@ export const installClient = async (
   await validateVersion(versionString, version);
   // Clean up workspace. Ignore any exception as install is already done.
   try {
-    rmSync(workspaceDir, { recursive: true, force: true });
+    rmSync(workspaceDir, { force: true, recursive: true });
   } catch (error) {
     console.error(
       `Workspace clean up failed. Ignoring because already installed. (error: ${error})`
@@ -189,7 +190,7 @@ export const installClient = async (
   }
 
   return {
-    version: versionString,
     path: installPath,
+    version: versionString,
   };
 };

@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+
 import {
   confirmOverwriteAccessPoint,
   saveAccessPoint,
@@ -6,6 +7,8 @@ import {
 import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class ConnectAccessPointCreate extends Command {
+  static args = {};
+
   static description = "Create an Autify Connect Access Point";
 
   static examples = [
@@ -24,8 +27,6 @@ export default class ConnectAccessPointCreate extends Command {
     }),
   };
 
-  static args = {};
-
   public async run(): Promise<void> {
     const { flags } = await this.parse(ConnectAccessPointCreate);
     const { configDir, userAgent } = this.config;
@@ -36,7 +37,7 @@ export default class ConnectAccessPointCreate extends Command {
       const response = await client.createAccessPoint(webWorkspaceId, {
         name,
       });
-      const key = response.data.key;
+      const { key } = response.data;
       this.log(
         `Successfully created Access Point: (name: ${name}, web-workspace-id: ${webWorkspaceId})`
       );

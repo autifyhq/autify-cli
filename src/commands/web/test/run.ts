@@ -1,24 +1,33 @@
-import { Command, Args, Flags } from "@oclif/core";
-import emoji from "node-emoji";
-import { runTest } from "../../../autify/web/runTest";
-import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
-import WebTestWait from "./wait";
+import { Args, Command, Flags } from "@oclif/core";
 import { CLIError } from "@oclif/errors";
-import { parseAutifyTestUrl } from "../../../autify/web/parseAutifyTestUrl";
+import emoji from "node-emoji";
+
 import { ClientManager } from "../../../autify/connect/client-manager/ClientManager";
+import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
 import { getWebClient } from "../../../autify/web/getWebClient";
+import { parseAutifyTestUrl } from "../../../autify/web/parseAutifyTestUrl";
+import { runTest } from "../../../autify/web/runTest";
+import WebTestWait from "./wait";
 
 const urlReplacementsToString = (
   urlReplacements: { pattern_url: string; replacement_url: string }[]
-) => {
-  return urlReplacements
-    .map((urlReplacement) => {
-      return `${urlReplacement.pattern_url} => ${urlReplacement.replacement_url}`;
-    })
+) =>
+  urlReplacements
+    .map(
+      (urlReplacement) =>
+        `${urlReplacement.pattern_url} => ${urlReplacement.replacement_url}`
+    )
     .join(", ");
-};
 
 export default class WebTestRun extends Command {
+  static args = {
+    "scenario-or-test-plan-url": Args.string({
+      description:
+        "Scenario URL or Test plan URL e.g. https://app.autify.com/projects/<ID>/(scenarios|test_plans)/<ID>",
+      required: true,
+    }),
+  };
+
   static description = "Run a scenario or test plan.";
 
   static examples = [
@@ -33,49 +42,33 @@ export default class WebTestRun extends Command {
   ];
 
   static flags = {
-    name: Flags.string({
-      char: "n",
-      description: "[Only for test scenario] Name of the test execution.",
-    }),
-    "url-replacements": Flags.string({
-      char: "r",
-      description:
-        'URL replacements. Example: "http://example.com http://example.net"',
-      multiple: true,
-    }),
     "autify-connect": Flags.string({
       description: "Name of the Autify Connect Access Point.",
       exclusive: ["autify-connect-client"],
     }),
     "autify-connect-client": Flags.boolean({
+      dependsOn: ["wait"],
       description: "Start Autify Connect Client",
       exclusive: ["autify-connect"],
-      dependsOn: ["wait"],
-    }),
-    "autify-connect-client-verbose": Flags.boolean({
-      description: "Verbose output for Autify Connect Client.",
-      dependsOn: ["autify-connect-client"],
-    }),
-    "autify-connect-client-file-logging": Flags.boolean({
-      description:
-        "Logging Autify Connect Client log to a file instead of console.",
-      dependsOn: ["autify-connect-client"],
     }),
     "autify-connect-client-debug-server-port": Flags.integer({
+      dependsOn: ["autify-connect-client"],
       description:
         "Port for Autify Connect Client debug server. A random port will be used if not specified.",
-      dependsOn: ["autify-connect-client"],
     }),
     "autify-connect-client-extra-arguments": Flags.string({
+      dependsOn: ["autify-connect-client"],
       description:
         'Extra command line arguments you want to pass to Autify Connect Client e.g. "--tunnel-proxy http://proxy".',
+    }),
+    "autify-connect-client-file-logging": Flags.boolean({
       dependsOn: ["autify-connect-client"],
+      description:
+        "Logging Autify Connect Client log to a file instead of console.",
     }),
-    os: Flags.string({
-      description: "[Only for test scenario] OS to run the test",
-    }),
-    "os-version": Flags.string({
-      description: "[Only for test scenario] OS version to run the test",
+    "autify-connect-client-verbose": Flags.boolean({
+      dependsOn: ["autify-connect-client"],
+      description: "Verbose output for Autify Connect Client.",
     }),
     browser: Flags.string({
       description: "[Only for test scenario] Browser to run the test",
@@ -86,47 +79,55 @@ export default class WebTestRun extends Command {
     "device-type": Flags.string({
       description: "[Only for test scenario] Device type to run the test",
     }),
-    wait: Flags.boolean({
-      char: "w",
-      description: "Wait until the test finishes.",
-      default: false,
+    "max-retry-count": Flags.integer({
+      default: 0,
+      description:
+        "Maximum retry count while waiting. The command can take up to `timeout * (max-retry-count + 1)`. Only effective with `--wait`.",
+    }),
+    name: Flags.string({
+      char: "n",
+      description: "[Only for test scenario] Name of the test execution.",
+    }),
+    os: Flags.string({
+      description: "[Only for test scenario] OS to run the test",
+    }),
+    "os-version": Flags.string({
+      description: "[Only for test scenario] OS version to run the test",
     }),
     timeout: Flags.integer({
       char: "t",
+      default: 300,
       description:
         "Timeout seconds when waiting for the finish of the test execution.",
-      default: 300,
+    }),
+    "url-replacements": Flags.string({
+      char: "r",
+      description:
+        'URL replacements. Example: "http://example.com http://example.net"',
+      multiple: true,
     }),
     verbose: Flags.boolean({
       char: "v",
-      description: "Verbose output",
       default: false,
+      description: "Verbose output",
     }),
-    "max-retry-count": Flags.integer({
-      description:
-        "Maximum retry count while waiting. The command can take up to `timeout * (max-retry-count + 1)`. Only effective with `--wait`.",
-      default: 0,
-    }),
-  };
-
-  static args = {
-    "scenario-or-test-plan-url": Args.string({
-      description:
-        "Scenario URL or Test plan URL e.g. https://app.autify.com/projects/<ID>/(scenarios|test_plans)/<ID>",
-      required: true,
+    wait: Flags.boolean({
+      char: "w",
+      default: false,
+      description: "Wait until the test finishes.",
     }),
   };
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(WebTestRun);
     const capabilityOption = {
-      os: flags.os,
-      // eslint-disable-next-line camelcase
-      os_version: flags["os-version"],
       browser: flags.browser,
       device: flags.device,
       // eslint-disable-next-line camelcase
       device_type: flags["device-type"],
+      os: flags.os,
+      // eslint-disable-next-line camelcase
+      os_version: flags["os-version"],
     };
     const urlReplacements = this.parseUrlReplacements(
       flags["url-replacements"] ?? []
@@ -137,7 +138,7 @@ export default class WebTestRun extends Command {
           urlReplacements
         )}`
       );
-    const { configDir, cacheDir, userAgent } = this.config;
+    const { cacheDir, configDir, userAgent } = this.config;
     const client = getWebClient(configDir, userAgent);
 
     const parsedTest = parseAutifyTestUrl(args["scenario-or-test-plan-url"]);
@@ -147,11 +148,11 @@ export default class WebTestRun extends Command {
     let autifyConnectClientManager: ClientManager | undefined;
 
     const runTestOnce = async () => {
-      const { resultId, capability } = await runTest(client, parsedTest, {
-        option: capabilityOption,
-        name: flags.name,
-        urlReplacements,
+      const { capability, resultId } = await runTest(client, parsedTest, {
         autifyConnectAccessPoint,
+        name: flags.name,
+        option: capabilityOption,
+        urlReplacements,
       });
       const testResultUrl = getWebTestResultUrl(
         configDir,
@@ -169,14 +170,14 @@ export default class WebTestRun extends Command {
     try {
       if (flags["autify-connect-client"]) {
         autifyConnectClientManager = await ClientManager.create({
-          configDir,
           cacheDir,
+          configDir,
+          debugServerPort: flags["autify-connect-client-debug-server-port"],
+          extraArguments: flags["autify-connect-client-extra-arguments"],
+          fileLogging: flags["autify-connect-client-file-logging"],
           userAgent,
           verbose: flags["autify-connect-client-verbose"],
-          fileLogging: flags["autify-connect-client-file-logging"],
-          debugServerPort: flags["autify-connect-client-debug-server-port"],
           webWorkspaceId: workspaceId,
-          extraArguments: flags["autify-connect-client-extra-arguments"],
         });
         autifyConnectAccessPoint = autifyConnectClientManager.accessPointName;
         this.log("Starting Autify Connect Client...");

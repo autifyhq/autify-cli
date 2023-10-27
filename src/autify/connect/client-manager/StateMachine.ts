@@ -1,36 +1,38 @@
 /* eslint-disable unicorn/filename-case */
-import { assign, createMachine, interpret, Interpreter } from "xstate";
-import { StateMachineTimeoutError, ProcessExit } from "./ClientManager";
+import { Interpreter, assign, createMachine, interpret } from "xstate";
+
+import { ProcessExit, StateMachineTimeoutError } from "./ClientManager";
 
 type ClientStateMachineContext = {
+  cleanup: () => Promise<void>;
+  errors: Error[];
+  kill: () => void;
+  processExit?: ProcessExit;
   spawn: (debugServerPort: number) => void;
   terminate: () => Promise<void>;
-  kill: () => void;
-  cleanup: () => Promise<void>;
-  processExit?: ProcessExit;
-  errors: Error[];
 };
 
 type ClientStateMachineEvent =
-  | { type: "SPAWN"; debugServerPort: number }
+  | { debugServerPort: number; type: "SPAWN" }
+  | { error: Error; type: "FAIL" }
+  | { processExit: ProcessExit; type: "EXIT" }
   | { type: "READY" }
-  | { type: "TERMINATE" }
-  | { type: "FAIL"; error: Error }
-  | { type: "EXIT"; processExit: ProcessExit };
+  | { type: "TERMINATE" };
 
 type ClientStateMachineState =
-  | { value: "init"; context: ClientStateMachineContext }
-  | { value: "starting"; context: ClientStateMachineContext }
-  | { value: "ready"; context: ClientStateMachineContext }
-  | { value: "terminating"; context: ClientStateMachineContext }
-  | { value: "killing"; context: ClientStateMachineContext }
-  | { value: "timeout"; context: ClientStateMachineContext }
-  | { value: "cleanup"; context: ClientStateMachineContext }
   | {
-      value: "done";
       context: ClientStateMachineContext & { processExit: ProcessExit };
-    };
+      value: "done";
+    }
+  | { context: ClientStateMachineContext; value: "cleanup" }
+  | { context: ClientStateMachineContext; value: "init" }
+  | { context: ClientStateMachineContext; value: "killing" }
+  | { context: ClientStateMachineContext; value: "ready" }
+  | { context: ClientStateMachineContext; value: "starting" }
+  | { context: ClientStateMachineContext; value: "terminating" }
+  | { context: ClientStateMachineContext; value: "timeout" };
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type ClientStateMachineService = Interpreter<
   ClientStateMachineContext,
   any,
@@ -47,140 +49,140 @@ export const createService = (
     ClientStateMachineEvent,
     ClientStateMachineState
   >({
+    context,
+    initial: "init",
     predictableActionArguments: true,
     schema: {
       context: {} as ClientStateMachineContext,
     },
-    context,
-    initial: "init",
     states: {
-      init: {
-        on: {
-          SPAWN: { target: "starting" },
-          FAIL: {
-            target: "cleanup",
-            actions: assign({
-              errors: (context, event) => {
-                context.errors.push(event.error);
-                return context.errors;
-              },
-            }),
-          },
-        },
-      },
-      starting: {
-        entry: (context, event) => {
-          if (event.type !== "SPAWN") return;
-          context.spawn(event.debugServerPort);
-        },
-        on: {
-          READY: { target: "ready" },
-          TERMINATE: { target: "terminating" },
-          EXIT: {
-            target: "cleanup",
-            actions: assign({
-              processExit: (_, event) => event.processExit,
-            }),
-          },
-        },
-        after: {
-          3000: {
-            target: "terminating",
-            actions: assign({
-              errors: (context) => {
-                context.errors.push(new StateMachineTimeoutError("starting"));
-                return context.errors;
-              },
-            }),
-          },
-        },
-      },
-      ready: {
-        on: {
-          TERMINATE: { target: "terminating" },
-          EXIT: {
-            target: "cleanup",
-            actions: assign({
-              processExit: (_, event) => event.processExit,
-            }),
-          },
-        },
-      },
-      terminating: {
-        invoke: {
-          src: (context) => context.terminate(),
-        },
-        on: {
-          TERMINATE: { target: "killing" },
-          EXIT: {
-            target: "cleanup",
-            actions: assign({
-              processExit: (_, event) => event.processExit,
-            }),
-          },
-        },
-        after: {
-          3000: { target: "killing" },
-        },
-      },
-      killing: {
-        entry: (context) => context.kill(),
-        on: {
-          TERMINATE: { target: "cleanup" },
-          EXIT: {
-            target: "cleanup",
-            actions: assign({
-              processExit: (_, event) => event.processExit,
-            }),
-          },
-        },
-        after: {
-          2000: {
-            target: "failed",
-            actions: assign({
-              errors: (context) => {
-                context.errors.push(new StateMachineTimeoutError("killing"));
-                return context.errors;
-              },
-            }),
-          },
-        },
-      },
       cleanup: {
-        invoke: {
-          src: (context) => context.cleanup(),
-          onDone: [
-            { target: "failed", cond: (context) => context.errors.length > 0 },
-            { target: "done" },
-          ],
-          onError: {
-            target: "failed",
-            actions: assign({
-              errors: (context, event) => {
-                context.errors.push(event.data);
-                return context.errors;
-              },
-            }),
-          },
-        },
         after: {
           2000: {
-            target: "failed",
             actions: assign({
-              errors: (context) => {
+              errors(context) {
                 context.errors.push(new StateMachineTimeoutError("cleanup"));
                 return context.errors;
               },
             }),
+            target: "failed",
           },
+        },
+        invoke: {
+          onDone: [
+            { cond: (context) => context.errors.length > 0, target: "failed" },
+            { target: "done" },
+          ],
+          onError: {
+            actions: assign({
+              errors(context, event) {
+                context.errors.push(event.data);
+                return context.errors;
+              },
+            }),
+            target: "failed",
+          },
+          src: (context) => context.cleanup(),
         },
       },
       done: {
         type: "final",
       },
       failed: {
-        type: "final",
         entry: (context) => context.kill(),
+        type: "final",
+      },
+      init: {
+        on: {
+          FAIL: {
+            actions: assign({
+              errors(context, event) {
+                context.errors.push(event.error);
+                return context.errors;
+              },
+            }),
+            target: "cleanup",
+          },
+          SPAWN: { target: "starting" },
+        },
+      },
+      killing: {
+        after: {
+          2000: {
+            actions: assign({
+              errors(context) {
+                context.errors.push(new StateMachineTimeoutError("killing"));
+                return context.errors;
+              },
+            }),
+            target: "failed",
+          },
+        },
+        entry: (context) => context.kill(),
+        on: {
+          EXIT: {
+            actions: assign({
+              processExit: (_, event) => event.processExit,
+            }),
+            target: "cleanup",
+          },
+          TERMINATE: { target: "cleanup" },
+        },
+      },
+      ready: {
+        on: {
+          EXIT: {
+            actions: assign({
+              processExit: (_, event) => event.processExit,
+            }),
+            target: "cleanup",
+          },
+          TERMINATE: { target: "terminating" },
+        },
+      },
+      starting: {
+        after: {
+          3000: {
+            actions: assign({
+              errors(context) {
+                context.errors.push(new StateMachineTimeoutError("starting"));
+                return context.errors;
+              },
+            }),
+            target: "terminating",
+          },
+        },
+        entry(context, event) {
+          if (event.type !== "SPAWN") return;
+          context.spawn(event.debugServerPort);
+        },
+        on: {
+          EXIT: {
+            actions: assign({
+              processExit: (_, event) => event.processExit,
+            }),
+            target: "cleanup",
+          },
+          READY: { target: "ready" },
+          TERMINATE: { target: "terminating" },
+        },
+      },
+      terminating: {
+        after: {
+          3000: { target: "killing" },
+        },
+        invoke: {
+          src: (context) => context.terminate(),
+        },
+        on: {
+          EXIT: {
+            actions: assign({
+              processExit: (_, event) => event.processExit,
+            }),
+            target: "cleanup",
+          },
+          TERMINATE: { target: "killing" },
+        },
       },
     },
   });

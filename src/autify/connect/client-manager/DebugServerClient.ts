@@ -1,8 +1,9 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
-import fetch from "node-fetch";
-import { ClientEvents } from "./ClientManager";
 import AbortController from "abort-controller";
+import fetch from "node-fetch";
+
+import { ClientEvents } from "./ClientManager";
 
 type DebugServerRequest = Readonly<{
   method: string;
@@ -10,8 +11,8 @@ type DebugServerRequest = Readonly<{
 }>;
 
 type DebugServerStatusResponse = Readonly<{
-  status: "starting" | "ready" | "reconnecting";
   message: string;
+  status: "ready" | "reconnecting" | "starting";
 }>;
 
 export class DebugServerClient {
@@ -31,10 +32,6 @@ export class DebugServerClient {
     }, 1000);
   }
 
-  public stopStatusTimer(): void {
-    clearInterval(this.statusTimer);
-  }
-
   public async requestStatus(): Promise<DebugServerStatusResponse> {
     const req = { method: "GET", path: "/status" };
     const res = (await this.request(req)) as DebugServerStatusResponse;
@@ -49,11 +46,16 @@ export class DebugServerClient {
     await this.request(req);
   }
 
+  public stopStatusTimer(): void {
+    clearInterval(this.statusTimer);
+  }
+
   private async request({ method, path }: DebugServerRequest) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 1000);
     let response;
     try {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       response = await fetch(`http://127.0.0.1:${this.port}${path}`, {
         method,
         signal: controller.signal as any,

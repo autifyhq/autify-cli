@@ -1,16 +1,18 @@
 /* eslint-disable unicorn/filename-case */
 import { WebClient } from "@autifyhq/autify-sdk";
 import { CLIError } from "@oclif/errors";
+import getPort from "get-port";
 import { ChildProcessWithoutNullStreams, spawn } from "node:child_process";
+import { join } from "node:path";
 import { env } from "node:process";
 import { EventEmitter } from "node:stream";
+import { parse } from "shell-quote";
+import TypedEmitter from "typed-emitter";
 import { Logger } from "winston";
+import { waitFor } from "xstate/lib/waitFor";
+
 import { get } from "../../../config";
-import {
-  AccessPoint,
-  createEphemeralAccessPointForWeb,
-  createStaticAccessPoint,
-} from "./AccessPoint";
+import { getWebClient } from "../../web/getWebClient";
 import {
   AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION,
   ConnectClientVersionMismatchError,
@@ -18,30 +20,29 @@ import {
   getInstallVersion,
   validateVersion,
 } from "../installClient";
-import { waitFor } from "xstate/lib/waitFor";
+import {
+  AccessPoint,
+  createEphemeralAccessPointForWeb,
+  createStaticAccessPoint,
+} from "./AccessPoint";
 import { DebugServerClient } from "./DebugServerClient";
-import { ClientStateMachineService, createService } from "./StateMachine";
 import {
   createClientLogger,
   createManagerLogger,
   setupClientOutputLogger,
 } from "./Logger";
-import { join } from "node:path";
-import TypedEmitter from "typed-emitter";
-import getPort from "get-port";
-import { getWebClient } from "../../web/getWebClient";
-import { parse } from "shell-quote";
+import { ClientStateMachineService, createService } from "./StateMachine";
 
 export type ClientEvents = TypedEmitter<{
+  error: (error: Error) => void;
   log: (msg: string) => void;
-  starting: (msg: string) => void;
   ready: (msg: string) => void;
   reconnecting: (msg: string) => void;
-  error: (error: Error) => void;
+  starting: (msg: string) => void;
 }>;
 
 export type ProcessExit = Readonly<{
-  code: number | null;
+  code: null | number;
   signal: NodeJS.Signals | null;
 }>;
 export class StateMachineTimeoutError extends CLIError {
@@ -51,135 +52,26 @@ export class StateMachineTimeoutError extends CLIError {
 }
 
 type ClientManagerOptions = Readonly<{
-  configDir: string;
   cacheDir: string;
-  verbose?: boolean;
-  fileLogging?: boolean;
+  configDir: string;
   debugServerPort?: number;
   extraArguments?: string;
+  fileLogging?: boolean;
+  verbose?: boolean;
 }>;
 
 export class ClientManager {
-  public static async create(
-    options: ClientManagerOptions & {
-      userAgent: string;
-      webWorkspaceId?: number;
-    }
-  ): Promise<ClientManager> {
-    if (options.webWorkspaceId) {
-      const { configDir, userAgent, webWorkspaceId } = options;
-      const client = getWebClient(configDir, userAgent);
-      return this.createWithEphemeralAccessPointForWeb(
-        client,
-        webWorkspaceId,
-        options
-      );
-    }
-
-    return this.createWithStaticAccessPoint(options);
-  }
-
-  private static async createWithStaticAccessPoint(
-    options: ClientManagerOptions
-  ): Promise<ClientManager> {
-    const name = get(options.configDir, "AUTIFY_CONNECT_ACCESS_POINT_NAME");
-    const key = get(options.configDir, "AUTIFY_CONNECT_ACCESS_POINT_KEY");
-    if (!name || !key)
-      throw new CLIError(
-        "Access Point is not saved. Run `autify connect access-point create/set` first."
-      );
-    const accessPoint = createStaticAccessPoint(name, key);
-    return new ClientManager(accessPoint, options);
-  }
-
-  private static async createWithEphemeralAccessPointForWeb(
-    client: WebClient,
-    workspaceId: number,
-    options: ClientManagerOptions
-  ): Promise<ClientManager> {
-    const accessPoint = await createEphemeralAccessPointForWeb(
-      client,
-      workspaceId
-    );
-    return new ClientManager(accessPoint, options);
-  }
-
-  public async start(): Promise<void> {
-    try {
-      this.logger.debug("start");
-      const version = await this.getClientVersion();
-      const debugServerPort = this.options.debugServerPort ?? (await getPort());
-      this.logger.info(
-        `Starting Autify Connect Client (accessPoint: ${this.accessPointName}, debugServerPort: ${debugServerPort}, path: ${this.clientPath}, version: ${version})`
-      );
-      this.service.send("SPAWN", { debugServerPort });
-    } catch (error) {
-      this.service.send("FAIL", { error });
-      throw error;
-    }
-  }
-
-  public async onceReady(): Promise<void> {
-    this.logger.debug("onceReady");
-    await this.once("ready");
-  }
-
-  public async onceTerminating(): Promise<void> {
-    this.logger.debug("onceTerminating");
-    await this.once("terminating");
-  }
-
-  public async onceDone(): Promise<number | null> {
-    this.logger.debug("onceDone");
-    const {
-      context: { processExit },
-    } = await this.once("done");
-    if (!processExit) {
-      this.logger.warn(
-        "Autify Connect Client exited but unable to capture the exit status"
-      );
-      return null;
-    }
-
-    this.logger.info(
-      `Autify Connect Client exited (code: ${processExit.code}, signal: ${processExit.signal})`
-    );
-    return processExit.code;
-  }
-
-  public async exit(options?: {
-    ignoreError: boolean;
-  }): Promise<number | null> {
-    try {
-      this.logger.debug("exit");
-      const snapshot = this.service.getSnapshot();
-      if (snapshot.done) {
-        this.logger.debug("Already exited.");
-        return snapshot.context.processExit?.code || null;
-      }
-
-      this.service.send("TERMINATE");
-      return await this.onceDone();
-    } catch (error) {
-      if (options?.ignoreError) {
-        this.logger.warn(`Ignoring exit error: ${error}`);
-        return null;
-      }
-
-      throw error;
-    }
-  }
-
-  public get accessPointName(): string {
-    return this.accessPoint.name;
-  }
+  private childProcess?: ChildProcessWithoutNullStreams;
 
   private readonly clientEvents = new EventEmitter() as ClientEvents;
-  private readonly logger: Logger;
+
   private readonly clientLogger: Logger;
-  private readonly service: ClientStateMachineService;
-  private childProcess?: ChildProcessWithoutNullStreams;
+
   private debugServerClient?: DebugServerClient;
+
+  private readonly logger: Logger;
+
+  private readonly service: ClientStateMachineService;
 
   private constructor(
     private readonly accessPoint: AccessPoint,
@@ -197,11 +89,11 @@ export class ClientManager {
     if (filename) this.logger.info(`Client log will be written on ${filename}`);
     this.clientLogger = createClientLogger({ level }, filename);
     this.service = createService({
-      spawn: (debugServerPort) => this.spawn(debugServerPort),
-      terminate: () => this.terminate(),
-      kill: () => this.kill(),
       cleanup: () => this.cleanup(),
       errors: [],
+      kill: () => this.kill(),
+      spawn: (debugServerPort) => this.spawn(debugServerPort),
+      terminate: () => this.terminate(),
     }).onTransition((state, event) => {
       if (!state.changed) return;
       this.logger.debug(
@@ -222,6 +114,199 @@ export class ClientManager {
     this.clientEvents.on("error", (error) => {
       this.logger.warn(`Ignoring client error: ${error}`);
     });
+  }
+
+  public static async create(
+    options: ClientManagerOptions & {
+      userAgent: string;
+      webWorkspaceId?: number;
+    }
+  ): Promise<ClientManager> {
+    if (options.webWorkspaceId) {
+      const { configDir, userAgent, webWorkspaceId } = options;
+      const client = getWebClient(configDir, userAgent);
+      return this.createWithEphemeralAccessPointForWeb(
+        client,
+        webWorkspaceId,
+        options
+      );
+    }
+
+    return this.createWithStaticAccessPoint(options);
+  }
+
+  private static async createWithEphemeralAccessPointForWeb(
+    client: WebClient,
+    workspaceId: number,
+    options: ClientManagerOptions
+  ): Promise<ClientManager> {
+    const accessPoint = await createEphemeralAccessPointForWeb(
+      client,
+      workspaceId
+    );
+    return new ClientManager(accessPoint, options);
+  }
+
+  private static async createWithStaticAccessPoint(
+    options: ClientManagerOptions
+  ): Promise<ClientManager> {
+    const name = get(options.configDir, "AUTIFY_CONNECT_ACCESS_POINT_NAME");
+    const key = get(options.configDir, "AUTIFY_CONNECT_ACCESS_POINT_KEY");
+    if (!name || !key)
+      throw new CLIError(
+        "Access Point is not saved. Run `autify connect access-point create/set` first."
+      );
+    const accessPoint = createStaticAccessPoint(name, key);
+    return new ClientManager(accessPoint, options);
+  }
+
+  public get accessPointName(): string {
+    return this.accessPoint.name;
+  }
+
+  public async exit(options?: {
+    ignoreError: boolean;
+  }): Promise<null | number> {
+    try {
+      this.logger.debug("exit");
+      const snapshot = this.service.getSnapshot();
+      if (snapshot.done) {
+        this.logger.debug("Already exited.");
+        return snapshot.context.processExit?.code || null;
+      }
+
+      this.service.send("TERMINATE");
+      return await this.onceDone();
+    } catch (error) {
+      if (options?.ignoreError) {
+        this.logger.warn(`Ignoring exit error: ${error}`);
+        return null;
+      }
+
+      throw error;
+    }
+  }
+
+  public async onceDone(): Promise<null | number> {
+    this.logger.debug("onceDone");
+    const {
+      context: { processExit },
+    } = await this.once("done");
+    if (!processExit) {
+      this.logger.warn(
+        "Autify Connect Client exited but unable to capture the exit status"
+      );
+      return null;
+    }
+
+    this.logger.info(
+      `Autify Connect Client exited (code: ${processExit.code}, signal: ${processExit.signal})`
+    );
+    return processExit.code;
+  }
+
+  public async onceReady(): Promise<void> {
+    this.logger.debug("onceReady");
+    await this.once("ready");
+  }
+
+  public async onceTerminating(): Promise<void> {
+    this.logger.debug("onceTerminating");
+    await this.once("terminating");
+  }
+
+  public async start(): Promise<void> {
+    try {
+      this.logger.debug("start");
+      const version = await this.getClientVersion();
+      const debugServerPort = this.options.debugServerPort ?? (await getPort());
+      this.logger.info(
+        `Starting Autify Connect Client (accessPoint: ${this.accessPointName}, debugServerPort: ${debugServerPort}, path: ${this.clientPath}, version: ${version})`
+      );
+      this.service.send("SPAWN", { debugServerPort });
+    } catch (error) {
+      this.service.send("FAIL", { error });
+      throw error;
+    }
+  }
+
+  private async cleanup() {
+    try {
+      this.logger.debug("cleanup start");
+      this.debugServerClient?.stopStatusTimer();
+      if (this.accessPoint.type === "ephemeral") {
+        await this.accessPoint.delete();
+        this.logger.info(
+          `Ephemeral Access Point was deleted: ${this.accessPointName}`
+        );
+      }
+
+      this.logger.debug("cleanup done");
+    } catch (error) {
+      this.logger.warn(`Ignoring cleanup error: ${error}`);
+    }
+  }
+
+  private get clientPath() {
+    return getInstallPath(this.options.configDir, this.options.cacheDir);
+  }
+
+  private async getClientVersion() {
+    const clientVersion = await getInstallVersion(this.clientPath);
+    try {
+      await validateVersion(
+        clientVersion,
+        AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION
+      );
+    } catch (error) {
+      if (error instanceof ConnectClientVersionMismatchError) {
+        this.logger.warn(
+          "Installed Autify Connect Client version doesn't match our supported version. " +
+            "Consider to run `autify connect client install` to install the supported version. " +
+            `(version: ${clientVersion}, supported: ${AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION})`
+        );
+      }
+    }
+
+    return clientVersion;
+  }
+
+  private kill() {
+    try {
+      this.logger.debug("kill");
+      this.childProcess?.kill();
+    } catch (error) {
+      this.logger.warn(`Ignoring kill error: ${error}`);
+    }
+  }
+
+  private async once(waitState: string) {
+    let state;
+    try {
+      state = await waitFor(
+        this.service,
+        (state) =>
+          state.matches(waitState) ||
+          state.matches("done") ||
+          state.matches("failed"),
+        {
+          timeout: Number.POSITIVE_INFINITY,
+        }
+      );
+    } catch {
+      throw new CLIError(
+        `Unknown state transition: ${this.service.getSnapshot().value}`
+      );
+    }
+
+    if (state.value === "failed")
+      this.logger.warn(`Failed (${state.context.errors})`);
+    const timeoutError = state.context.errors.find(
+      (error) => error instanceof StateMachineTimeoutError
+    );
+    if (timeoutError) throw timeoutError;
+
+    return state;
   }
 
   private spawn(debugServerPort: number) {
@@ -269,84 +354,5 @@ export class ClientManager {
     } catch (error) {
       this.logger.warn(`Ignoring terminate error: ${error}`);
     }
-  }
-
-  private kill() {
-    try {
-      this.logger.debug("kill");
-      this.childProcess?.kill();
-    } catch (error) {
-      this.logger.warn(`Ignoring kill error: ${error}`);
-    }
-  }
-
-  private async cleanup() {
-    try {
-      this.logger.debug("cleanup start");
-      this.debugServerClient?.stopStatusTimer();
-      if (this.accessPoint.type === "ephemeral") {
-        await this.accessPoint.delete();
-        this.logger.info(
-          `Ephemeral Access Point was deleted: ${this.accessPointName}`
-        );
-      }
-
-      this.logger.debug("cleanup done");
-    } catch (error) {
-      this.logger.warn(`Ignoring cleanup error: ${error}`);
-    }
-  }
-
-  private async once(waitState: string) {
-    let state;
-    try {
-      state = await waitFor(
-        this.service,
-        (state) =>
-          state.matches(waitState) ||
-          state.matches("done") ||
-          state.matches("failed"),
-        {
-          timeout: Number.POSITIVE_INFINITY,
-        }
-      );
-    } catch {
-      throw new CLIError(
-        `Unknown state transition: ${this.service.getSnapshot().value}`
-      );
-    }
-
-    if (state.value === "failed")
-      this.logger.warn(`Failed (${state.context.errors})`);
-    const timeoutError = state.context.errors.find(
-      (error) => error instanceof StateMachineTimeoutError
-    );
-    if (timeoutError) throw timeoutError;
-
-    return state;
-  }
-
-  private get clientPath() {
-    return getInstallPath(this.options.configDir, this.options.cacheDir);
-  }
-
-  private async getClientVersion() {
-    const clientVersion = await getInstallVersion(this.clientPath);
-    try {
-      await validateVersion(
-        clientVersion,
-        AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION
-      );
-    } catch (error) {
-      if (error instanceof ConnectClientVersionMismatchError) {
-        this.logger.warn(
-          "Installed Autify Connect Client version doesn't match our supported version. " +
-            "Consider to run `autify connect client install` to install the supported version. " +
-            `(version: ${clientVersion}, supported: ${AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION})`
-        );
-      }
-    }
-
-    return clientVersion;
   }
 }

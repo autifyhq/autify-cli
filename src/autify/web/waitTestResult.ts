@@ -1,8 +1,8 @@
 /* eslint-disable unicorn/filename-case */
+import { WebClient } from "@autifyhq/autify-sdk";
 import { CLIError } from "@oclif/errors";
 import Listr, { ListrTaskWrapper } from "listr";
 import { setInterval } from "node:timers/promises";
-import { WebClient } from "@autifyhq/autify-sdk";
 import emoji from "node-emoji";
 
 const waitUntil = async <T>(
@@ -14,8 +14,7 @@ const waitUntil = async <T>(
   const task = new Listr<{ result: T }>(
     [
       {
-        title: `Waiting... (timeout: ${timeoutSecond} s)`,
-        task: async (ctx, task) => {
+        async task(ctx, task) {
           let killed;
           process.on("SIGINT", (signal) => {
             killed = signal;
@@ -41,11 +40,12 @@ const waitUntil = async <T>(
             }
           }
         },
+        title: `Waiting... (timeout: ${timeoutSecond} s)`,
       },
     ],
     {
-      renderer: verbose ? "verbose" : "default",
       nonTTYRenderer: "verbose",
+      renderer: verbose ? "verbose" : "default",
     }
   );
   const res = await task.run();
@@ -87,12 +87,13 @@ const describeResult =
     if (data.finished_at) return data;
   };
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const waitTestResult = async (
   client: WebClient,
   workspaceId: number,
   resultId: number,
-  options: { timeoutSecond: number; verbose: boolean; intervalSecond: number }
-): Promise<{ isPassed: boolean; data: any }> => {
+  options: { intervalSecond: number; timeoutSecond: number; verbose: boolean }
+): Promise<{ data: any; isPassed: boolean }> => {
   const data = await waitUntil(
     describeResult(client, workspaceId, resultId),
     options.timeoutSecond,
@@ -101,7 +102,7 @@ export const waitTestResult = async (
   );
   const isPassed = data?.status === "passed";
   return {
-    isPassed,
     data,
+    isPassed,
   };
 };

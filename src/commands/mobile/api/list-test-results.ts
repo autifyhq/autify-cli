@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 
 export default class MobileApiListTestResults extends Command {
@@ -7,11 +8,6 @@ export default class MobileApiListTestResults extends Command {
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
   static flags = {
-    "project-id": Flags.string({
-      description:
-        "ID of the project from which the list of test results will be retrieved.",
-      required: true,
-    }),
     page: Flags.integer({
       description: "Page number to be retrieved.",
       required: false,
@@ -19,6 +15,11 @@ export default class MobileApiListTestResults extends Command {
     "per-page": Flags.integer({
       description: "Number of test results per page.",
       required: false,
+    }),
+    "project-id": Flags.string({
+      description:
+        "ID of the project from which the list of test results will be retrieved.",
+      required: true,
     }),
     "test-plan-id": Flags.string({
       description: "ID of the test plan.",

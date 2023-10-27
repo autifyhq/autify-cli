@@ -1,8 +1,8 @@
 /* eslint-disable unicorn/filename-case */
-import { promisify } from "node:util";
 import { exec } from "node:child_process";
-import stripAnsi from "strip-ansi";
 import { env } from "node:process";
+import { promisify } from "node:util";
+import stripAnsi from "strip-ansi";
 
 const normalize = (stdout: string) =>
   stdout
@@ -26,11 +26,11 @@ const normalize = (stdout: string) =>
 
 export const execAutifyCli = async (
   args: string
-): Promise<{ stdout: string; stderr: string }> => {
+): Promise<{ stderr: string; stdout: string }> => {
   const command = `autify-with-proxy ${args}`;
-  const { stdout, stderr } = await promisify(exec)(command, { env });
+  const { stderr, stdout } = await promisify(exec)(command, { env });
   return {
-    stdout: normalize(stripAnsi(stdout)),
     stderr: normalize(stripAnsi(stderr)),
+    stdout: normalize(stripAnsi(stdout)),
   };
 };

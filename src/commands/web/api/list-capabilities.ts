@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+
 import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiListCapabilities extends Command {
@@ -7,12 +8,6 @@ export default class WebApiListCapabilities extends Command {
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
   static flags = {
-    "project-id": Flags.integer({
-      description:
-        "For example, 1 for the following URL: https://app.autify.com/projects/1/capabilities",
-      required: true,
-    }),
-    os: Flags.string({ description: "os name to filter", required: false }),
     browser: Flags.string({
       description: "browser name to filter",
       required: false,
@@ -20,6 +15,12 @@ export default class WebApiListCapabilities extends Command {
     "device-type": Flags.string({
       description: "device_type name to filter",
       required: false,
+    }),
+    os: Flags.string({ description: "os name to filter", required: false }),
+    "project-id": Flags.integer({
+      description:
+        "For example, 1 for the following URL: https://app.autify.com/projects/1/capabilities",
+      required: true,
     }),
   };
 

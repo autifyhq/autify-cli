@@ -5,26 +5,24 @@ import { v4 as uuid } from "uuid";
 const ACCESS_POINT_NAME_PREFIX = "autify-cli-";
 
 interface StaticAccessPoint {
-  readonly type: "static";
-  readonly name: string;
   readonly key: string;
+  readonly name: string;
+  readonly type: "static";
 }
 
 interface EphemeralAccessPoint {
-  readonly type: "ephemeral";
-  readonly name: string;
-  readonly key: string;
   readonly delete: () => Promise<void>;
+  readonly key: string;
+  readonly name: string;
+  readonly type: "ephemeral";
 }
 
-export type AccessPoint = StaticAccessPoint | EphemeralAccessPoint;
+export type AccessPoint = EphemeralAccessPoint | StaticAccessPoint;
 
 export const createStaticAccessPoint = (
   name: string,
   key: string
-): StaticAccessPoint => {
-  return { type: "static", name, key };
-};
+): StaticAccessPoint => ({ key, name, type: "static" });
 
 export const createEphemeralAccessPointForWeb = async (
   client: WebClient,
@@ -32,16 +30,16 @@ export const createEphemeralAccessPointForWeb = async (
 ): Promise<EphemeralAccessPoint> => {
   const randomName = `${ACCESS_POINT_NAME_PREFIX}${uuid()}`;
   const res = await client.createAccessPoint(workspaceId, { name: randomName });
-  const name = res.data.name;
-  const key = res.data.key;
+  const { name } = res.data;
+  const { key } = res.data;
   return {
-    type: "ephemeral",
-    name,
-    key,
-    delete: async () => {
+    async delete() {
       await client.deleteAccessPoint(workspaceId, {
         name,
       });
     },
+    key,
+    name,
+    type: "ephemeral",
   };
 };

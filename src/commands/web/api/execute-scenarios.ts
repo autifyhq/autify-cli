@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+
 import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiExecuteScenarios extends Command {
@@ -8,13 +9,13 @@ export default class WebApiExecuteScenarios extends Command {
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
   static flags = {
+    "execute-scenarios-request": Flags.string({
+      description: "The scenarios and settings to execute",
+      required: true,
+    }),
     "project-id": Flags.integer({
       description:
         "For example, 1 for the following URL: https://app.autify.com/projects/1/scenarios",
-      required: true,
-    }),
-    "execute-scenarios-request": Flags.string({
-      description: "The scenarios and settings to execute",
       required: true,
     }),
   };

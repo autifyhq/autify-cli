@@ -1,11 +1,12 @@
 /* eslint-disable unicorn/filename-case */
 import { MOBILE_BASE_PATH } from "@autifyhq/autify-sdk";
+
 import { get } from "../../config";
 
 export const getBuildDetailUrl = (
   configDir: string,
   workspaceId: string,
-  os: "ios" | "android",
+  os: "android" | "ios",
   buildId: string
 ): string => {
   // Currently, it's heuristic. We could provide a new API or include the URL in the response of the existing APIs.

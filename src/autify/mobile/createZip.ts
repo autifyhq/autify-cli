@@ -1,16 +1,15 @@
 /* eslint-disable unicorn/filename-case */
 
 import { CLIError } from "@oclif/errors";
-import { execFileSync } from "node:child_process";
-import { createWriteStream, lstatSync } from "node:fs";
-import { basename, dirname, resolve } from "node:path";
-import which from "which";
 import archiver from "archiver";
+import { execFileSync } from "node:child_process";
 import { once } from "node:events";
-import StreamZip from "node-stream-zip";
-import { tmpdir } from "node:os";
+import { createWriteStream, lstatSync } from "node:fs";
 import { mkdtemp } from "node:fs/promises";
-import { join } from "node:path";
+import { tmpdir } from "node:os";
+import { basename, dirname, join, resolve } from "node:path";
+import StreamZip from "node-stream-zip";
+import which from "which";
 
 const checkBuildPath = (buildPath: string) => {
   if (!lstatSync(buildPath).isDirectory()) {

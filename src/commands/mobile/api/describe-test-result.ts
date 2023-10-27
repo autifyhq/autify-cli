@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 
 export default class MobileApiDescribeTestResult extends Command {
@@ -7,12 +8,12 @@ export default class MobileApiDescribeTestResult extends Command {
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
   static flags = {
+    id: Flags.string({ description: "Test Result ID.", required: true }),
     "project-id": Flags.string({
       description:
         "ID of the project from which the test results will be obtained.",
       required: true,
     }),
-    id: Flags.string({ description: "Test Result ID.", required: true }),
   };
 
   public async run(): Promise<void> {

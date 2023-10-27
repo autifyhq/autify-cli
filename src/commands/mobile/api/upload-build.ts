@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 
 export default class MobileApiUploadBuild extends Command {
@@ -7,11 +8,11 @@ export default class MobileApiUploadBuild extends Command {
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
   static flags = {
+    file: Flags.string({ description: "Build file.", required: true }),
     "project-id": Flags.string({
       description: "The ID of the project to upload the build file to.",
       required: true,
     }),
-    file: Flags.string({ description: "Build file.", required: true }),
   };
 
   public async run(): Promise<void> {

@@ -1,13 +1,21 @@
-import { Command, Args, Flags } from "@oclif/core";
+import { Args, Command, Flags } from "@oclif/core";
 import emoji from "node-emoji";
+
 import { getBuildDetailUrl } from "../../../autify/mobile/getBuildDetailUrl";
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 import { uploadBuild } from "../../../autify/mobile/uploadBuild";
 
 export default class MobileBuildUpload extends Command {
-  static enableJsonFlag = true;
+  static args = {
+    "build-path": Args.string({
+      description: "File path to the iOS app (*.app) or Android app (*.apk).",
+      required: true,
+    }),
+  };
 
   static description = "Upload a build file";
+
+  static enableJsonFlag = true;
 
   static examples = [
     "<%= config.bin %> <%= command.id %>",
@@ -19,13 +27,6 @@ export default class MobileBuildUpload extends Command {
     "workspace-id": Flags.string({
       char: "w",
       description: "Workspace ID to upload the build file",
-      required: true,
-    }),
-  };
-
-  static args = {
-    "build-path": Args.string({
-      description: "File path to the iOS app (*.app) or Android app (*.apk).",
       required: true,
     }),
   };

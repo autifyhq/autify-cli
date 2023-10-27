@@ -2,20 +2,21 @@ import assert from "node:assert";
 import { execSync } from "node:child_process";
 import {
   appendFileSync,
+  mkdtempSync,
   readFileSync,
   writeFileSync,
-  mkdtempSync,
 } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
+
 import pkg from "../package.json";
 
-const { version, oclif: oclifConfig } = pkg;
+const { oclif: oclifConfig, version } = pkg;
 
 const { bucket, folder } = oclifConfig.update.s3;
 
 const run = (cmd: string, cwd?: string) => {
-  execSync(cmd, { stdio: "inherit", cwd });
+  execSync(cmd, { cwd, stdio: "inherit" });
 };
 
 const oclif = (args: string) => {
@@ -52,13 +53,13 @@ const getNewVersion = () => {
 };
 
 type S3FileOption = Readonly<{
-  target: string;
-  tarball?: "tar.gz" | "tar.xz";
   npm?: "autify-cli" | "autify-cli-integration-test";
-  script?: "install-standalone.sh" | "install-cicd.bash";
+  script?: "install-cicd.bash" | "install-standalone.sh";
+  tarball?: "tar.gz" | "tar.xz";
+  target: string;
 }>;
 
-const s3File = ({ target, tarball, npm, script }: S3FileOption) => {
+const s3File = ({ npm, script, tarball, target }: S3FileOption) => {
   let file = `autify-v${version}-${sha}-`;
   switch (target) {
     case "win": {
@@ -100,16 +101,16 @@ const uploadNpmPackage = (
   if (npm === "autify-cli") run("npm pack");
   else if (npm === "autify-cli-integration-test")
     run("npm pack -w integration-test");
-  const file = s3File({ target: "npm", npm });
+  const file = s3File({ npm, target: "npm" });
   run(
     `aws s3 cp --acl public-read ${file} s3://${bucket}/${s3KeyPrefix}/${file}`
   );
 };
 
-const uploadShell = (script: "install-standalone.sh" | "install-cicd.bash") => {
+const uploadShell = (script: "install-cicd.bash" | "install-standalone.sh") => {
   const prefix = `${folder}/versions/${version}/${sha}/autify-v${version}-${sha}`;
   updateShellInstaller(script, prefix);
-  const file = s3File({ target: "shell", script });
+  const file = s3File({ script, target: "shell" });
   run(
     `aws s3 cp --acl public-read ${file} s3://${bucket}/${s3KeyPrefix}/${file}`
   );
@@ -185,7 +186,7 @@ const promoteNpm = (
   npm: "autify-cli" | "autify-cli-integration-test",
   channel: string
 ) => {
-  const file = downloadS3(".", { target: "npm", npm });
+  const file = downloadS3(".", { npm, target: "npm" });
   const regex = new RegExp(`${npm}-.+\\.tgz$`);
   const destFile = file.replace(regex, `${npm}.tgz`);
   const dest = `s3://${bucket}/${folder}/channels/${channel}/${destFile}`;
@@ -228,10 +229,10 @@ const publishBrew = () => {
 };
 
 const publishNpm = () => {
-  const cliPackage = downloadS3(".", { target: "npm", npm: "autify-cli" });
+  const cliPackage = downloadS3(".", { npm: "autify-cli", target: "npm" });
   const testPackage = downloadS3(".", {
-    target: "npm",
     npm: "autify-cli-integration-test",
+    target: "npm",
   });
   run(`npm publish --access=public ${cliPackage}`);
   run(`npm publish --access=public ${testPackage}`);
@@ -258,9 +259,9 @@ const rollbackCommand = () => {
 
 const downloadS3 = (
   cwd: string,
-  { target, tarball, npm, script }: S3FileOption
+  { npm, script, tarball, target }: S3FileOption
 ) => {
-  const file = s3File({ target, tarball, npm, script });
+  const file = s3File({ npm, script, tarball, target });
   const key = `${s3KeyPrefix}/${file}`;
   const url = `https://${bucket}.s3.amazonaws.com/${key}`;
   run(`curl -s -O ${url}`, cwd);
@@ -272,7 +273,7 @@ const installTarball = (
   target: string,
   tarball: "tar.gz" | "tar.xz"
 ) => {
-  const file = downloadS3(cwd, { target, tarball });
+  const file = downloadS3(cwd, { tarball, target });
   const tarFlag = tarball === "tar.xz" ? "-xJf" : "-xzf";
   run(`tar ${tarFlag} ${file}`, cwd);
   return join(cwd, "autify", "bin");
@@ -295,16 +296,16 @@ const installMacos = (cwd: string) => {
 
 const installStandaloneShell = (cwd: string) => {
   const file = downloadS3(cwd, {
-    target: "shell",
     script: "install-standalone.sh",
+    target: "shell",
   });
   run(`cat ${file} | sh -xe`, cwd);
 };
 
 const installCicdShell = (cwd: string) => {
   const file = downloadS3(cwd, {
-    target: "shell",
     script: "install-cicd.bash",
+    target: "shell",
   });
   run(`cat ${file} | bash -xe`, cwd);
   const autifyPath = join(cwd, "autify", "path");
@@ -320,10 +321,10 @@ const installBrew = () => {
 };
 
 const installNpm = (cwd: string) => {
-  const cliPackage = downloadS3(cwd, { target: "npm", npm: "autify-cli" });
+  const cliPackage = downloadS3(cwd, { npm: "autify-cli", target: "npm" });
   const testPackage = downloadS3(cwd, {
-    target: "npm",
     npm: "autify-cli-integration-test",
+    target: "npm",
   });
   run(`npm install ${cliPackage} ${testPackage}`, cwd);
   return join(cwd, "node_modules", ".bin");

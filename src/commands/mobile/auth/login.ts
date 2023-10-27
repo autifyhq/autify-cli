@@ -1,5 +1,6 @@
 import { Command } from "@oclif/core";
 import * as inquirer from "inquirer";
+
 import { set } from "../../../config";
 
 export default class MobileAuthLogin extends Command {
@@ -19,10 +20,10 @@ export default class MobileAuthLogin extends Command {
   private async readTokenFromStdin() {
     const res = await inquirer.prompt([
       {
-        name: "token",
-        message: "Enter Access Token",
-        type: "password",
         mask: true,
+        message: "Enter Access Token",
+        name: "token",
+        type: "password",
       },
     ]);
     return res.token as string;

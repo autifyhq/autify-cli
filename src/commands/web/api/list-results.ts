@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+
 import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiListResults extends Command {
@@ -7,11 +8,6 @@ export default class WebApiListResults extends Command {
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
   static flags = {
-    "project-id": Flags.integer({
-      description:
-        "For example, 1 for the following URL: https://app.autify.com/projects/1/results",
-      required: true,
-    }),
     page: Flags.integer({
       description: "The number of page returns.",
       required: false,
@@ -20,6 +16,11 @@ export default class WebApiListResults extends Command {
       description:
         "The number of items returns. Default number is 30 and up to a maximum of 100",
       required: false,
+    }),
+    "project-id": Flags.integer({
+      description:
+        "For example, 1 for the following URL: https://app.autify.com/projects/1/results",
+      required: true,
     }),
     "test-plan-id": Flags.integer({
       description: "Test plan ID used to filter results.",

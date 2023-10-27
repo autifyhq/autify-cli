@@ -3,7 +3,7 @@ import { CLIError } from "@oclif/errors";
 
 export const parseTestResultUrl = (
   url: string
-): { workspaceId: number; resultId: number } => {
+): { resultId: number; workspaceId: number } => {
   const { pathname } = new URL(url);
   const testResultUrlPathRegExp =
     /\/projects\/(?<workspaceId>\d+)\/results\/(?<resultId>\d+)/;
@@ -11,5 +11,5 @@ export const parseTestResultUrl = (
   const workspaceId = Number.parseInt(match?.groups?.workspaceId ?? "", 10);
   const resultId = Number.parseInt(match?.groups?.resultId ?? "", 10);
   if (!workspaceId || !resultId) throw new CLIError(`Invalid URL: ${url}`);
-  return { workspaceId, resultId };
+  return { resultId, workspaceId };
 };

@@ -1,5 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 import * as inquirer from "inquirer";
+
 import {
   confirmOverwriteAccessPoint,
   saveAccessPoint,
@@ -32,10 +33,10 @@ export default class ConnectAccessPointSet extends Command {
   private async readKeyFromStdin() {
     const res = await inquirer.prompt([
       {
-        name: "key",
-        message: "Enter Autify Connect Access Point Key",
-        type: "password",
         mask: true,
+        message: "Enter Autify Connect Access Point Key",
+        name: "key",
+        type: "password",
       },
     ]);
     return res.key as string;

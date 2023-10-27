@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { MobileClient } from "@autifyhq/autify-sdk";
+
 import { get, getOrThrow } from "../../config";
 
 export const getMobileClient = (

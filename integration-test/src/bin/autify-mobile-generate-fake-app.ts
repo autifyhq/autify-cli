@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+
 import { androidBuildPath, iosBuildPath } from "../commands";
 
 // https://commons.wikimedia.org/wiki/File:Transparent.gif

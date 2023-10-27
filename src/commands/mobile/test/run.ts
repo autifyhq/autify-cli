@@ -1,6 +1,7 @@
-import { Command, Args, Flags } from "@oclif/core";
+import { Args, Command, Flags } from "@oclif/core";
 import { CLIError } from "@oclif/errors";
 import emoji from "node-emoji";
+
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 import { getMobileTestResultUrl } from "../../../autify/mobile/getTestResultUrl";
 import { parseTestPlanUrl } from "../../../autify/mobile/parseTestPlanUrl";
@@ -8,6 +9,14 @@ import MobileBuildUpload from "../build/upload";
 import MobileTestWait from "./wait";
 
 export default class MobileTestRun extends Command {
+  static args = {
+    "test-plan-url": Args.string({
+      description:
+        "Test plan URL e.g. https://mobile-app.autify.com/projects/<ID>/test_plans/<ID>",
+      required: true,
+    }),
+  };
+
   static description = "Run a test plan.";
 
   static examples = [
@@ -25,34 +34,26 @@ export default class MobileTestRun extends Command {
       description: "File path to the iOS app (*.app) or Android app (*.apk).",
       exclusive: ["build-id"],
     }),
-    wait: Flags.boolean({
-      char: "w",
-      description: "Wait until the test finishes.",
-      default: false,
+    "max-retry-count": Flags.integer({
+      default: 0,
+      description:
+        "Maximum retry count. The command can take up to timeout * (max-retry-count + 1).",
     }),
     timeout: Flags.integer({
       char: "t",
+      default: 300,
       description:
         "Timeout seconds when waiting for the finish of the test execution.",
-      default: 300,
     }),
     verbose: Flags.boolean({
       char: "v",
-      description: "Verbose output",
       default: false,
+      description: "Verbose output",
     }),
-    "max-retry-count": Flags.integer({
-      description:
-        "Maximum retry count. The command can take up to timeout * (max-retry-count + 1).",
-      default: 0,
-    }),
-  };
-
-  static args = {
-    "test-plan-url": Args.string({
-      description:
-        "Test plan URL e.g. https://mobile-app.autify.com/projects/<ID>/test_plans/<ID>",
-      required: true,
+    wait: Flags.boolean({
+      char: "w",
+      default: false,
+      description: "Wait until the test finishes.",
     }),
   };
 
@@ -62,7 +63,7 @@ export default class MobileTestRun extends Command {
     const buildPath = flags["build-path"];
     const { configDir, userAgent } = this.config;
     const client = getMobileClient(configDir, userAgent);
-    const { workspaceId, testPlanId } = parseTestPlanUrl(args["test-plan-url"]);
+    const { testPlanId, workspaceId } = parseTestPlanUrl(args["test-plan-url"]);
     if (buildPath) {
       const uploadArgs = ["--workspace-id", workspaceId, buildPath];
       const uploadCommand = new MobileBuildUpload(uploadArgs, this.config);

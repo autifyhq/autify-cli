@@ -1,6 +1,7 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
 import inquirer from "inquirer";
+
 import { get, set } from "../../config";
 
 export const confirmOverwriteAccessPoint = async (
@@ -11,10 +12,10 @@ export const confirmOverwriteAccessPoint = async (
     const message = `You've already set an Access Point at ${configDir} (name: ${existingName}). Are you ok to clear its configuration from this machine?`;
     const res = await inquirer.prompt([
       {
-        name: "confirmed",
-        message,
-        type: "confirm",
         default: false,
+        message,
+        name: "confirmed",
+        type: "confirm",
       },
     ]);
     if (!res.confirmed) {

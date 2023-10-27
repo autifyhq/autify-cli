@@ -1,15 +1,16 @@
+import NodeHttpAdapter from "@pollyjs/adapter-node-http";
+import { Polly, Request } from "@pollyjs/core";
+import { HarEntry, HarRequest } from "@pollyjs/persister";
+import FSPersister from "@pollyjs/persister-fs";
 import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
-import { Polly, Request } from "@pollyjs/core";
-import NodeHttpAdapter from "@pollyjs/adapter-node-http";
-import { HarRequest, HarEntry } from "@pollyjs/persister";
-import FSPersister from "@pollyjs/persister-fs";
 import { spawn } from "node:child_process";
+import { existsSync } from "node:fs";
 import { AddressInfo } from "node:net";
 import path from "node:path";
 import { argv, env, exit } from "node:process";
-import { existsSync } from "node:fs";
 import which from "which";
+
 import { normalizeCommand } from "../commands";
 
 Polly.register(NodeHttpAdapter);
@@ -17,11 +18,10 @@ Polly.register(FSPersister);
 
 type PollyMode = "record" | "replay";
 
-const { AUTIFY_POLLY_RECORD, AUTIFY_CLI_PATH } = env;
+const { AUTIFY_CLI_PATH, AUTIFY_POLLY_RECORD } = env;
 
-const getPollyMode = (): PollyMode => {
-  return AUTIFY_POLLY_RECORD ? "record" : "replay";
-};
+const getPollyMode = (): PollyMode =>
+  AUTIFY_POLLY_RECORD ? "record" : "replay";
 
 const getAutifyCli = (): string => {
   let autify = AUTIFY_CLI_PATH ?? "autify";
@@ -81,8 +81,18 @@ const createPolly = async (args: string[]) => {
     encodeURIComponent(args.join(" "))
   );
   const polly = new Polly("polly-proxy", {
-    mode,
     adapters: ["node-http"],
+    flushRequestsOnStop: true,
+    matchRequestsBy: {
+      body(body, request) {
+        // Binary body is not recorded. Ignore for matching.
+        if (typeof body !== "string") return "";
+        if (ignoreBody(request)) return "";
+        return body;
+      },
+      headers: false,
+    },
+    mode,
     persister: "fs",
     persisterOptions: {
       fs: {
@@ -90,16 +100,6 @@ const createPolly = async (args: string[]) => {
       },
     },
     recordIfMissing: false,
-    flushRequestsOnStop: true,
-    matchRequestsBy: {
-      headers: false,
-      body: (body, request) => {
-        // Binary body is not recorded. Ignore for matching.
-        if (typeof body !== "string") return "";
-        if (ignoreBody(request)) return "";
-        return body;
-      },
-    },
   });
   // Remove headers because access token is included and also we don't care any other headers.
   polly.server.any().on("beforePersist", (_req, recording) => {
@@ -112,13 +112,13 @@ const createPolly = async (args: string[]) => {
 
 const startProxy = (target: string) => {
   const app = express();
-  app.use("", createProxyMiddleware({ target, changeOrigin: true }));
+  app.use("", createProxyMiddleware({ changeOrigin: true, target }));
   const server = app.listen();
   const { port } = server.address() as AddressInfo;
-  return { server, port };
+  return { port, server };
 };
 
-type ProcStatus = [number | null, NodeJS.Signals | null];
+type ProcStatus = [null | number, NodeJS.Signals | null];
 
 const autifyWithProxy = async (originalArgs: string[]) => {
   const args = normalizeCommand(originalArgs);
@@ -130,8 +130,8 @@ const autifyWithProxy = async (originalArgs: string[]) => {
     env: {
       AUTIFY_CONNECT_CLIENT_MODE: "fake",
       ...env,
-      AUTIFY_WEB_BASE_PATH: `http://127.0.0.1:${webProxy.port}/api/v1/`,
       AUTIFY_MOBILE_BASE_PATH: `http://127.0.0.1:${mobileProxy.port}/api/v1/`,
+      AUTIFY_WEB_BASE_PATH: `http://127.0.0.1:${webProxy.port}/api/v1/`,
     },
     stdio: "inherit",
   });

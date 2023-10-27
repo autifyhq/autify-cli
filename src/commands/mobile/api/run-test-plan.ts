@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 
 export default class MobileApiRunTestPlan extends Command {
@@ -7,12 +8,12 @@ export default class MobileApiRunTestPlan extends Command {
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
   static flags = {
-    "test-plan-id": Flags.string({
-      description: "The ID of the test plan to run.",
-      required: true,
-    }),
     "run-test-plan-request": Flags.string({
       description: "The build_id to execute the test plan.",
+      required: true,
+    }),
+    "test-plan-id": Flags.string({
+      description: "The ID of the test plan to run.",
       required: true,
     }),
   };

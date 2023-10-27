@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+
 import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiUpdateUrlReplacement extends Command {
@@ -12,13 +13,13 @@ export default class WebApiUpdateUrlReplacement extends Command {
         "For example, 15 for the following URL: https://app.autify.com/projects/1/test_plans/15",
       required: true,
     }),
-    "url-replacement-id": Flags.integer({
-      description: "url_replacement id",
-      required: true,
-    }),
     "update-url-replacement-request": Flags.string({
       description:
         "The url to replace. Either pattern_url or replacement_url is required.",
+      required: true,
+    }),
+    "url-replacement-id": Flags.integer({
+      description: "url_replacement id",
       required: true,
     }),
   };

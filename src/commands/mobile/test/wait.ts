@@ -1,5 +1,6 @@
-import { Command, Args, Flags } from "@oclif/core";
+import { Args, Command, Flags } from "@oclif/core";
 import emoji from "node-emoji";
+
 import { getWaitIntervalSecond } from "../../../autify/getWaitIntervalSecond";
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 import { getMobileTestResultUrl } from "../../../autify/mobile/getTestResultUrl";
@@ -7,6 +8,14 @@ import { parseTestResultUrl } from "../../../autify/mobile/parseTestResultUrl";
 import { waitTestResult } from "../../../autify/mobile/waitTestResult";
 
 export default class MobileTestWait extends Command {
+  static args = {
+    "test-result-url": Args.string({
+      description:
+        "Test result URL e.g. https://mobile-app.autify.com/projects/<ID>/results/<ID>",
+      required: true,
+    }),
+  };
+
   static description = "Wait a test result until it finishes.";
 
   static examples = [
@@ -16,22 +25,14 @@ export default class MobileTestWait extends Command {
   static flags = {
     timeout: Flags.integer({
       char: "t",
+      default: 300,
       description:
         "Timeout seconds when waiting for the finish of the test execution.",
-      default: 300,
     }),
     verbose: Flags.boolean({
       char: "v",
-      description: "Verbose output",
       default: false,
-    }),
-  };
-
-  static args = {
-    "test-result-url": Args.string({
-      description:
-        "Test result URL e.g. https://mobile-app.autify.com/projects/<ID>/results/<ID>",
-      required: true,
+      description: "Verbose output",
     }),
   };
 
@@ -40,7 +41,7 @@ export default class MobileTestWait extends Command {
     const { configDir, userAgent } = this.config;
     const waitIntervalSecond = getWaitIntervalSecond(configDir);
     const client = getMobileClient(configDir, userAgent);
-    const { workspaceId, resultId } = parseTestResultUrl(
+    const { resultId, workspaceId } = parseTestResultUrl(
       args["test-result-url"]
     );
     const testResultUrl = getMobileTestResultUrl(
@@ -51,14 +52,14 @@ export default class MobileTestWait extends Command {
     this.log(
       `${emoji.get("clock1")} Waiting for the test result: ${testResultUrl}`
     );
-    const { isPassed, data } = await waitTestResult(
+    const { data, isPassed } = await waitTestResult(
       client,
       workspaceId,
       resultId,
       {
+        intervalSecond: waitIntervalSecond,
         timeoutSecond: flags.timeout,
         verbose: flags.verbose,
-        intervalSecond: waitIntervalSecond,
       }
     );
     if (isPassed) {

@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { WEB_BASE_PATH } from "@autifyhq/autify-sdk";
+
 import { get } from "../../config";
 
 export const getWebTestResultUrl = (

@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+
 import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiListUrlReplacements extends Command {

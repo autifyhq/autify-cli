@@ -12,6 +12,6 @@ const testPathPattern =
   args.length === 0 ? "" : `--testPathPattern '(${args.join("|")})'`;
 
 execSync(`npm run ${command} -- ${testPathPattern}`, {
-  stdio: "inherit",
   cwd: rootDir,
+  stdio: "inherit",
 });

@@ -3,16 +3,16 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 
 type Variable =
-  | "AUTIFY_WEB_ACCESS_TOKEN"
-  | "AUTIFY_WEB_BASE_PATH"
-  | "AUTIFY_MOBILE_ACCESS_TOKEN"
-  | "AUTIFY_MOBILE_BASE_PATH"
-  | "AUTIFY_CONNECT_ACCESS_POINT_NAME"
+  | "AUTIFY_CLI_USER_AGENT_SUFFIX"
   | "AUTIFY_CONNECT_ACCESS_POINT_KEY"
+  | "AUTIFY_CONNECT_ACCESS_POINT_NAME"
   | "AUTIFY_CONNECT_CLIENT_MODE"
   | "AUTIFY_CONNECT_CLIENT_SOURCE_URL"
-  | "AUTIFY_CLI_USER_AGENT_SUFFIX"
-  | "AUTIFY_TEST_WAIT_INTERVAL_SECOND";
+  | "AUTIFY_MOBILE_ACCESS_TOKEN"
+  | "AUTIFY_MOBILE_BASE_PATH"
+  | "AUTIFY_TEST_WAIT_INTERVAL_SECOND"
+  | "AUTIFY_WEB_ACCESS_TOKEN"
+  | "AUTIFY_WEB_BASE_PATH";
 
 const envFile = (dir: string) => path.resolve(dir, "config.env");
 const read = (dir: string) =>
@@ -41,9 +41,8 @@ export const set = (
   write(configDir, config);
 };
 
-export const get = (configDir: string, key: Variable): string | undefined => {
-  return key in process.env ? process.env[key] : read(configDir)[key];
-};
+export const get = (configDir: string, key: Variable): string | undefined =>
+  key in process.env ? process.env[key] : read(configDir)[key];
 
 export const getOrThrow = (configDir: string, key: Variable): string => {
   const value = get(configDir, key);

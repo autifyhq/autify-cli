@@ -1,6 +1,7 @@
 /* eslint-disable unicorn/filename-case */
-import { CLIError } from "@oclif/errors";
 import { WebClient } from "@autifyhq/autify-sdk";
+import { CLIError } from "@oclif/errors";
+
 import { TestPlan, TestScenario } from "./parseAutifyTestUrl";
 
 type CapabilityOption = Parameters<
@@ -10,9 +11,8 @@ type CreateUrlReplacementRequest = Parameters<
   WebClient["createUrlReplacement"]
 >[1];
 
-const isCapabilitySpecified = (option: CapabilityOption) => {
-  return Object.values(option).some(Boolean);
-};
+const isCapabilitySpecified = (option: CapabilityOption) =>
+  Object.values(option).some(Boolean);
 
 const getCapability = async (
   client: WebClient,
@@ -49,37 +49,36 @@ const getCapability = async (
 
 /* eslint-disable camelcase */
 const capabilityToString = ({
-  os,
-  os_version,
   browser,
   browser_version,
   device,
   device_type,
-}: CapabilityOption) => {
-  return [os, os_version, browser, browser_version, device, device_type]
+  os,
+  os_version,
+}: CapabilityOption) =>
+  [os, os_version, browser, browser_version, device, device_type]
     .filter(Boolean)
     .join(" ");
-};
 /* eslint-enable camelcase */
 
 type RunTestProps = Readonly<{
-  option: CapabilityOption;
-  name?: string;
-  urlReplacements: CreateUrlReplacementRequest[];
   autifyConnectAccessPoint?: string;
+  name?: string;
+  option: CapabilityOption;
+  urlReplacements: CreateUrlReplacementRequest[];
 }>;
 
 export const runTest = async (
   client: WebClient,
-  parsedTest: TestScenario | TestPlan,
-  { option, name, urlReplacements, autifyConnectAccessPoint }: RunTestProps
-): Promise<{ resultId: number; capability: string }> => {
-  const { workspaceId, testScenarioId, testPlanId } = parsedTest;
+  parsedTest: TestPlan | TestScenario,
+  { autifyConnectAccessPoint, name, option, urlReplacements }: RunTestProps
+): Promise<{ capability: string; resultId: number }> => {
+  const { testPlanId, testScenarioId, workspaceId } = parsedTest;
   if (testScenarioId) {
     const capability = await getCapability(client, workspaceId, option);
     const res = await client.executeScenarios(workspaceId, {
-      name,
       capabilities: [capability],
+      name,
       scenarios: [{ id: testScenarioId }],
       // eslint-disable-next-line camelcase
       url_replacements: urlReplacements,
@@ -91,8 +90,8 @@ export const runTest = async (
       }),
     });
     return {
-      resultId: res.data.result_id,
       capability: capabilityToString(capability),
+      resultId: res.data.result_id,
     };
   }
 
@@ -124,8 +123,8 @@ export const runTest = async (
     }
 
     return {
-      resultId: res.data.data.id,
       capability: "configured by test plan",
+      resultId: res.data.data.id,
     };
   }
 

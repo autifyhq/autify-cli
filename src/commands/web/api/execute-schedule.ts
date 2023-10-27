@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+
 import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiExecuteSchedule extends Command {
@@ -8,14 +9,14 @@ export default class WebApiExecuteSchedule extends Command {
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
   static flags = {
+    "execute-schedule-request": Flags.string({
+      description: "The options to execute a test plan.",
+      required: false,
+    }),
     "schedule-id": Flags.integer({
       description:
         "For example, 3 for the following URL: https://app.autify.com/projects/1/test_plans/3",
       required: true,
-    }),
-    "execute-schedule-request": Flags.string({
-      description: "The options to execute a test plan.",
-      required: false,
     }),
   };
 

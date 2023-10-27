@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+
 import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiListAccessPoints extends Command {
@@ -7,14 +8,14 @@ export default class WebApiListAccessPoints extends Command {
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
   static flags = {
+    page: Flags.integer({
+      description: "The number of page returns.",
+      required: false,
+    }),
     "project-id": Flags.integer({
       description:
         "For example, 1 for the following URL: https://app.autify.com/projects/1/scenarios",
       required: true,
-    }),
-    page: Flags.integer({
-      description: "The number of page returns.",
-      required: false,
     }),
   };
 

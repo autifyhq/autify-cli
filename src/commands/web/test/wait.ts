@@ -1,12 +1,21 @@
-import { Command, Args, Flags } from "@oclif/core";
+import { Args, Command, Flags } from "@oclif/core";
 import emoji from "node-emoji";
+
+import { getWaitIntervalSecond } from "../../../autify/getWaitIntervalSecond";
+import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
+import { getWebClient } from "../../../autify/web/getWebClient";
 import { parseTestResultUrl } from "../../../autify/web/parseTestResultUrl";
 import { waitTestResult } from "../../../autify/web/waitTestResult";
-import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
-import { getWaitIntervalSecond } from "../../../autify/getWaitIntervalSecond";
-import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebTestWait extends Command {
+  static args = {
+    "test-result-url": Args.string({
+      description:
+        "Test result URL e.g. https://app.autify.com/projects/<ID>/results/<ID>",
+      required: true,
+    }),
+  };
+
   static description = "Wait a test result until it finishes.";
 
   static examples = [
@@ -16,22 +25,14 @@ export default class WebTestWait extends Command {
   static flags = {
     timeout: Flags.integer({
       char: "t",
+      default: 300,
       description:
         "Timeout seconds when waiting for the finish of the test execution.",
-      default: 300,
     }),
     verbose: Flags.boolean({
       char: "v",
-      description: "Verbose output",
       default: false,
-    }),
-  };
-
-  static args = {
-    "test-result-url": Args.string({
-      description:
-        "Test result URL e.g. https://app.autify.com/projects/<ID>/results/<ID>",
-      required: true,
+      description: "Verbose output",
     }),
   };
 
@@ -40,21 +41,21 @@ export default class WebTestWait extends Command {
     const { configDir, userAgent } = this.config;
     const waitIntervalSecond = getWaitIntervalSecond(configDir);
     const client = getWebClient(configDir, userAgent);
-    const { workspaceId, resultId } = parseTestResultUrl(
+    const { resultId, workspaceId } = parseTestResultUrl(
       args["test-result-url"]
     );
     const testResultUrl = getWebTestResultUrl(configDir, workspaceId, resultId);
     this.log(
       `${emoji.get("clock1")} Waiting for the test result: ${testResultUrl}`
     );
-    const { isPassed, data } = await waitTestResult(
+    const { data, isPassed } = await waitTestResult(
       client,
       workspaceId,
       resultId,
       {
+        intervalSecond: waitIntervalSecond,
         timeoutSecond: flags.timeout,
         verbose: flags.verbose,
-        intervalSecond: waitIntervalSecond,
       }
     );
     if (isPassed) {

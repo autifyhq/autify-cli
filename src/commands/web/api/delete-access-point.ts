@@ -1,4 +1,5 @@
 import { Command, Flags } from "@oclif/core";
+
 import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiDeleteAccessPoint extends Command {
@@ -7,13 +8,13 @@ export default class WebApiDeleteAccessPoint extends Command {
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
   static flags = {
+    "delete-access-point-request": Flags.string({
+      description: "The name of the access point to be deleted",
+      required: true,
+    }),
     "project-id": Flags.integer({
       description:
         "For example, 1 for the following URL: https://app.autify.com/projects/1/scenarios",
-      required: true,
-    }),
-    "delete-access-point-request": Flags.string({
-      description: "The name of the access point to be deleted",
       required: true,
     }),
   };

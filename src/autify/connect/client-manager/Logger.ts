@@ -2,17 +2,17 @@
 import { ChildProcessWithoutNullStreams } from "node:child_process";
 import { createInterface } from "node:readline";
 import {
-  createLogger,
-  format,
   Logger,
   LoggerOptions,
+  createLogger,
+  format,
   transports,
 } from "winston";
 
 type ClientLog = Readonly<{
   level: string;
-  ts: string;
   msg: string;
+  ts: string;
 }>;
 
 const logFormatConsole = (prefix: string) =>
@@ -20,7 +20,7 @@ const logFormatConsole = (prefix: string) =>
     format.colorize(),
     format.timestamp(),
     format.printf(
-      ({ timestamp, level, message }) =>
+      ({ level, message, timestamp }) =>
         `${prefix.padEnd(25)} ${timestamp}\t${level}\t${message}`
     )
   );
@@ -29,17 +29,16 @@ const logFormatFile = () =>
   format.combine(
     format.timestamp(),
     format.printf(
-      ({ timestamp, level, message }) => `${timestamp}\t${level}\t${message}`
+      ({ level, message, timestamp }) => `${timestamp}\t${level}\t${message}`
     )
   );
 
-export const createManagerLogger = (options: LoggerOptions): Logger => {
-  return createLogger(options).add(
+export const createManagerLogger = (options: LoggerOptions): Logger =>
+  createLogger(options).add(
     new transports.Console({
       format: logFormatConsole("[Autify Connect Manager]"),
     })
   );
-};
 
 export const createClientLogger = (
   options: LoggerOptions,
@@ -49,8 +48,8 @@ export const createClientLogger = (
   filename
     ? logger.add(
         new transports.File({
-          format: logFormatFile(),
           filename,
+          format: logFormatFile(),
         })
       )
     : logger.add(
@@ -67,8 +66,8 @@ export const setupClientOutputLogger = (
 ): void => {
   // stdout
   createInterface({
-    input: childProcess.stdout,
     crlfDelay: Number.POSITIVE_INFINITY,
+    input: childProcess.stdout,
   }).on("line", (line) => {
     try {
       callback(JSON.parse(line) as ClientLog);
