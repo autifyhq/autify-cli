@@ -17,6 +17,10 @@ export default class WebApiDescribeResult extends Command {
         "For example, 4 for the following URL: https://app.autify.com/projects/1/results/4",
       required: true,
     }),
+    "get-details": Flags.string({
+      description: "The flag to get details of the test case result.",
+      required: false,
+    }),
   };
 
   public async run(): Promise<void> {
@@ -25,7 +29,8 @@ export default class WebApiDescribeResult extends Command {
     const client = getWebClient(configDir, userAgent);
     const res = await client.describeResult(
       flags["project-id"],
-      flags["result-id"]
+      flags["result-id"],
+      flags["get-details"] ? JSON.parse(flags["get-details"]) : undefined
     );
     console.log(JSON.stringify(res.data, null, 2));
   }
