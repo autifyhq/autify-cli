@@ -60,7 +60,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^8.52.0",
     "eslint-config-oclif": "^5.0.0",
-    "eslint-config-oclif-typescript": "^1.0.3",
+    "eslint-config-oclif-typescript": "^3.0.21",
     "eslint-config-prettier": "^9.0.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.0.2",
