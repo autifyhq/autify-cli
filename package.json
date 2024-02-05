@@ -62,7 +62,7 @@
     "eslint-config-oclif": "^5.0.0",
     "eslint-config-oclif-typescript": "^3.0.44",
     "eslint-config-prettier": "^9.1.0",
-    "husky": "^8.0.3",
+    "husky": "^9.0.10",
     "lint-staged": "^15.2.1",
     "oclif": "^4.4.4",
     "patch-package": "^8.0.0",
