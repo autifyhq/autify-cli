@@ -12,7 +12,7 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: 20.11.0
-        cache: npm
+        # cache: npm
         registry-url: "https://registry.npmjs.org"
     - run: npm install
       shell: bash
