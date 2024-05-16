@@ -13,7 +13,7 @@ runs:
       with:
         node-version: 20.11.0
         # cache: npm
-        registry-url: "https://registry.npmjs.org"
+        # registry-url: "https://registry.npmjs.org"
     - run: npm install
       shell: bash
     - uses: aws-actions/configure-aws-credentials@v4
