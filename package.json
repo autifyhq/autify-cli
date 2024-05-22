@@ -65,7 +65,6 @@
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "oclif": "^4.8.5",
-    "patch-package": "^8.0.0",
     "prettier": "^3.2.5",
     "shx": "^0.3.4",
     "ts-morph": "^21.0.1",
@@ -134,9 +133,6 @@
     }
   },
   "scripts": {
-    "postinstall": "per-env || true",
-    "postinstall:development": "patch-package",
-    "postinstall:production": "true",
     "generate:api-commands": "ts-node scripts/generate-api-commands.ts",
     "generate": "npm run generate:api-commands web && npm run generate:api-commands mobile && npm run format-lint-api-commands && npm run build",
     "build": "shx rm -rf dist && tsc -b",
