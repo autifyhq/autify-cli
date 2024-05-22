@@ -13,6 +13,11 @@ runs:
       with:
         cache: npm
         registry-url: "https://registry.npmjs.org"
+        node-version: "18.20.1"
+    # https://github.com/npm/cli/issues/7308
+    - if: runner.os == 'Windows'
+      run: npm install -g npm@9.9.3
+      shell: bash
     - run: npm install
       shell: bash
     - uses: aws-actions/configure-aws-credentials@v4
