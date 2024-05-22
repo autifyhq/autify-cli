@@ -12,6 +12,11 @@ jobs:
     with:
       branch: ${{ github.base_ref }}
 
+  lint:
+    uses: ./.github/workflows/lint.yml
+    with:
+      branch: ${{ github.base_ref }}
+
   upload:
     needs: [validate]
     uses: ./.github/workflows/upload.yml
