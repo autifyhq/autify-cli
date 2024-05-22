@@ -1,0 +1,20 @@
+name: Lint
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        type: string
+        required: true
+
+jobs:
+  branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/setup
+      - run: npx prettier -c .
+      - run: npm run lint
