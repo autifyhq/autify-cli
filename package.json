@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@autifyhq/autify-cli-integration-test": "*",
-    "@oclif/test": "^3.2.15",
+    "@oclif/test": "^4.0.4",
     "@types/archiver": "^6.0.2",
     "@types/chai": "^4.3.16",
     "@types/inquirer": "^8.2.10",
