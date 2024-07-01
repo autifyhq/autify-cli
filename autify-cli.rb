@@ -3,7 +3,7 @@
 # Edit https://github.com/autifyhq/autify-cli/blob/main/autify-cli.rb instead.
 
 class AutifyCli < Formula
-  desc "Autify Command Line Interface (CLI)"
+  desc "Autify Command-Line Interface (CLI)"
   homepage "https://github.com/autifyhq/autify-cli"
   url "https://github.com/autifyhq/autify-cli", using: :git, revision: "<REVISION>"
   version "<VERSION>"
@@ -25,7 +25,7 @@ class AutifyCli < Formula
 
   def taball_url
     package = JSON.parse(File.read("./package.json"), symbolize_names: true)
-    raise "Version mismatch: #{package[:version]}" unless package[:version] == version
+    raise "Version mismatch: #{package[:version]}" if package[:version] != version
 
     bucket = package.dig(:oclif, :update, :s3, :bucket)
     folder = package.dig(:oclif, :update, :s3, :folder)
