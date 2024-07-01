@@ -123,6 +123,7 @@
     },
     "update": {
       "s3": {
+        "host": "https://autify-cli-assets.s3.us-west-2.amazonaws.com",
         "bucket": "autify-cli-assets",
         "folder": "autify-cli"
       }
