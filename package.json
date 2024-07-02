@@ -169,7 +169,7 @@
     ]
   },
   "engines": {
-    "node": ">=22.3.0"
+    "node": ">=22.0.0"
   },
   "bugs": "https://github.com/autifyhq/autify-cli/issues",
   "keywords": [
