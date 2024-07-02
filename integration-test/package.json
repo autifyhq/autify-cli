@@ -51,7 +51,7 @@
     "test:record": "AUTIFY_POLLY_RECORD=1 jest --testMatch **/dist/test/**/*.test.js --updateSnapshot"
   },
   "engines": {
-    "node": ">=20.15.0"
+    "node": ">=22.4.0"
   },
   "bugs": {
     "url": "https://github.com/autifyhq/autify-cli/issues"

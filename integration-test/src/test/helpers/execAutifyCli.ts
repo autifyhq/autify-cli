@@ -27,7 +27,7 @@ const normalize = (stdout: string) =>
 export const execAutifyCli = async (
   args: string
 ): Promise<{ stdout: string; stderr: string }> => {
-  const command = `autify-with-proxy ${args}`;
+  const command = `autify-with-proxy ${process.platform === "win32" ? args.replaceAll(/"([^"]+)"/g, '""""$1""') : args}`;
   const { stdout, stderr } = await promisify(exec)(command, { env });
   return {
     stdout: normalize(stripAnsi(stdout)),

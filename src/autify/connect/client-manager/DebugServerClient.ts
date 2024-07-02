@@ -1,6 +1,5 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
-import fetch from "node-fetch";
 import { ClientEvents } from "./ClientManager";
 import AbortController from "abort-controller";
 

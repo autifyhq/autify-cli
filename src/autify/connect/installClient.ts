@@ -1,7 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { CLIError } from "@oclif/errors";
 import { arch, env, platform } from "node:process";
-import fetch from "node-fetch";
 import {
   createReadStream,
   createWriteStream,
@@ -83,7 +82,10 @@ const download = async (workspaceDir: string, url: URL) => {
   if (!response.ok)
     throw new CLIError(`Failed to fetch ${url}: ${response.status}`);
   const streamPipeline = promisify(pipeline);
-  await streamPipeline(response.body, createWriteStream(downloadPath));
+  if (response.body) {
+    await streamPipeline(response.body, createWriteStream(downloadPath));
+  }
+
   return downloadPath;
 };
 
