@@ -78,7 +78,7 @@ const createPolly = async (args: string[]) => {
     "..",
     "..",
     "__recordings__",
-    encodeURIComponent(args.join(" "))
+    encodeURIComponent(args.map((arg) => arg.replaceAll(/"+/g, "")).join(" "))
   );
   const polly = new Polly("polly-proxy", {
     mode,
@@ -133,6 +133,7 @@ const autifyWithProxy = async (originalArgs: string[]) => {
       AUTIFY_WEB_BASE_PATH: `http://127.0.0.1:${webProxy.port}/api/v1/`,
       AUTIFY_MOBILE_BASE_PATH: `http://127.0.0.1:${mobileProxy.port}/api/v1/`,
     },
+    shell: process.platform === "win32",
     stdio: "inherit",
   });
   return new Promise<ProcStatus>((resolve, reject) => {
