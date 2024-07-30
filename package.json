@@ -45,7 +45,7 @@
     "@autifyhq/autify-cli-integration-test": "*",
     "@types/archiver": "^6.0.2",
     "@types/chai": "^4.3.16",
-    "@types/inquirer": "^8.2.10",
+    "@types/inquirer": "^9.0.7",
     "@types/listr": "^0.14.9",
     "@types/node": "^20.14.13",
     "@types/node-emoji": "^1.8.2",
