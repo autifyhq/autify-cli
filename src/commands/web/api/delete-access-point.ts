@@ -13,7 +13,8 @@ export default class WebApiDeleteAccessPoint extends Command {
       required: true,
     }),
     "delete-access-point-request": Flags.string({
-      description: "The name of the access point to be deleted",
+      description:
+        'A JSON object with the name of the access point to be deleted e.g. {"name":"string"}',
       required: true,
     }),
   };

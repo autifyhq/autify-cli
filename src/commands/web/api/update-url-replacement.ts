@@ -18,7 +18,7 @@ export default class WebApiUpdateUrlReplacement extends Command {
     }),
     "update-url-replacement-request": Flags.string({
       description:
-        "The url to replace. Either pattern_url or replacement_url is required.",
+        'A JSON object with the url to replace. Either pattern_url or replacement_url is required. e.g. {"pattern_url":"string","replacement_url":"string"}',
       required: true,
     }),
   };

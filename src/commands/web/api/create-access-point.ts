@@ -14,7 +14,8 @@ export default class WebApiCreateAccessPoint extends Command {
       required: true,
     }),
     "create-access-point-request": Flags.string({
-      description: "The name of the access point to be created",
+      description:
+        'A JSON object with the name of the access point to be created e.g. {"name":"string"}',
       required: true,
     }),
   };

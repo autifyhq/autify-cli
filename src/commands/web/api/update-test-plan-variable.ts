@@ -18,7 +18,7 @@ export default class WebApiUpdateTestPlanVariable extends Command {
     }),
     "update-test-plan-variable-request": Flags.string({
       description:
-        "The variable's new key and/or default_value's value to register",
+        'A JSON object with the variable\'s new key and/or default_value\'s value to register e.g. {"key":"string","default_value":"string"}',
       required: true,
     }),
   };

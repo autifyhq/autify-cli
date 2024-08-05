@@ -13,7 +13,8 @@ export default class WebApiCreateUrlReplacement extends Command {
       required: true,
     }),
     "create-url-replacement-request": Flags.string({
-      description: "The url to replace",
+      description:
+        'A JSON object with the url to replace e.g. {"pattern_url":"string","replacement_url":"string"}',
       required: true,
     }),
   };
