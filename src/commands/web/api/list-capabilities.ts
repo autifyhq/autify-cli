@@ -12,13 +12,24 @@ export default class WebApiListCapabilities extends Command {
         "For example, 1 for the following URL: https://app.autify.com/projects/1/capabilities",
       required: true,
     }),
-    os: Flags.string({ description: "os name to filter", required: false }),
+    os: Flags.string({
+      description: "os name to filter (deprecated)",
+      required: false,
+    }),
+    "os-type": Flags.string({
+      description: "Type of the os to filter",
+      required: false,
+    }),
     browser: Flags.string({
-      description: "browser name to filter",
+      description: "browser name to filter (deprecated)",
+      required: false,
+    }),
+    "browser-type": Flags.string({
+      description: "Type of the browser to filter",
       required: false,
     }),
     "device-type": Flags.string({
-      description: "device_type name to filter",
+      description: "device_type name to filter (mobile is deprecated)",
       required: false,
     }),
   };
@@ -30,8 +41,10 @@ export default class WebApiListCapabilities extends Command {
     const res = await client.listCapabilities(
       flags["project-id"],
       flags.os,
+      flags["os-type"] ? JSON.parse(flags["os-type"]) : undefined,
       flags.browser,
-      flags["device-type"]
+      flags["browser-type"] ? JSON.parse(flags["browser-type"]) : undefined,
+      flags["device-type"] ? JSON.parse(flags["device-type"]) : undefined
     );
     console.log(JSON.stringify(res.data, null, 2));
   }

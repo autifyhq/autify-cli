@@ -3,7 +3,7 @@ import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiGetCreditUsage extends Command {
   static description =
-    "Get the number of credits used in the project\\ \\ Notes:\\ This endpoint works only for organizations on credit-based plans. It always returns 0 for `credits_consumed` and `credit_consumption_event_count` if your organization is on a run-based plan.";
+    "Get the number of credits used in the project  Notes: This endpoint works only for organizations on credit-based plans. It always returns 0 for `credits_consumed` and `credit_consumption_event_count` if your organization is on a run-based plan.";
 
   static examples = ["<%= config.bin %> <%= command.id %>"];
 
@@ -15,12 +15,12 @@ export default class WebApiGetCreditUsage extends Command {
     }),
     "date-from": Flags.string({
       description:
-        "The date to start counting used credits from.\\ If not specified, the date will be set to 1 week ago.\\ Up to 90 days in advance can be specified. If the specified date is more than 90 days in the past, the date will be set to 90 days ago.\\ Date must follow the format YYYY-MM-DD (example: &quot;2023-09-21&quot;).",
+        'The date to start counting used credits from. If not specified, the date will be set to 1 week ago. Up to 90 days in advance can be specified. If the specified date is more than 90 days in the past, the date will be set to 90 days ago. Date must follow the format YYYY-MM-DD (example: "2023-09-21").',
       required: false,
     }),
     "date-to": Flags.string({
       description:
-        "The date to end counting used credits from.\\ If not specified, the date will be set to today.\\ Date must follow the format YYYY-MM-DD (example: &quot;2023-09-28&quot;).",
+        'The date to end counting used credits from. If not specified, the date will be set to today. Date must follow the format YYYY-MM-DD (example: "2023-09-28").',
       required: false,
     }),
     "scenario-id": Flags.integer({
