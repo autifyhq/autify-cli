@@ -12,7 +12,8 @@ export default class MobileApiRunTestPlan extends Command {
       required: true,
     }),
     "run-test-plan-request": Flags.string({
-      description: "The build_id to execute the test plan.",
+      description:
+        'A JSON object with the build_id to execute the test plan. e.g. {"build_id":"string"}',
       required: true,
     }),
   };

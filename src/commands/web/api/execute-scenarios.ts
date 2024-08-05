@@ -14,7 +14,8 @@ export default class WebApiExecuteScenarios extends Command {
       required: true,
     }),
     "execute-scenarios-request": Flags.string({
-      description: "The scenarios and settings to execute",
+      description:
+        'A JSON object with the scenarios and settings to execute e.g. {"name":"string","execution_type":"parallel","capabilities":[{"os":"string","os_type":"macos","os_version":"string","device":"string","browser":"string","browser_type":"chrome","browser_version":"string"}],"url_replacements":[{"pattern_url":"string","replacement_url":"string"}],"scenarios":[{"id":0}],"autify_connect":{"name":"string"}}',
       required: true,
     }),
   };

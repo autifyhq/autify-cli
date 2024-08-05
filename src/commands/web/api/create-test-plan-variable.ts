@@ -14,7 +14,7 @@ export default class WebApiCreateTestPlanVariable extends Command {
     }),
     "create-test-plan-variable-request": Flags.string({
       description:
-        "The new variable key and default value to use in the test plan",
+        'A JSON object with the new variable key and default value to use in the test plan e.g. {"key":"string","default_value":"string"}',
       required: true,
     }),
   };

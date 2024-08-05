@@ -14,7 +14,8 @@ export default class WebApiExecuteSchedule extends Command {
       required: true,
     }),
     "execute-schedule-request": Flags.string({
-      description: "The options to execute a test plan.",
+      description:
+        'A JSON object with the options to execute a test plan. e.g. {"autify_connect":{"name":"string"}}',
       required: false,
     }),
   };
