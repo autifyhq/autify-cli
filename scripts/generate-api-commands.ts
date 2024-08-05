@@ -1,17 +1,13 @@
-import { MethodDeclaration, Project, SourceFile } from "ts-morph";
+import { MethodDeclaration, Project, SourceFile, Type } from "ts-morph";
 
 const project = new Project({});
 
-const getFlagType = (parameterType: string) => {
-  switch (parameterType) {
-    case "number": {
-      return "Flags.integer";
-    }
-
-    default: {
-      return "Flags.string";
-    }
+const getFlagType = (parameterType: Type) => {
+  if (parameterType.isNumber()) {
+    return "Flags.integer";
   }
+
+  return "Flags.string";
 };
 
 const pascallize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -20,6 +16,41 @@ const kebabize = (str: string) =>
     /[A-Z]+(?![a-z])|[A-Z]/g,
     (c, ofs) => (ofs ? "-" : "") + c.toLowerCase()
   );
+const decapitalize = (str: string) =>
+  str.charAt(0).toLowerCase() + str.slice(1);
+
+const toExample = (type: Type): any => {
+  if (type.isInterface()) {
+    const result: { [k: string]: any } = {};
+
+    for (const p of type.getProperties()) {
+      const name = p.getName();
+      const t = p.getValueDeclarationOrThrow().getType();
+
+      result[name] = toExample(t);
+    }
+
+    return result;
+  }
+
+  if (type.isArray()) {
+    return [toExample(type.getArrayElementTypeOrThrow())];
+  }
+
+  if (type.isUnion()) {
+    return type.getUnionTypes()[0].getLiteralValue();
+  }
+
+  if (type.isNumber()) {
+    return 0;
+  }
+
+  if (type.isString()) {
+    return "string";
+  }
+
+  throw new Error("Unknown type");
+};
 
 const writeCommandSource = (service: string, apiMethod: MethodDeclaration) => {
   const Service = pascallize(service);
@@ -32,21 +63,28 @@ const writeCommandSource = (service: string, apiMethod: MethodDeclaration) => {
   const args: string[] = [];
   for (const [index, parameter] of parameters.entries()) {
     const name = kebabize(parameter.getName());
-    const parameterType = parameter.getType().getText();
+    const parameterType = parameter.getType();
     const required = !parameter.isOptional();
-    const flagDescription = jsDoc
+    let flagDescription = jsDoc
       .getTags()
       .filter((t) => t.getTagName() === "param")
-      [index].getCommentText();
+      [index].getCommentText()!;
+
+    if (parameterType.isInterface()) {
+      const example = toExample(parameter.getType());
+
+      flagDescription = `A JSON object with ${decapitalize(flagDescription)} e.g. ${JSON.stringify(example)}`;
+    }
+
     const flagType = getFlagType(parameterType);
     flags.push(
       `    '${name}': ${flagType}({description: ${JSON.stringify(flagDescription)}, required: ${required}}),`
     );
     const arg = `flags['${name}']`;
     if (
-      parameterType !== "number" &&
-      parameterType !== "string" &&
-      parameterType !== "any"
+      !parameterType.isNumber() &&
+      !parameterType.isString() &&
+      !parameterType.isAny()
     ) {
       if (required) args.push(`JSON.parse(${arg})`);
       else args.push(`${arg} ? JSON.parse(${arg}) : undefined`);
