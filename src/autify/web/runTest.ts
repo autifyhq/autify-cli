@@ -3,9 +3,9 @@ import { CLIError } from "@oclif/errors";
 import { WebClient } from "@autifyhq/autify-sdk";
 import { TestPlan, TestScenario } from "./parseAutifyTestUrl";
 
-type CapabilityOption = Parameters<
-  WebClient["executeScenarios"]
->[1]["capabilities"][number];
+type CapabilityOption = Awaited<
+  ReturnType<WebClient["listCapabilities"]>
+>["data"][number];
 type CreateUrlReplacementRequest = Parameters<
   WebClient["createUrlReplacement"]
 >[1];

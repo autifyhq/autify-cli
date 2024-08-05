@@ -126,7 +126,7 @@ export default class WebTestRun extends Command {
       browser: flags.browser,
       device: flags.device,
       // eslint-disable-next-line camelcase
-      device_type: flags["device-type"],
+      device_type: flags["device-type"] as any,
     };
     const urlReplacements = this.parseUrlReplacements(
       flags["url-replacements"] ?? []
