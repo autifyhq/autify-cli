@@ -40,7 +40,7 @@ const writeCommandSource = (service: string, apiMethod: MethodDeclaration) => {
       [index].getCommentText();
     const flagType = getFlagType(parameterType);
     flags.push(
-      `    '${name}': ${flagType}({description: '${flagDescription}', required: ${required}}),`
+      `    '${name}': ${flagType}({description: ${JSON.stringify(flagDescription)}, required: ${required}}),`
     );
     const arg = `flags['${name}']`;
     if (
