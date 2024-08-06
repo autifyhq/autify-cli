@@ -78,7 +78,7 @@ EXAMPLES
   $ autify connect access-point create --name NAME --web-workspace-id ID
 ```
 
-_See code: [src/commands/connect/access-point/create.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/connect/access-point/create.ts)_
+_See code: [src/commands/connect/access-point/create.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/connect/access-point/create.ts)_
 
 ## `autify connect access-point set`
 
@@ -104,7 +104,7 @@ EXAMPLES
     $ autify connect access-point set --name=NAME < key.txt
 ```
 
-_See code: [src/commands/connect/access-point/set.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/connect/access-point/set.ts)_
+_See code: [src/commands/connect/access-point/set.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/connect/access-point/set.ts)_
 
 ## `autify connect client install [VERSION]`
 
@@ -134,7 +134,7 @@ EXAMPLES
     $ autify connect client install stable
 ```
 
-_See code: [src/commands/connect/client/install.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/connect/client/install.ts)_
+_See code: [src/commands/connect/client/install.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/connect/client/install.ts)_
 
 ## `autify connect client start`
 
@@ -168,7 +168,7 @@ EXAMPLES
     $ autify connect client start --web-workspace-id 000
 ```
 
-_See code: [src/commands/connect/client/start.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/connect/client/start.ts)_
+_See code: [src/commands/connect/client/start.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/connect/client/start.ts)_
 
 ## `autify help [COMMAND]`
 
@@ -188,7 +188,7 @@ DESCRIPTION
   Display help for autify.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.4/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.7/src/commands/help.ts)_
 
 ## `autify mobile api describe-test-result`
 
@@ -209,7 +209,7 @@ EXAMPLES
   $ autify mobile api describe-test-result
 ```
 
-_See code: [src/commands/mobile/api/describe-test-result.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/mobile/api/describe-test-result.ts)_
+_See code: [src/commands/mobile/api/describe-test-result.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/mobile/api/describe-test-result.ts)_
 
 ## `autify mobile api list-test-results`
 
@@ -233,7 +233,7 @@ EXAMPLES
   $ autify mobile api list-test-results
 ```
 
-_See code: [src/commands/mobile/api/list-test-results.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/mobile/api/list-test-results.ts)_
+_See code: [src/commands/mobile/api/list-test-results.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/mobile/api/list-test-results.ts)_
 
 ## `autify mobile api run-test-plan`
 
@@ -244,7 +244,8 @@ USAGE
   $ autify mobile api run-test-plan --test-plan-id <value> --run-test-plan-request <value>
 
 FLAGS
-  --run-test-plan-request=<value>  (required) The build_id to execute the test plan.
+  --run-test-plan-request=<value>  (required) A JSON object with the build_id to execute the test plan. e.g.
+                                   {"build_id":"string"}
   --test-plan-id=<value>           (required) The ID of the test plan to run.
 
 DESCRIPTION
@@ -254,7 +255,7 @@ EXAMPLES
   $ autify mobile api run-test-plan
 ```
 
-_See code: [src/commands/mobile/api/run-test-plan.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/mobile/api/run-test-plan.ts)_
+_See code: [src/commands/mobile/api/run-test-plan.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/mobile/api/run-test-plan.ts)_
 
 ## `autify mobile api upload-build`
 
@@ -275,7 +276,7 @@ EXAMPLES
   $ autify mobile api upload-build
 ```
 
-_See code: [src/commands/mobile/api/upload-build.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/mobile/api/upload-build.ts)_
+_See code: [src/commands/mobile/api/upload-build.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/mobile/api/upload-build.ts)_
 
 ## `autify mobile auth login`
 
@@ -298,7 +299,7 @@ EXAMPLES
     $ autify mobile auth login < token.txt
 ```
 
-_See code: [src/commands/mobile/auth/login.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/mobile/auth/login.ts)_
+_See code: [src/commands/mobile/auth/login.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/mobile/auth/login.ts)_
 
 ## `autify mobile build upload BUILD-PATH`
 
@@ -332,7 +333,7 @@ EXAMPLES
     $ autify mobile build upload --workspace-id AAA ./my.app --json
 ```
 
-_See code: [src/commands/mobile/build/upload.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/mobile/build/upload.ts)_
+_See code: [src/commands/mobile/build/upload.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/mobile/build/upload.ts)_
 
 ## `autify mobile test run TEST-PLAN-URL`
 
@@ -372,7 +373,7 @@ EXAMPLES
       --timeout 600
 ```
 
-_See code: [src/commands/mobile/test/run.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/mobile/test/run.ts)_
+_See code: [src/commands/mobile/test/run.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/mobile/test/run.ts)_
 
 ## `autify mobile test wait TEST-RESULT-URL`
 
@@ -396,7 +397,7 @@ EXAMPLES
   $ autify mobile test wait https://mobile-app.autify.com/projects/AAA/results/BBB
 ```
 
-_See code: [src/commands/mobile/test/wait.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/mobile/test/wait.ts)_
+_See code: [src/commands/mobile/test/wait.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/mobile/test/wait.ts)_
 
 ## `autify update [CHANNEL]`
 
@@ -433,7 +434,7 @@ EXAMPLES
     $ autify update --available
 ```
 
-_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v4.4.6/src/commands/update.ts)_
+_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v4.4.16/src/commands/update.ts)_
 
 ## `autify web api create-access-point`
 
@@ -444,7 +445,8 @@ USAGE
   $ autify web api create-access-point --project-id <value> --create-access-point-request <value>
 
 FLAGS
-  --create-access-point-request=<value>  (required) The name of the access point to be created
+  --create-access-point-request=<value>  (required) A JSON object with the name of the access point to be created e.g.
+                                         {"name":"string"}
   --project-id=<value>                   (required) For example, 1 for the following URL:
                                          https://app.autify.com/projects/1/scenarios
 
@@ -455,7 +457,7 @@ EXAMPLES
   $ autify web api create-access-point
 ```
 
-_See code: [src/commands/web/api/create-access-point.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/create-access-point.ts)_
+_See code: [src/commands/web/api/create-access-point.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/create-access-point.ts)_
 
 ## `autify web api create-test-plan-variable`
 
@@ -466,7 +468,8 @@ USAGE
   $ autify web api create-test-plan-variable --test-plan-id <value> --create-test-plan-variable-request <value>
 
 FLAGS
-  --create-test-plan-variable-request=<value>  (required) The new variable key and default value to use in the test plan
+  --create-test-plan-variable-request=<value>  (required) A JSON object with the new variable key and default value to
+                                               use in the test plan e.g. {"key":"string","default_value":"string"}
   --test-plan-id=<value>                       (required) For example, 15 for the following URL:
                                                https://app.autify.com/projects/1/test_plans/15
 
@@ -477,7 +480,7 @@ EXAMPLES
   $ autify web api create-test-plan-variable
 ```
 
-_See code: [src/commands/web/api/create-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/create-test-plan-variable.ts)_
+_See code: [src/commands/web/api/create-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/create-test-plan-variable.ts)_
 
 ## `autify web api create-url-replacement`
 
@@ -488,7 +491,8 @@ USAGE
   $ autify web api create-url-replacement --test-plan-id <value> --create-url-replacement-request <value>
 
 FLAGS
-  --create-url-replacement-request=<value>  (required) The url to replace
+  --create-url-replacement-request=<value>  (required) A JSON object with the url to replace e.g.
+                                            {"pattern_url":"string","replacement_url":"string"}
   --test-plan-id=<value>                    (required) For example, 15 for the following URL:
                                             https://app.autify.com/projects/1/test_plans/15
 
@@ -499,7 +503,7 @@ EXAMPLES
   $ autify web api create-url-replacement
 ```
 
-_See code: [src/commands/web/api/create-url-replacement.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/create-url-replacement.ts)_
+_See code: [src/commands/web/api/create-url-replacement.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/create-url-replacement.ts)_
 
 ## `autify web api delete-access-point`
 
@@ -510,7 +514,8 @@ USAGE
   $ autify web api delete-access-point --project-id <value> --delete-access-point-request <value>
 
 FLAGS
-  --delete-access-point-request=<value>  (required) The name of the access point to be deleted
+  --delete-access-point-request=<value>  (required) A JSON object with the name of the access point to be deleted e.g.
+                                         {"name":"string"}
   --project-id=<value>                   (required) For example, 1 for the following URL:
                                          https://app.autify.com/projects/1/scenarios
 
@@ -521,7 +526,7 @@ EXAMPLES
   $ autify web api delete-access-point
 ```
 
-_See code: [src/commands/web/api/delete-access-point.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/delete-access-point.ts)_
+_See code: [src/commands/web/api/delete-access-point.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/delete-access-point.ts)_
 
 ## `autify web api delete-test-plan-variable`
 
@@ -543,7 +548,7 @@ EXAMPLES
   $ autify web api delete-test-plan-variable
 ```
 
-_See code: [src/commands/web/api/delete-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/delete-test-plan-variable.ts)_
+_See code: [src/commands/web/api/delete-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/delete-test-plan-variable.ts)_
 
 ## `autify web api delete-url-replacement`
 
@@ -565,7 +570,7 @@ EXAMPLES
   $ autify web api delete-url-replacement
 ```
 
-_See code: [src/commands/web/api/delete-url-replacement.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/delete-url-replacement.ts)_
+_See code: [src/commands/web/api/delete-url-replacement.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/delete-url-replacement.ts)_
 
 ## `autify web api describe-result`
 
@@ -587,7 +592,7 @@ EXAMPLES
   $ autify web api describe-result
 ```
 
-_See code: [src/commands/web/api/describe-result.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/describe-result.ts)_
+_See code: [src/commands/web/api/describe-result.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/describe-result.ts)_
 
 ## `autify web api describe-scenario`
 
@@ -608,7 +613,7 @@ EXAMPLES
   $ autify web api describe-scenario
 ```
 
-_See code: [src/commands/web/api/describe-scenario.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/describe-scenario.ts)_
+_See code: [src/commands/web/api/describe-scenario.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/describe-scenario.ts)_
 
 ## `autify web api execute-scenarios`
 
@@ -619,9 +624,14 @@ USAGE
   $ autify web api execute-scenarios --project-id <value> --execute-scenarios-request <value>
 
 FLAGS
-  --execute-scenarios-request=<value>  (required) The scenarios and settings to execute
-  --project-id=<value>                 (required) For example, 1 for the following URL:
-                                       https://app.autify.com/projects/1/scenarios
+  --execute-scenarios-request=<value>
+      (required) A JSON object with the scenarios and settings to execute e.g.
+      {"name":"string","execution_type":"parallel","capabilities":[{"os":"string","os_type":"macos","os_version":"string",
+      "device":"string","browser":"string","browser_type":"chrome","browser_version":"string"}],"url_replacements":[{"patt
+      ern_url":"string","replacement_url":"string"}],"scenarios":[{"id":0}],"autify_connect":{"name":"string"}}
+
+  --project-id=<value>
+      (required) For example, 1 for the following URL: https://app.autify.com/projects/1/scenarios
 
 DESCRIPTION
   You can execute any scenarios in your workspace using any execution environments (which is called "capabilities"
@@ -631,33 +641,34 @@ EXAMPLES
   $ autify web api execute-scenarios
 ```
 
-_See code: [src/commands/web/api/execute-scenarios.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/execute-scenarios.ts)_
+_See code: [src/commands/web/api/execute-scenarios.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/execute-scenarios.ts)_
 
 ## `autify web api execute-schedule`
 
-"Schedule" is called as "Test Plan" now.\ If you want to run a test plan, use this endpoint.
+"Schedule" is called as "Test Plan" now. If you want to run a test plan, use this endpoint.
 
 ```
 USAGE
   $ autify web api execute-schedule --schedule-id <value> [--execute-schedule-request <value>]
 
 FLAGS
-  --execute-schedule-request=<value>  The options to execute a test plan.
+  --execute-schedule-request=<value>  A JSON object with the options to execute a test plan. e.g.
+                                      {"autify_connect":{"name":"string"}}
   --schedule-id=<value>               (required) For example, 3 for the following URL:
                                       https://app.autify.com/projects/1/test_plans/3
 
 DESCRIPTION
-  "Schedule" is called as "Test Plan" now.\ If you want to run a test plan, use this endpoint.
+  "Schedule" is called as "Test Plan" now. If you want to run a test plan, use this endpoint.
 
 EXAMPLES
   $ autify web api execute-schedule
 ```
 
-_See code: [src/commands/web/api/execute-schedule.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/execute-schedule.ts)_
+_See code: [src/commands/web/api/execute-schedule.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/execute-schedule.ts)_
 
 ## `autify web api get-credit-usage`
 
-Get the number of credits used in the project\ \ Notes:\ This endpoint works only for organizations on credit-based plans. It always returns 0 for `credits_consumed` and `credit_consumption_event_count` if your organization is on a run-based plan.
+Get the number of credits used in the project Notes: This endpoint works only for organizations on credit-based plans. It always returns 0 for `credits_consumed` and `credit_consumption_event_count` if your organization is on a run-based plan.
 
 ```
 USAGE
@@ -665,19 +676,19 @@ USAGE
     [--test-plan-id <value>] [--user-id <value>]
 
 FLAGS
-  --date-from=<value>     The date to start counting used credits from.\ If not specified, the date will be set to 1
-                          week ago.\ Up to 90 days in advance can be specified. If the specified date is more than 90
-                          days in the past, the date will be set to 90 days ago.\ Date must follow the format YYYY-MM-DD
-                          (example: &quot;2023-09-21&quot;).
-  --date-to=<value>       The date to end counting used credits from.\ If not specified, the date will be set to today.\
-                          Date must follow the format YYYY-MM-DD (example: &quot;2023-09-28&quot;).
+  --date-from=<value>     The date to start counting used credits from. If not specified, the date will be set to 1 week
+                          ago. Up to 90 days in advance can be specified. If the specified date is more than 90 days in
+                          the past, the date will be set to 90 days ago. Date must follow the format YYYY-MM-DD
+                          (example: "2023-09-21").
+  --date-to=<value>       The date to end counting used credits from. If not specified, the date will be set to today.
+                          Date must follow the format YYYY-MM-DD (example: "2023-09-28").
   --project-id=<value>    (required) For example, 1 for the following URL: https://app.autify.com/projects/1/credits
   --scenario-id=<value>   The scenario ID to filter used credits by.
   --test-plan-id=<value>  The test plan ID to filter used credits by.
   --user-id=<value>       The user ID that executed tests to filter used credits by.
 
 DESCRIPTION
-  Get the number of credits used in the project\ \ Notes:\ This endpoint works only for organizations on credit-based
+  Get the number of credits used in the project  Notes: This endpoint works only for organizations on credit-based
   plans. It always returns 0 for `credits_consumed` and `credit_consumption_event_count` if your organization is on a
   run-based plan.
 
@@ -685,7 +696,7 @@ EXAMPLES
   $ autify web api get-credit-usage
 ```
 
-_See code: [src/commands/web/api/get-credit-usage.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/get-credit-usage.ts)_
+_See code: [src/commands/web/api/get-credit-usage.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/get-credit-usage.ts)_
 
 ## `autify web api get-project-info`
 
@@ -705,7 +716,7 @@ EXAMPLES
   $ autify web api get-project-info
 ```
 
-_See code: [src/commands/web/api/get-project-info.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/get-project-info.ts)_
+_See code: [src/commands/web/api/get-project-info.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/get-project-info.ts)_
 
 ## `autify web api list-access-points`
 
@@ -726,7 +737,7 @@ EXAMPLES
   $ autify web api list-access-points
 ```
 
-_See code: [src/commands/web/api/list-access-points.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/list-access-points.ts)_
+_See code: [src/commands/web/api/list-access-points.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/list-access-points.ts)_
 
 ## `autify web api list-capabilities`
 
@@ -734,13 +745,17 @@ List available Capabilities.
 
 ```
 USAGE
-  $ autify web api list-capabilities --project-id <value> [--os <value>] [--browser <value>] [--device-type <value>]
+  $ autify web api list-capabilities --project-id <value> [--os <value>] [--os-type <value>] [--browser <value>]
+    [--browser-type <value>] [--device-type <value>]
 
 FLAGS
-  --browser=<value>      browser name to filter
-  --device-type=<value>  device_type name to filter
-  --os=<value>           os name to filter
-  --project-id=<value>   (required) For example, 1 for the following URL: https://app.autify.com/projects/1/capabilities
+  --browser=<value>       browser name to filter (deprecated)
+  --browser-type=<value>  Type of the browser to filter
+  --device-type=<value>   device_type name to filter (mobile is deprecated)
+  --os=<value>            os name to filter (deprecated)
+  --os-type=<value>       Type of the os to filter
+  --project-id=<value>    (required) For example, 1 for the following URL:
+                          https://app.autify.com/projects/1/capabilities
 
 DESCRIPTION
   List available Capabilities.
@@ -749,7 +764,7 @@ EXAMPLES
   $ autify web api list-capabilities
 ```
 
-_See code: [src/commands/web/api/list-capabilities.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/list-capabilities.ts)_
+_See code: [src/commands/web/api/list-capabilities.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/list-capabilities.ts)_
 
 ## `autify web api list-results`
 
@@ -772,7 +787,7 @@ EXAMPLES
   $ autify web api list-results
 ```
 
-_See code: [src/commands/web/api/list-results.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/list-results.ts)_
+_See code: [src/commands/web/api/list-results.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/list-results.ts)_
 
 ## `autify web api list-scenarios`
 
@@ -793,7 +808,7 @@ EXAMPLES
   $ autify web api list-scenarios
 ```
 
-_See code: [src/commands/web/api/list-scenarios.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/list-scenarios.ts)_
+_See code: [src/commands/web/api/list-scenarios.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/list-scenarios.ts)_
 
 ## `autify web api list-test-plan-variable`
 
@@ -814,7 +829,7 @@ EXAMPLES
   $ autify web api list-test-plan-variable
 ```
 
-_See code: [src/commands/web/api/list-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/list-test-plan-variable.ts)_
+_See code: [src/commands/web/api/list-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/list-test-plan-variable.ts)_
 
 ## `autify web api list-url-replacements`
 
@@ -835,7 +850,7 @@ EXAMPLES
   $ autify web api list-url-replacements
 ```
 
-_See code: [src/commands/web/api/list-url-replacements.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/list-url-replacements.ts)_
+_See code: [src/commands/web/api/list-url-replacements.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/list-url-replacements.ts)_
 
 ## `autify web api update-test-plan-variable`
 
@@ -850,8 +865,9 @@ FLAGS
   --test-plan-id=<value>                       (required) For example, 15 for the following URL:
                                                https://app.autify.com/projects/1/test_plans/15
   --test-plan-variable-id=<value>              (required) test_plan_variable id
-  --update-test-plan-variable-request=<value>  (required) The variable&#39;s new key and/or default_value&#39;s value to
-                                               register
+  --update-test-plan-variable-request=<value>  (required) A JSON object with the variable's new key and/or
+                                               default_value's value to register e.g.
+                                               {"key":"string","default_value":"string"}
 
 DESCRIPTION
   Update a url replacement for the test plan
@@ -860,7 +876,7 @@ EXAMPLES
   $ autify web api update-test-plan-variable
 ```
 
-_See code: [src/commands/web/api/update-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/update-test-plan-variable.ts)_
+_See code: [src/commands/web/api/update-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/update-test-plan-variable.ts)_
 
 ## `autify web api update-url-replacement`
 
@@ -874,8 +890,9 @@ USAGE
 FLAGS
   --test-plan-id=<value>                    (required) For example, 15 for the following URL:
                                             https://app.autify.com/projects/1/test_plans/15
-  --update-url-replacement-request=<value>  (required) The url to replace. Either pattern_url or replacement_url is
-                                            required.
+  --update-url-replacement-request=<value>  (required) A JSON object with the url to replace. Either pattern_url or
+                                            replacement_url is required. e.g.
+                                            {"pattern_url":"string","replacement_url":"string"}
   --url-replacement-id=<value>              (required) url_replacement id
 
 DESCRIPTION
@@ -885,7 +902,7 @@ EXAMPLES
   $ autify web api update-url-replacement
 ```
 
-_See code: [src/commands/web/api/update-url-replacement.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/api/update-url-replacement.ts)_
+_See code: [src/commands/web/api/update-url-replacement.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/api/update-url-replacement.ts)_
 
 ## `autify web auth login`
 
@@ -908,7 +925,7 @@ EXAMPLES
     $ autify web auth login < token.txt
 ```
 
-_See code: [src/commands/web/auth/login.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/auth/login.ts)_
+_See code: [src/commands/web/auth/login.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/auth/login.ts)_
 
 ## `autify web test run SCENARIO-OR-TEST-PLAN-URL`
 
@@ -989,7 +1006,7 @@ EXAMPLES
     $ autify web test run https://app.autify.com/projects/0000/scenarios/0000 --wait --autify-connect-client
 ```
 
-_See code: [src/commands/web/test/run.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/test/run.ts)_
+_See code: [src/commands/web/test/run.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/test/run.ts)_
 
 ## `autify web test wait TEST-RESULT-URL`
 
@@ -1013,6 +1030,6 @@ EXAMPLES
   $ autify web test wait https://app.autify.com/projects/0000/results/0000
 ```
 
-_See code: [src/commands/web/test/wait.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-beta.0/src/commands/web/test/wait.ts)_
+_See code: [src/commands/web/test/wait.ts](https://github.com/autifyhq/autify-cli/blob/v0.47.0-rc.0/src/commands/web/test/wait.ts)_
 
 <!-- commandsstop -->
