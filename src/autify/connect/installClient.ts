@@ -170,7 +170,7 @@ export const installClient = async (
   // Clean up workspace in case something is left by previous command.
   if (existsSync(workspaceDir))
     rmSync(workspaceDir, { recursive: true, force: true });
-  mkdirSync(workspaceDir);
+  mkdirSync(workspaceDir, { recursive: true });
   const downloadPath = await download(workspaceDir, url);
   const extractPath = await extract(downloadPath);
   // Pre-install validation
