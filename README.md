@@ -310,7 +310,7 @@ USAGE
   $ autify mobile build upload BUILD-PATH -w <value> [--json]
 
 ARGUMENTS
-  BUILD-PATH  File path to the iOS app (*.app) or Android app (*.apk).
+  BUILD-PATH  File path to the iOS app (*.app, *.ipa) or Android app (*.apk).
 
 FLAGS
   -w, --workspace-id=<value>  (required) Workspace ID to upload the build file
