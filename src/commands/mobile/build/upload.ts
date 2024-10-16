@@ -25,7 +25,8 @@ export default class MobileBuildUpload extends Command {
 
   static args = {
     "build-path": Args.string({
-      description: "File path to the iOS app (*.app) or Android app (*.apk).",
+      description:
+        "File path to the iOS app (*.app, *.ipa) or Android app (*.apk).",
       required: true,
     }),
   };

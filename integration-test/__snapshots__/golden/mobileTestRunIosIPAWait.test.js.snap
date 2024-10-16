@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_plans/BBB --build-path /path/to/ios.ipa --wait 1`] = `
+{
+  "stderr": "",
+  "stdout": "[HPM] Proxy created: /  -> https://app.autify.com
+[HPM] Proxy created: /  -> https://mobile-app.autify.com
+✅ Successfully uploaded ios.ipa (ID: gquLbX). See https://mobile-app.autify.com/projects/4yyFEL/builds?os=ios&selectedBuildId=gquLbX&page=1
+✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/d3tEQW
+🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/d3tEQW
+[HH:MM:SS] Waiting... (timeout: 300 s) [started]
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
+[HH:MM:SS] → TestPlan: 👍 Passed , TestCases: 👍 Passed 
+[HH:MM:SS] Waiting... (timeout: 300 s) [completed]
+✅ Test passed!: https://mobile-app.autify.com/projects/4yyFEL/results/d3tEQW
+[HPM] server close signal received: closing proxy server
+",
+}
+`;

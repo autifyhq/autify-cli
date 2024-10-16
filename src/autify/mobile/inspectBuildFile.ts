@@ -5,8 +5,9 @@ import { createZip } from "./createZip";
 
 const isIosApp = (buildPath: string) => {
   return (
-    lstatSync(buildPath).isDirectory() &&
-    buildPath.replace(/\/$/, "").endsWith(".app")
+    (lstatSync(buildPath).isDirectory() &&
+      buildPath.replace(/\/$/, "").endsWith(".app")) ||
+    (lstatSync(buildPath).isFile() && buildPath.endsWith(".ipa"))
   );
 };
 
@@ -21,7 +22,11 @@ const getOs = (buildPath: string) => {
 };
 
 const getUploadPath = async (buildPath: string, os: "ios" | "android") => {
-  if (os === "ios") return createZip(buildPath);
+  if (os === "ios") {
+    if (buildPath.endsWith(".ipa")) return buildPath;
+    return createZip(buildPath);
+  }
+
   if (os === "android") return buildPath;
   throw new CLIError(`Invalid os: ${os}`);
 };

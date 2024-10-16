@@ -22,7 +22,8 @@ export default class MobileTestRun extends Command {
       exclusive: ["build-path"],
     }),
     "build-path": Flags.file({
-      description: "File path to the iOS app (*.app) or Android app (*.apk).",
+      description:
+        "File path to the iOS app (*.app, *.ipa) or Android app (*.apk).",
       exclusive: ["build-id"],
     }),
     wait: Flags.boolean({
