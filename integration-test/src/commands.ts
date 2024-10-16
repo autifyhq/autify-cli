@@ -1,4 +1,5 @@
 export const iosBuildPath = "ios.app";
+export const iosIPABuildPath = "ios.ipa";
 export const androidBuildPath = "android.apk";
 
 const webTestScenarioUrl =
@@ -8,6 +9,8 @@ const mobileAndroidTestPlanUrl =
   "https://mobile-app.autify.com/projects/4yyFEL/test_plans/Wptd97";
 const mobileIosTestPlanUrl =
   "https://mobile-app.autify.com/projects/4yyFEL/test_plans/kYtlRR";
+const mobileIosRealDeviceTestPlanUrl =
+  "https://mobile-app.autify.com/projects/4yyFEL/test_plans/1EtZ0P";
 const mobileWorkspaceId = "4yyFEL";
 const mobileAndroidBuildId = "d1ulrD";
 
@@ -51,12 +54,16 @@ const replaceWebTestPlanUrl = (arg: string) => {
   return regExp.test(arg) ? webTestPlanUrl : arg;
 };
 
-const replaceMobileTetsPlanUrl = (arg: string, os: "android" | "ios") => {
+const replaceMobileTetsPlanUrl = (
+  arg: string,
+  os: "android" | "ios" | "iosreal"
+) => {
   const regExp =
     /^https:\/\/mobile-app.autify.com\/projects\/[^/]+\/test_plans\/[^/]+\/?$/;
   if (regExp.test(arg)) {
     if (os === "android") return mobileAndroidTestPlanUrl;
     if (os === "ios") return mobileIosTestPlanUrl;
+    if (os === "iosreal") return mobileIosRealDeviceTestPlanUrl;
   }
 
   return arg;
@@ -72,9 +79,12 @@ const replaceMobileAndroidBuildPath = (arg: string) =>
   arg.replace(/^(--[^=]+=)?.+\.apk$/, `$1${androidBuildPath}`);
 const replaceMobileIosBuildPath = (arg: string) =>
   arg.replace(/^(--[^=]+=)?.+\.app$/, `$1${iosBuildPath}`);
+const replaceMobileIosIPABuildPath = (arg: string) =>
+  arg.replace(/^(--[^=]+=)?.+\.ipa/, `$1${iosIPABuildPath}`);
 
 // Assuming ios command contains .app
 const isIos = (args: string[]) => args.some((a) => a.endsWith(".app"));
+const isIosIPA = (args: string[]) => args.some((a) => a.endsWith(".ipa"));
 
 const replaceConstants = (args: string[]) => {
   if (args[0] === "web") {
@@ -84,16 +94,25 @@ const replaceConstants = (args: string[]) => {
   }
 
   if (args[0] === "mobile") {
-    return isIos(args)
-      ? args
-          .map((a) => replaceMobileWorkspaceId(a))
-          .map((a) => replaceMobileTetsPlanUrl(a, "ios"))
-          .map((a) => replaceMobileIosBuildPath(a))
-      : args
-          .map((a) => replaceMobileWorkspaceId(a))
-          .map((a) => replaceMobileTetsPlanUrl(a, "android"))
-          .map((a) => replaceMobileAndroidBuildId(a))
-          .map((a) => replaceMobileAndroidBuildPath(a));
+    if (isIos(args)) {
+      return args
+        .map((a) => replaceMobileWorkspaceId(a))
+        .map((a) => replaceMobileTetsPlanUrl(a, "ios"))
+        .map((a) => replaceMobileIosBuildPath(a));
+    }
+
+    if (isIosIPA(args)) {
+      return args
+        .map((a) => replaceMobileWorkspaceId(a))
+        .map((a) => replaceMobileTetsPlanUrl(a, "iosreal"))
+        .map((a) => replaceMobileIosIPABuildPath(a));
+    }
+
+    return args
+      .map((a) => replaceMobileWorkspaceId(a))
+      .map((a) => replaceMobileTetsPlanUrl(a, "android"))
+      .map((a) => replaceMobileAndroidBuildId(a))
+      .map((a) => replaceMobileAndroidBuildPath(a));
   }
 
   return args;

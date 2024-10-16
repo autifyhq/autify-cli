@@ -9,4 +9,5 @@ node_modules
 oclif.manifest.json
 *.tgz
 ios.app*
+ios.ipa*
 android.apk*
