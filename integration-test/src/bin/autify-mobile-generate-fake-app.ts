@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { androidBuildPath, iosBuildPath } from "../commands";
+import { androidBuildPath, iosBuildPath, iosIPABuildPath } from "../commands";
 
 // https://commons.wikimedia.org/wiki/File:Transparent.gif
 const tinyBinary = Buffer.from(
@@ -16,6 +16,13 @@ if (existsSync(iosBuildPath)) {
   mkdirSync(iosBuildPath); // *.app is a directory
   writeFileSync(join(iosBuildPath, "ios"), tinyBinary); // Add a fake binary file
   console.log(`${iosBuildPath} is created.`);
+}
+
+if (existsSync(iosIPABuildPath)) {
+  console.log(`${iosIPABuildPath} already exists.`);
+} else {
+  writeFileSync(iosIPABuildPath, tinyBinary); // Create a fake binary file
+  console.log(`${iosIPABuildPath} is created.`);
 }
 
 if (existsSync(androidBuildPath)) {
