@@ -3,7 +3,7 @@ import { CLIError } from "@oclif/errors";
 import Listr, { ListrTaskWrapper } from "listr";
 import { setInterval } from "node:timers/promises";
 import { WebClient } from "@autifyhq/autify-sdk";
-import emoji from "node-emoji";
+import * as emoji from "node-emoji";
 
 const waitUntil = async <T>(
   callback: (task: ListrTaskWrapper<{ result: T }>) => Promise<T>,
