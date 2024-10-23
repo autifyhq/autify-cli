@@ -1,5 +1,5 @@
 import { Command, Args, Flags } from "@oclif/core";
-import emoji from "node-emoji";
+import * as emoji from "node-emoji";
 import { getBuildDetailUrl } from "../../../autify/mobile/getBuildDetailUrl";
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 import { uploadBuild } from "../../../autify/mobile/uploadBuild";

@@ -1,5 +1,5 @@
 import { Command, Args, Flags } from "@oclif/core";
-import emoji from "node-emoji";
+import * as emoji from "node-emoji";
 import { getWaitIntervalSecond } from "../../../autify/getWaitIntervalSecond";
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 import { getMobileTestResultUrl } from "../../../autify/mobile/getTestResultUrl";
