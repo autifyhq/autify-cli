@@ -30,7 +30,7 @@
     "get-port": "^5.1.1",
     "inquirer": "^8.2.6",
     "listr": "^0.14.3",
-    "node-emoji": "^1.11.0",
+    "node-emoji": "^2.1.3",
     "node-stream-zip": "^1.15.0",
     "per-env": "^1.0.2",
     "shell-quote": "^1.8.2",
