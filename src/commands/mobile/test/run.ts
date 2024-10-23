@@ -1,6 +1,6 @@
 import { Command, Args, Flags } from "@oclif/core";
 import { CLIError } from "@oclif/errors";
-import emoji from "node-emoji";
+import * as emoji from "node-emoji";
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 import { getMobileTestResultUrl } from "../../../autify/mobile/getTestResultUrl";
 import { parseTestPlanUrl } from "../../../autify/mobile/parseTestPlanUrl";

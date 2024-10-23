@@ -1,5 +1,5 @@
 import { Command, Args, Flags } from "@oclif/core";
-import emoji from "node-emoji";
+import * as emoji from "node-emoji";
 import { parseTestResultUrl } from "../../../autify/web/parseTestResultUrl";
 import { waitTestResult } from "../../../autify/web/waitTestResult";
 import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
