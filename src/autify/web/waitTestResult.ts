@@ -60,7 +60,7 @@ const emojiStatus = (status?: Status) => {
   if (status === "queuing") return emoji.get("cyclone") + " Queuing";
   if (status === "waiting")
     return emoji.get("hourglass_flowing_sand") + " Waiting";
-  if (status === "running") return emoji.get("car") + " Running";
+  if (status === "running") return emoji.get("red_car") + " Running";
   if (status === "passed") return emoji.get("+1") + " Passed ";
   if (status === "failed") return emoji.get("rotating_light") + " Failed ";
   if (status === "skipped") return emoji.get("zzz") + " Skipped";
