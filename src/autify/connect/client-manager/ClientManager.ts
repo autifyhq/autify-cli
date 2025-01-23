@@ -28,9 +28,19 @@ import {
 } from "./Logger";
 import { join } from "node:path";
 import TypedEmitter from "typed-emitter";
-import getPort from "get-port";
 import { getWebClient } from "../../web/getWebClient";
 import { parse } from "shell-quote";
+import type GetPort from "get-port";
+
+// Workaround to import get-port, which is an ES module, dynamically and avoid
+// having typescript transpile that import into a require.
+async function importGetPort(): Promise<typeof GetPort> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  return new Promise((resolve) => {
+    // eslint-disable-next-line no-eval
+    eval(`import("get-port").then((esm) => resolve(esm.default));`);
+  });
+}
 
 export type ClientEvents = TypedEmitter<{
   log: (msg: string) => void;
@@ -108,6 +118,7 @@ export class ClientManager {
     try {
       this.logger.debug("start");
       const version = await this.getClientVersion();
+      const getPort = await importGetPort();
       const debugServerPort = this.options.debugServerPort ?? (await getPort());
       this.logger.info(
         `Starting Autify Connect Client (accessPoint: ${this.accessPointName}, debugServerPort: ${debugServerPort}, path: ${this.clientPath}, version: ${version})`
