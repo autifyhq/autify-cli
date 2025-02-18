@@ -15,7 +15,7 @@ import { promisify } from "node:util";
 import { basename, dirname, join } from "node:path";
 import { Extract } from "unzip-stream";
 import { execFile } from "node:child_process";
-import tar from "tar";
+import * as tar from "tar";
 import { get } from "../../config";
 
 // Update whenever to bump supported version.
