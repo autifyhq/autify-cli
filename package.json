@@ -50,7 +50,6 @@
     "@types/node": "^20.17.19",
     "@types/shell-quote": "^1.7.5",
     "@types/unzip-stream": "^0.3.4",
-    "@types/uuid": "^9.0.8",
     "chai": "^5.2.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.1",
