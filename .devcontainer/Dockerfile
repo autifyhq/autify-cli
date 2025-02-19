@@ -2,7 +2,7 @@
 
 # [Choice] Node.js version (use -bullseye variants on local arm64/Apple Silicon):
 # see https://github.com/devcontainers/images/tree/main/src/typescript-node
-ARG VARIANT="20-bullseye"
+ARG VARIANT="22-bullseye"
 FROM mcr.microsoft.com/devcontainers/typescript-node:${VARIANT}
 # [Optional] Uncomment this section to install additional OS packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
