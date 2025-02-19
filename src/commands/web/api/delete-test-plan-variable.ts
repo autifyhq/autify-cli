@@ -4,9 +4,7 @@ import { getWebClient } from "../../../autify/web/getWebClient";
 export default class WebApiDeleteTestPlanVariable extends Command {
   static description =
     "Delete an existing test plan variable for the test plan";
-
   static examples = ["<%= config.bin %> <%= command.id %>"];
-
   static flags = {
     "test-plan-id": Flags.integer({
       description:

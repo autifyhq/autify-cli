@@ -26,7 +26,7 @@ const oclif = (args: string) => {
 
 const fail = (message: string) => {
   console.error(message);
-  // eslint-disable-next-line no-process-exit,unicorn/no-process-exit
+  // eslint-disable-next-line unicorn/no-process-exit
   process.exit(1);
 };
 
@@ -61,11 +61,6 @@ type S3FileOption = Readonly<{
 const s3File = ({ target, tarball, npm, script }: S3FileOption) => {
   let file = `autify-v${version}-${sha}-`;
   switch (target) {
-    case "win": {
-      file += "x64.exe";
-      break;
-    }
-
     case "macos": {
       file += "x64.pkg";
       break;
@@ -80,6 +75,11 @@ const s3File = ({ target, tarball, npm, script }: S3FileOption) => {
     case "shell": {
       assert(script);
       file = script;
+      break;
+    }
+
+    case "win": {
+      file += "x64.exe";
       break;
     }
 
@@ -119,21 +119,15 @@ const uploadCommand = (args: string[]) => {
   const target = args[0];
   if (!target) fail("Usage: ts-node ./scripts/release.ts upload TARGET");
   switch (target) {
-    case "win": {
-      oclif("pack win");
-      oclif("upload win");
+    case "deb": {
+      oclif("pack deb");
+      oclif("upload deb");
       break;
     }
 
     case "macos": {
       oclif("pack macos");
       oclif("upload macos");
-      break;
-    }
-
-    case "deb": {
-      oclif("pack deb");
-      oclif("upload deb");
       break;
     }
 
@@ -146,6 +140,12 @@ const uploadCommand = (args: string[]) => {
     case "shell": {
       uploadShell("install-standalone.sh");
       uploadShell("install-cicd.bash");
+      break;
+    }
+
+    case "win": {
+      oclif("pack win");
+      oclif("upload win");
       break;
     }
 
@@ -335,18 +335,8 @@ const installCommand = (args: string[]) => {
   const temp = mkdtempSync(join(tmpdir(), "autify-cli-"));
   let bin: string | void;
   switch (target) {
-    case "win": {
-      bin = installWindows(temp);
-      break;
-    }
-
-    case "macos": {
-      bin = installMacos(temp);
-      break;
-    }
-
-    case "standalone-shell": {
-      bin = installStandaloneShell(temp);
+    case "brew": {
+      bin = installBrew();
       break;
     }
 
@@ -355,13 +345,23 @@ const installCommand = (args: string[]) => {
       break;
     }
 
-    case "brew": {
-      bin = installBrew();
+    case "macos": {
+      bin = installMacos(temp);
       break;
     }
 
     case "npm": {
       bin = installNpm(temp);
+      break;
+    }
+
+    case "standalone-shell": {
+      bin = installStandaloneShell(temp);
+      break;
+    }
+
+    case "win": {
+      bin = installWindows(temp);
       break;
     }
 
@@ -479,8 +479,28 @@ const main = () => {
   const command = process.argv[2];
   const args = process.argv.slice(3);
   switch (command) {
-    case "upload": {
-      uploadCommand(args);
+    case "bump": {
+      bumpCommand();
+      break;
+    }
+
+    case "get-installer-url": {
+      getInstallerUrlCommand();
+      break;
+    }
+
+    case "install": {
+      installCommand(args);
+      break;
+    }
+
+    case "merge-bump": {
+      mergeBumpCommand();
+      break;
+    }
+
+    case "pr-bump": {
+      prBumpCommand();
       break;
     }
 
@@ -499,33 +519,13 @@ const main = () => {
       break;
     }
 
-    case "install": {
-      installCommand(args);
-      break;
-    }
-
-    case "bump": {
-      bumpCommand();
-      break;
-    }
-
-    case "merge-bump": {
-      mergeBumpCommand();
-      break;
-    }
-
-    case "pr-bump": {
-      prBumpCommand();
+    case "upload": {
+      uploadCommand(args);
       break;
     }
 
     case "validate": {
       validateCommand(args);
-      break;
-    }
-
-    case "get-installer-url": {
-      getInstallerUrlCommand();
       break;
     }
 

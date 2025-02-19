@@ -4,9 +4,7 @@ import { getWebClient } from "../../../autify/web/getWebClient";
 export default class WebApiExecuteSchedule extends Command {
   static description =
     '"Schedule" is called as "Test Plan" now. If you want to run a test plan, use this endpoint.';
-
   static examples = ["<%= config.bin %> <%= command.id %>"];
-
   static flags = {
     "schedule-id": Flags.integer({
       description:

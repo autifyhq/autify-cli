@@ -3,9 +3,7 @@ import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiListAccessPoints extends Command {
   static description = "List access points for the project.";
-
   static examples = ["<%= config.bin %> <%= command.id %>"];
-
   static flags = {
     "project-id": Flags.integer({
       description:

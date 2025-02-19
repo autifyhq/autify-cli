@@ -4,9 +4,7 @@ import { getWebClient } from "../../../autify/web/getWebClient";
 export default class WebApiCreateAccessPoint extends Command {
   static description =
     "You can generate a new access point by passing in its name.";
-
   static examples = ["<%= config.bin %> <%= command.id %>"];
-
   static flags = {
     "project-id": Flags.integer({
       description:

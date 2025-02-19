@@ -3,9 +3,7 @@ import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiDeleteAccessPoint extends Command {
   static description = "You can delete an access point by passing in its name.";
-
   static examples = ["<%= config.bin %> <%= command.id %>"];
-
   static flags = {
     "project-id": Flags.integer({
       description:

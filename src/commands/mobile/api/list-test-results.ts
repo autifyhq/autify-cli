@@ -3,9 +3,7 @@ import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 
 export default class MobileApiListTestResults extends Command {
   static description = "List test results.";
-
   static examples = ["<%= config.bin %> <%= command.id %>"];
-
   static flags = {
     "project-id": Flags.string({
       description:

@@ -3,14 +3,13 @@
 import { CLIError } from "@oclif/errors";
 import { execFileSync } from "node:child_process";
 import { createWriteStream, lstatSync } from "node:fs";
-import { basename, dirname, resolve } from "node:path";
+import { basename, dirname, resolve, join } from "node:path";
 import which from "which";
 import archiver from "archiver";
 import { once } from "node:events";
 import StreamZip from "node-stream-zip";
 import { tmpdir } from "node:os";
 import { mkdtemp } from "node:fs/promises";
-import { join } from "node:path";
 
 const checkBuildPath = (buildPath: string) => {
   if (!lstatSync(buildPath).isDirectory()) {

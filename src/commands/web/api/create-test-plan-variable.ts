@@ -3,9 +3,7 @@ import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiCreateTestPlanVariable extends Command {
   static description = "Create a new variable for the test plan";
-
   static examples = ["<%= config.bin %> <%= command.id %>"];
-
   static flags = {
     "test-plan-id": Flags.integer({
       description:

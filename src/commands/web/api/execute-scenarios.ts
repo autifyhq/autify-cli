@@ -4,9 +4,7 @@ import { getWebClient } from "../../../autify/web/getWebClient";
 export default class WebApiExecuteScenarios extends Command {
   static description =
     'You can execute any scenarios in your workspace using any execution environments (which is called "capabilities" here).';
-
   static examples = ["<%= config.bin %> <%= command.id %>"];
-
   static flags = {
     "project-id": Flags.integer({
       description:

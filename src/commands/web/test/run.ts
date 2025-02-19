@@ -20,7 +20,6 @@ const urlReplacementsToString = (
 
 export default class WebTestRun extends Command {
   static description = "Run a scenario or test plan.";
-
   static examples = [
     "Run a test scenario (Default capability):\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000",
     "Run a test plan:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/test_plans/0000",
@@ -31,7 +30,6 @@ export default class WebTestRun extends Command {
     "Run a test scenario with Autify Connect:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --autify-connect NAME",
     "Run a test scenario with Autify Connect Client:\n<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/scenarios/0000 --wait --autify-connect-client",
   ];
-
   static flags = {
     name: Flags.string({
       char: "n",
@@ -108,7 +106,6 @@ export default class WebTestRun extends Command {
       default: 0,
     }),
   };
-
   static args = {
     "scenario-or-test-plan-url": Args.string({
       description:

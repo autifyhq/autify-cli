@@ -4,9 +4,7 @@ import { getWebClient } from "../../../autify/web/getWebClient";
 export default class WebApiGetCreditUsage extends Command {
   static description =
     "Get the number of credits used in the project  Notes: This endpoint works only for organizations on credit-based plans. It always returns 0 for `credits_consumed` and `credit_consumption_event_count` if your organization is on a run-based plan.";
-
   static examples = ["<%= config.bin %> <%= command.id %>"];
-
   static flags = {
     "project-id": Flags.integer({
       description:

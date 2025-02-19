@@ -7,12 +7,10 @@ import {
 
 export default class ConnectAccessPointSet extends Command {
   static description = "Set Autify Connect Access Point";
-
   static examples = [
     "Start interactive setup:\n<%= config.bin %> <%= command.id %> --name=NAME",
     "Reading the key from file:\n<%= config.bin %> <%= command.id %> --name=NAME < key.txt",
   ];
-
   static flags = {
     name: Flags.string({
       description: "Name of the Autify Connect Access Point already created",
