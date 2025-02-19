@@ -50,7 +50,7 @@
     "@types/chai": "^5.0.1",
     "@types/inquirer": "^8.2.10",
     "@types/listr": "^0.14.9",
-    "@types/node": "^20.17.19",
+    "@types/node": "^22.13.4",
     "@types/shell-quote": "^1.7.5",
     "@types/unzip-stream": "^0.3.4",
     "chai": "^5.2.0",
@@ -165,7 +165,7 @@
     ]
   },
   "engines": {
-    "node": ">=22.5.1"
+    "node": ">=22.14.0"
   },
   "bugs": "https://github.com/autifyhq/autify-cli/issues",
   "keywords": [
