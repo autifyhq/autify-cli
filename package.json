@@ -39,7 +39,7 @@
     "uuid": "^11.0.5",
     "which": "^5.0.0",
     "winston": "^3.17.0",
-    "xstate": "^4.38.3"
+    "xstate": "^5.19.2"
   },
   "devDependencies": {
     "@autifyhq/autify-cli-integration-test": "*",
