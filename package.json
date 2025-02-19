@@ -43,6 +43,9 @@
   },
   "devDependencies": {
     "@autifyhq/autify-cli-integration-test": "*",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.20.0",
+    "@oclif/prettier-config": "^0.2.1",
     "@types/archiver": "^6.0.3",
     "@types/chai": "^5.0.1",
     "@types/inquirer": "^8.2.10",
@@ -52,10 +55,10 @@
     "@types/unzip-stream": "^0.3.4",
     "chai": "^5.2.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.57.1",
+    "eslint": "^9.20.1",
     "eslint-config-oclif": "^6.0.15",
-    "eslint-config-oclif-typescript": "^3.1.14",
     "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-unicorn": "^57.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
     "oclif": "^4.17.30",
@@ -65,7 +68,8 @@
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "typed-emitter": "^2.1.0",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.1"
   },
   "oclif": {
     "bin": "autify",
@@ -131,7 +135,7 @@
     "generate:api-commands": "ts-node scripts/generate-api-commands.ts",
     "generate": "npm run generate:api-commands web && npm run generate:api-commands mobile && npm run format-lint-api-commands && npm run build",
     "build": "shx rm -rf dist && tsc -b",
-    "lint": "eslint . --ext .ts --config .eslintrc",
+    "lint": "eslint .",
     "format": "prettier . --write",
     "format-api-commands": "prettier --write src/commands/web/api src/commands/mobile/api",
     "lint-api-commands": "eslint --fix src/commands/web/api src/commands/mobile/api",
@@ -152,11 +156,6 @@
     "prepare": "per-env || true",
     "prepare:development": "husky install",
     "prepare:production": "true"
-  },
-  "overrides": {
-    "eslint-plugin-unicorn": "^50.0.1",
-    "@typescript-eslint/parser": "^6.21.0",
-    "@typescript-eslint/eslint-plugin": "^6.21.0"
   },
   "lint-staged": {
     "**/*.{md,json,yml,js,cjs}": "prettier --write",

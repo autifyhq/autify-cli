@@ -1,4 +1,5 @@
 /* eslint-disable unicorn/filename-case */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { ChildProcessWithoutNullStreams } from "node:child_process";
 import { createInterface } from "node:readline";
 import {

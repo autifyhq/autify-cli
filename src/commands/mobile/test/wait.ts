@@ -8,11 +8,9 @@ import { waitTestResult } from "../../../autify/mobile/waitTestResult";
 
 export default class MobileTestWait extends Command {
   static description = "Wait a test result until it finishes.";
-
   static examples = [
     "<%= config.bin %> <%= command.id %> https://mobile-app.autify.com/projects/AAA/results/BBB",
   ];
-
   static flags = {
     timeout: Flags.integer({
       char: "t",
@@ -26,7 +24,6 @@ export default class MobileTestWait extends Command {
       default: false,
     }),
   };
-
   static args = {
     "test-result-url": Args.string({
       description:

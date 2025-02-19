@@ -3,9 +3,7 @@ import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 
 export default class MobileApiUploadBuild extends Command {
   static description = "Upload the build file.";
-
   static examples = ["<%= config.bin %> <%= command.id %>"];
-
   static flags = {
     "project-id": Flags.string({
       description: "The ID of the project to upload the build file to.",

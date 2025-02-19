@@ -9,13 +9,11 @@ import MobileTestWait from "./wait";
 
 export default class MobileTestRun extends Command {
   static description = "Run a test plan.";
-
   static examples = [
     "Run a test plan with a build ID:\n<%= config.bin %> <%= command.id %> --build-id CCC https://mobile-app.autify.com/projects/AAA/test_plans/BBB",
     "Run a test plan with a new build file:\n<%= config.bin %> <%= command.id %> --build-path ./my.[app|apk] https://mobile-app.autify.com/projects/AAA/test_plans/BBB",
     "Run and wait a test plan:\n<%= config.bin %> <%= command.id %> --build-id CCC https://mobile-app.autify.com/projects/AAA/test_plans/BBB --wait --timeout 600",
   ];
-
   static flags = {
     "build-id": Flags.string({
       description: "ID of the already uploaded build.",
@@ -48,7 +46,6 @@ export default class MobileTestRun extends Command {
       default: 0,
     }),
   };
-
   static args = {
     "test-plan-url": Args.string({
       description:

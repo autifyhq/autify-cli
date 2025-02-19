@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/import-style */
 import * as envfile from "envfile";
 import * as fs from "node:fs";
 import * as path from "node:path";

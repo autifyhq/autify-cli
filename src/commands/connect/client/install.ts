@@ -7,15 +7,12 @@ import {
 
 export default class ConnectClientInstall extends Command {
   static description = "Install Autify Connect Client";
-
   static examples = [
     "(Recommended) Install the supported version:\n<%= config.bin %> <%= command.id %>",
     "Install a specific version:\n<%= config.bin %> <%= command.id %> v0.6.1",
     "Install a stable version:\n<%= config.bin %> <%= command.id %> stable",
   ];
-
   static flags = {};
-
   static args = {
     version: Args.string({
       description: "Specify the target version of Autify Connect Client.",

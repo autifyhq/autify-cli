@@ -7,11 +7,9 @@ import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class ConnectAccessPointCreate extends Command {
   static description = "Create an Autify Connect Access Point";
-
   static examples = [
     "<%= config.bin %> <%= command.id %> --name NAME --web-workspace-id ID",
   ];
-
   static flags = {
     name: Flags.string({
       description: "Name of Autify Connect Access Point to be created",
@@ -23,7 +21,6 @@ export default class ConnectAccessPointCreate extends Command {
       exactlyOne: ["web-workspace-id"],
     }),
   };
-
   static args = {};
 
   public async run(): Promise<void> {

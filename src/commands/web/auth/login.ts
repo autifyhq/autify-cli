@@ -4,7 +4,6 @@ import { set } from "../../../config";
 
 export default class WebAuthLogin extends Command {
   static description = "Login to Autify for Web";
-
   static examples = [
     "Start interactive setup:\n<%= config.bin %> <%= command.id %>",
     "Reading the token from file:\n<%= config.bin %> <%= command.id %> < token.txt",
