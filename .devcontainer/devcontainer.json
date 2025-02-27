@@ -4,35 +4,42 @@
   "name": "Node.js & TypeScript",
   "build": {
     "dockerfile": "Dockerfile",
-    // Update 'VARIANT' to pick a Node version: 18, 16, 14.
+    // Update 'VARIANT' to pick a Node version: 22, 20, 18.
     // Append -bullseye or -buster to pin to an OS version.
     // Use -bullseye variants on local on arm64/Apple Silicon.
     "args": {
-      "VARIANT": "16-bullseye"
+      "VARIANT": "20-bullseye"
     }
   },
-
-  // Set *default* container specific settings.json values on container create.
-  "settings": {},
-
-  // Add the IDs of extensions you want installed when the container is created.
-  "extensions": ["dbaeumer.vscode-eslint"],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
 
-  // Use 'postCreateCommand' to run commands after the container is created.
-  // "postCreateCommand": "yarn install",
+  "workspaceFolder": "/home/node/autify-cli",
 
   // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "node",
   "mounts": [
+    "source=${localWorkspaceFolder},target=/home/node/autify-cli,type=bind",
+    "source=${localWorkspaceFolderBasename}_node_modules,target=/home/node/autify-cli/node_modules,type=volume",
     "source=${env:HOME}${env:USERPROFILE}/.aws,target=/home/node/.aws,type=bind",
     "source=${env:HOME}${env:USERPROFILE}/.config/autify,target=/home/node/.config/autify,type=bind",
     "source=${env:HOME}${env:USERPROFILE}/.config/gh,target=/home/node/.config/gh,type=bind"
   ],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "sudo chown -R node:node /home/node/autify-cli/node_modules",
+
   "features": {
     "github-cli": "latest",
     "aws-cli": "latest"
+  },
+  "customizations": {
+    "vscode": {
+      // Set *default* container specific settings.json values on container create.
+      "settings": {},
+      // Add the IDs of extensions you want installed when the container is created.
+      "extensions": ["dbaeumer.vscode-eslint"]
+    }
   }
 }

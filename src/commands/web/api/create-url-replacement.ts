@@ -3,9 +3,7 @@ import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebApiCreateUrlReplacement extends Command {
   static description = "Create a new url replacement for the test plan";
-
   static examples = ["<%= config.bin %> <%= command.id %>"];
-
   static flags = {
     "test-plan-id": Flags.integer({
       description:

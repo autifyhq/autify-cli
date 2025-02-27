@@ -3,9 +3,7 @@ import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 
 export default class MobileApiRunTestPlan extends Command {
   static description = "Run a test plan";
-
   static examples = ["<%= config.bin %> <%= command.id %>"];
-
   static flags = {
     "test-plan-id": Flags.string({
       description: "The ID of the test plan to run.",

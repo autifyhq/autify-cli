@@ -4,7 +4,6 @@ import { set } from "../../../config";
 
 export default class MobileAuthLogin extends Command {
   static description = "Login to Autify for Mobile";
-
   static examples = [
     "Start interactive setup:\n<%= config.bin %> <%= command.id %>",
     "Reading the token from file:\n<%= config.bin %> <%= command.id %> < token.txt",

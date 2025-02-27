@@ -8,11 +8,9 @@ import { getWebClient } from "../../../autify/web/getWebClient";
 
 export default class WebTestWait extends Command {
   static description = "Wait a test result until it finishes.";
-
   static examples = [
     "<%= config.bin %> <%= command.id %> https://app.autify.com/projects/0000/results/0000",
   ];
-
   static flags = {
     timeout: Flags.integer({
       char: "t",
@@ -26,7 +24,6 @@ export default class WebTestWait extends Command {
       default: false,
     }),
   };
-
   static args = {
     "test-result-url": Args.string({
       description:

@@ -3,12 +3,10 @@ import { ClientManager } from "../../../autify/connect/client-manager/ClientMana
 
 export default class ConnectClientStart extends Command {
   static description = "Start Autify Connect Client";
-
   static examples = [
     "With pre-created Access Point:\n<%= config.bin %> <%= command.id %>",
     "With ephemeral Access Point of Autify for Web:\n<%= config.bin %> <%= command.id %> --web-workspace-id 000",
   ];
-
   static flags = {
     verbose: Flags.boolean({
       description: "Make the operation more talkative.",

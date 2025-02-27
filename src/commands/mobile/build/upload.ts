@@ -6,15 +6,12 @@ import { uploadBuild } from "../../../autify/mobile/uploadBuild";
 
 export default class MobileBuildUpload extends Command {
   static enableJsonFlag = true;
-
   static description = "Upload a build file";
-
   static examples = [
     "<%= config.bin %> <%= command.id %>",
     "Upload build file\n<%= config.bin %> <%= command.id %> --workspace-id AAA ./my.app",
     "Upload build file (JSON output)\n<%= config.bin %> <%= command.id %> --workspace-id AAA ./my.app --json",
   ];
-
   static flags = {
     "workspace-id": Flags.string({
       char: "w",
@@ -22,7 +19,6 @@ export default class MobileBuildUpload extends Command {
       required: true,
     }),
   };
-
   static args = {
     "build-path": Args.string({
       description:
