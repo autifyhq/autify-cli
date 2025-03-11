@@ -13,6 +13,9 @@ const testPathPattern =
 
 execSync(`npm run ${command} -- ${testPathPattern}`, {
   stdio: "inherit",
-  env: { ...process.env, NODE_OPTIONS: "--no-deprecation" },
+  env: {
+    ...process.env,
+    NODE_OPTIONS: "--no-deprecation --no-experimental-global-navigator",
+  },
   cwd: rootDir,
 });
