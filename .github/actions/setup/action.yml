@@ -14,7 +14,7 @@ runs:
         cache: npm
         registry-url: "https://registry.npmjs.org"
         node-version-file: "package.json"
-        node-version: 20
+        node-version: 22
     # https://github.com/npm/cli/issues/7308
     - if: runner.os == 'Windows'
       run: npm install -g npm@9.9.3
