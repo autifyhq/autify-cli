@@ -4,7 +4,7 @@ import {
   installBinary,
 } from "../../../autify/mobile/mobilelink/installBinary";
 
-export default class ConnectClientInstall extends Command {
+export default class MobileLinkInstall extends Command {
   static description = "Install Mobile Link";
   static examples = [
     "(Recommended) Install the stable version:\n<%= config.bin %> <%= command.id %>",
