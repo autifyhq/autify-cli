@@ -29,7 +29,7 @@ export type ProcessExit = Readonly<{
 }>;
 export class StateMachineTimeoutError extends CLIError {
   constructor(state: string) {
-    super(`Autify Device Link Manager faced timeout at ${state} state.`);
+    super(`MobileLink Manager faced timeout at ${state} state.`);
   }
 }
 
@@ -43,7 +43,7 @@ export class MobileLinkManager {
     this.logger.debug("exec");
     const version = await this.getMobiieLinkVersion();
     this.logger.info(
-      `Executing Mobile Link (path: ${this.mobileLinkPath}, version: ${version})`
+      `Executing MobileLink (path: ${this.mobileLinkPath}, version: ${version})`
     );
     this.spawn(argv);
   }
@@ -53,7 +53,7 @@ export class MobileLinkManager {
       this.logger.debug("start");
       const version = await this.getMobiieLinkVersion();
       this.logger.info(
-        `Executing Mobile Link (path: ${this.mobileLinkPath}, version: ${version})`
+        `Executing MobileLink (path: ${this.mobileLinkPath}, version: ${version})`
       );
       this.service.send("START", { workspaceId });
     } catch (error) {
@@ -79,13 +79,13 @@ export class MobileLinkManager {
     } = await this.once("done");
     if (!processExit) {
       this.logger.warn(
-        "Autify Mobile Link exited but unable to capture the exit status"
+        "MobileLink exited but unable to capture the exit status"
       );
       return null;
     }
 
     this.logger.info(
-      `Autify Mobile Linkt exited (code: ${processExit.code}, signal: ${processExit.signal})`
+      `MobileLinkt exited (code: ${processExit.code}, signal: ${processExit.signal})`
     );
     return processExit.code;
   }
