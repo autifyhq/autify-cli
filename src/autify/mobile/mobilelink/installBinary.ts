@@ -99,15 +99,18 @@ export const getInstallPath = (cacheDir: string): string => {
   return join(cacheDir, directoryName);
 };
 
+export const getBinaryPath = (cacheDir: string): string => {
+  return join(getInstallPath(cacheDir), "bin", "mobilelink");
+};
+
 export const getInstallVersion = async (path: string): Promise<string> => {
-  const binaryPath = join(path, "bin", "mobilelink");
-  if (!existsSync(binaryPath)) {
+  if (!existsSync(path)) {
     throw new CLIError(
-      `Autify Mobile Link isn't installed yet at ${binaryPath}. Run \`autify mobile link install\` first.`
+      `MobileLink isn't installed yet at ${path}. Run \`autify mobile link install\` first.`
     );
   }
 
-  const { stdout } = await promisify(execFile)(binaryPath, ["--version"], {
+  const { stdout } = await promisify(execFile)(path, ["--version"], {
     env,
   });
   const version = stdout.trim();
@@ -129,7 +132,8 @@ export const installBinary = async (
   const installPath = getInstallPath(cacheDir);
   rmSync(installPath, { recursive: true, force: true });
   renameSync(extractPath, installPath);
-  const versionString = await getInstallVersion(installPath);
+  const binaryPath = getBinaryPath(cacheDir);
+  const versionString = await getInstallVersion(binaryPath);
   // Clean up workspace. Ignore any exception as install is already done.
   try {
     rmSync(workspaceDir, { recursive: true, force: true });
