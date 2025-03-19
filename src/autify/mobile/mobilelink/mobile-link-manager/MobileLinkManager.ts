@@ -14,6 +14,7 @@ import {
   setupMobileLinkOutputLogger,
 } from "./Logger";
 import TypedEmitter from "typed-emitter";
+import { getOrThrow } from "../../../../config";
 
 export type MobileLinkEvents = TypedEmitter<{
   log: (msg: string) => void;
@@ -39,13 +40,16 @@ type MobileLinkManagerOptions = Readonly<{
 }>;
 
 export class MobileLinkManager {
-  public async exec(argv: string[]): Promise<void> {
+  public async exec(
+    argv: string[],
+    extraEnv: { [key: string]: string } = {}
+  ): Promise<void> {
     this.logger.debug("exec");
     const version = await this.getMobiieLinkVersion();
     this.logger.info(
       `Executing MobileLink (path: ${this.mobileLinkPath}, args: ${argv.join(" ")}, version: ${version})`
     );
-    this.spawn(argv);
+    this.spawn(argv, extraEnv);
   }
 
   public async start(workspaceId?: string): Promise<void> {
@@ -63,11 +67,11 @@ export class MobileLinkManager {
   }
 
   public async setup(): Promise<void> {
-    this.exec(["link", "setup"]);
+    this.exec(["link", "setup"], this.integrationVariables);
   }
 
   public async doctor(): Promise<void> {
-    this.exec(["link", "doctor"]);
+    this.exec(["link", "doctor"], this.integrationVariables);
   }
 
   public async onceReady(): Promise<void> {
@@ -186,13 +190,7 @@ export class MobileLinkManager {
     try {
       const argv = ["link", "start"];
       if (workspaceId) argv.push(workspaceId);
-      this.spawn(
-        argv,
-        {
-          AUTIFY_CONNECT_BIN_PATH: this.autifyConnectPath,
-        },
-        false
-      );
+      this.spawn(argv, this.integrationVariables, false);
       if (this.childProcess) {
         this.childProcess.on("exit", (code, signal) => {
           this.service.send("EXIT", { processExit: { code, signal } });
@@ -273,5 +271,17 @@ export class MobileLinkManager {
 
   private get autifyConnectPath() {
     return getInstallPath(this.options.configDir, this.options.cacheDir);
+  }
+
+  private get accessToken() {
+    return getOrThrow(this.options.configDir, "AUTIFY_MOBILE_ACCESS_TOKEN");
+  }
+
+  private get integrationVariables() {
+    return {
+      AUTIFY_CLI_INTEGRATION: "true",
+      AUTIFY_CONNECT_BIN_PATH: this.autifyConnectPath,
+      AUTIFY_MOBILE_ACCESS_TOKEN: this.accessToken,
+    };
   }
 }
