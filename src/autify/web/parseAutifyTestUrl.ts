@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/filename-case */
-import { CLIError } from "@oclif/errors";
+import { Errors } from "@oclif/core";
 
 const parseTestScenarioUrl = (url: string) => {
   const { pathname } = new URL(url);
@@ -40,5 +40,5 @@ export const parseAutifyTestUrl = (url: string): TestScenario | TestPlan => {
   const testPlan = parseTestPlanUrl(url);
   if (testScenario) return testScenario;
   if (testPlan) return testPlan;
-  throw new CLIError(`Invalid URL: ${url}`);
+  throw new Errors.CLIError(`Invalid URL: ${url}`);
 };

@@ -1,9 +1,8 @@
-import { Command, Args, Flags } from "@oclif/core";
+import { Command, Args, Flags, Errors } from "@oclif/core";
 import * as emoji from "node-emoji";
 import { runTest } from "../../../autify/web/runTest";
 import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
 import WebTestWait from "./wait";
-import { CLIError } from "@oclif/errors";
 import { parseAutifyTestUrl } from "../../../autify/web/parseAutifyTestUrl";
 import { ClientManager } from "../../../autify/connect/client-manager/ClientManager";
 import { getWebClient } from "../../../autify/web/getWebClient";
@@ -191,11 +190,11 @@ export default class WebTestRun extends Command {
           try {
             await WebTestWait.run(waitArgs);
           } catch (error) {
-            if ((error as CLIError).oclif.exit === 0) return null;
+            if ((error as Errors.CLIError).oclif.exit === 0) return null;
             return error as Error;
           }
 
-          throw new CLIError(`Unexpected behavior.`);
+          throw new Errors.CLIError(`Unexpected behavior.`);
         };
 
         const maxRetryCount = flags["max-retry-count"];
@@ -257,7 +256,7 @@ export default class WebTestRun extends Command {
             `Use space instead (--url-replacements "${pattern_url} ${replacement_url}").`
         );
       } else {
-        throw new CLIError(
+        throw new Errors.CLIError(
           `Can't parse ${s} as --url-replacements option. Please make sure it has a space as a delimiter and surrounded by quotes. (e.g. --url-replacements "https://example.com https://example.net")`
         );
       }
