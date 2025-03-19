@@ -142,7 +142,12 @@ export class MobileLinkManager {
     });
     this.clientEvents.on("log", (msg) => {
       // Guardrail in case debug server isn't working well.
-      if (msg.includes("Local devices are ready for use")) {
+      if (
+        msg.includes("Local devices are ready for use") ||
+        msg.includes(
+          "起動しました。ローカルデバイスを利用する準備ができました。"
+        )
+      ) {
         this.clientEvents.emit("ready", msg);
       }
     });
