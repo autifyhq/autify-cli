@@ -66,6 +66,10 @@ export class MobileLinkManager {
     this.exec(["link", "setup"]);
   }
 
+  public async doctor(): Promise<void> {
+    this.exec(["link", "doctor"]);
+  }
+
   public async onceReady(): Promise<void> {
     this.logger.debug("onceReady");
     await this.once("ready");
