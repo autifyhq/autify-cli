@@ -43,7 +43,7 @@ export class MobileLinkManager {
     this.logger.debug("exec");
     const version = await this.getMobiieLinkVersion();
     this.logger.info(
-      `Executing MobileLink (path: ${this.mobileLinkPath}, version: ${version})`
+      `Executing MobileLink (path: ${this.mobileLinkPath}, args: ${argv.join(" ")}, version: ${version})`
     );
     this.spawn(argv);
   }
@@ -53,13 +53,17 @@ export class MobileLinkManager {
       this.logger.debug("start");
       const version = await this.getMobiieLinkVersion();
       this.logger.info(
-        `Executing MobileLink (path: ${this.mobileLinkPath}, version: ${version})`
+        `Executing MobileLink (path: ${this.mobileLinkPath}, args: link start, version: ${version})`
       );
       this.service.send("START", { workspaceId });
     } catch (error) {
       this.service.send("FAIL", { error });
       throw error;
     }
+  }
+
+  public async setup(): Promise<void> {
+    this.exec(["link", "setup"]);
   }
 
   public async onceReady(): Promise<void> {
@@ -168,13 +172,9 @@ export class MobileLinkManager {
       },
     });
     if (connectConsole) {
-      this.childProcess.stdout.on("data", (data) => {
-        process.stdout.write(data);
-      });
-
-      this.childProcess.stderr.on("data", (data) => {
-        process.stderr.write(data);
-      });
+      this.childProcess.stdout.pipe(process.stdout);
+      this.childProcess.stderr.pipe(process.stderr);
+      process.stdin.pipe(this.childProcess.stdin);
     }
   }
 

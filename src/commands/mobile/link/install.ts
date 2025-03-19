@@ -5,9 +5,9 @@ import {
 } from "../../../autify/mobile/mobilelink/installBinary";
 
 export default class MobileLinkInstall extends Command {
-  static description = "Install Mobile Link";
+  static description = "Install MobileLink";
   static examples = [
-    "(Recommended) Install the stable version:\n<%= config.bin %> <%= command.id %>",
+    "Install the stable version:\n<%= config.bin %> <%= command.id %>",
   ];
   static flags = {};
 
