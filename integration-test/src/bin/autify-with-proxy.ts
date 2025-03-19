@@ -112,7 +112,7 @@ const createPolly = async (args: string[]) => {
 
 const startProxy = (target: string) => {
   const app = express();
-  app.use("", createProxyMiddleware({ target, changeOrigin: true }));
+  app.use(createProxyMiddleware({ target, changeOrigin: true }));
   const server = app.listen();
   const { port } = server.address() as AddressInfo;
   return { server, port };
