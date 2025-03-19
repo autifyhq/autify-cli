@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/filename-case */
-import { CLIError } from "@oclif/errors";
+import { Errors } from "@oclif/core";
 import { ClientEvents } from "./ClientManager";
 import AbortController from "abort-controller";
 
@@ -38,7 +38,7 @@ export class DebugServerClient {
     const req = { method: "GET", path: "/status" };
     const res = (await this.request(req)) as DebugServerStatusResponse;
     if (res.status && res.message) return res;
-    throw new CLIError(
+    throw new Errors.CLIError(
       `Invalid response from ${JSON.stringify(req)}: ${JSON.stringify(res)}`
     );
   }
@@ -62,7 +62,7 @@ export class DebugServerClient {
     }
 
     if (response.ok) return response.json();
-    throw new CLIError(
+    throw new Errors.CLIError(
       `Request to debug server failed: ${method} ${path} => ${response.status} ${response.statusText}`
     );
   }

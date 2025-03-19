@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/filename-case */
-import { CLIError } from "@oclif/errors";
+import { Errors } from "@oclif/core";
 import { arch, env, platform } from "node:process";
 import {
   createReadStream,
@@ -27,7 +27,7 @@ const getMode = (configDir: string): ClientMode => {
   const mode = get(configDir, "AUTIFY_CONNECT_CLIENT_MODE");
   if (!mode) return "real";
   if (!["fake", "real"].includes(mode))
-    throw new CLIError(
+    throw new Errors.CLIError(
       `Unknown value is specified by AUTIFY_CONNECT_CLIENT_MODE: ${mode}`
     );
   return mode as ClientMode;
@@ -38,14 +38,14 @@ const getOs = () => {
   if (os === "linux") return "linux";
   if (os === "darwin") return "darwin";
   if (os === "win32") return "windows";
-  throw new CLIError(`Unsupported OS: ${os}`);
+  throw new Errors.CLIError(`Unsupported OS: ${os}`);
 };
 
 const getArch = () => {
   if (arch === "ia32") return "386";
   if (arch === "x64") return "amd64";
   if (arch === "arm64") return "arm64";
-  throw new CLIError(`Unsupported Architecture: ${arch}`);
+  throw new Errors.CLIError(`Unsupported Architecture: ${arch}`);
 };
 
 const getExt = () => (getOs() === "windows" ? "zip" : "tar.gz");
@@ -80,7 +80,7 @@ const download = async (workspaceDir: string, url: URL) => {
   const downloadPath = join(workspaceDir, basename(url.pathname));
   const response = await fetch(url);
   if (!response.ok)
-    throw new CLIError(`Failed to fetch ${url}: ${response.status}`);
+    throw new Errors.CLIError(`Failed to fetch ${url}: ${response.status}`);
   const streamPipeline = promisify(pipeline);
   if (response.body) {
     await streamPipeline(response.body, createWriteStream(downloadPath));
@@ -102,17 +102,17 @@ const extract = async (downloadPath: string) => {
       Extract({ path: dir })
     );
   } else {
-    throw new CLIError(`Unsupported file format: ${downloadPath}`);
+    throw new Errors.CLIError(`Unsupported file format: ${downloadPath}`);
   }
 
   const files = readdirSync(dir);
   const binary = files.find((file) => file.startsWith("autifyconnect"));
   if (!binary)
-    throw new CLIError(`Cannot find any autifyconnect binary in ${dir}`);
+    throw new Errors.CLIError(`Cannot find any autifyconnect binary in ${dir}`);
   return join(dir, binary);
 };
 
-export class ConnectClientVersionMismatchError extends CLIError {
+export class ConnectClientVersionMismatchError extends Errors.CLIError {
   constructor(
     readonly expected: string,
     readonly reality: string
@@ -147,7 +147,7 @@ export const getInstallPath = (configDir: string, cacheDir: string): string => {
 
 export const getInstallVersion = async (path: string): Promise<string> => {
   if (!existsSync(path)) {
-    throw new CLIError(
+    throw new Errors.CLIError(
       `Autify Connect Client isn't installed yet at ${path}. Run \`autify connect client install\` first.`
     );
   }
@@ -156,7 +156,7 @@ export const getInstallVersion = async (path: string): Promise<string> => {
     env,
   });
   const version = stderr.trim();
-  if (version === "") throw new CLIError("Version is empty");
+  if (version === "") throw new Errors.CLIError("Version is empty");
   return version;
 };
 

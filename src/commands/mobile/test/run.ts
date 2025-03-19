@@ -1,5 +1,4 @@
-import { Command, Args, Flags } from "@oclif/core";
-import { CLIError } from "@oclif/errors";
+import { Command, Args, Flags, Errors } from "@oclif/core";
 import * as emoji from "node-emoji";
 import { getMobileClient } from "../../../autify/mobile/getMobileClient";
 import { getMobileTestResultUrl } from "../../../autify/mobile/getTestResultUrl";
@@ -73,7 +72,7 @@ export default class MobileTestRun extends Command {
         // eslint-disable-next-line camelcase
         build_id: buildId,
       });
-      if (!res.data.id) throw new CLIError(`Failed to run a test plan.`);
+      if (!res.data.id) throw new Errors.CLIError(`Failed to run a test plan.`);
       const testResultUrl = getMobileTestResultUrl(
         configDir,
         workspaceId,
@@ -96,11 +95,11 @@ export default class MobileTestRun extends Command {
         try {
           await MobileTestWait.run(waitArgs);
         } catch (error) {
-          if ((error as CLIError).oclif.exit === 0) return null;
+          if ((error as Errors.CLIError).oclif.exit === 0) return null;
           return error as Error;
         }
 
-        throw new CLIError(`Unexpected behavior.`);
+        throw new Errors.CLIError(`Unexpected behavior.`);
       };
 
       const maxRetryCount = flags["max-retry-count"];

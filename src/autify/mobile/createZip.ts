@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 
-import { CLIError } from "@oclif/errors";
+import { Errors } from "@oclif/core";
 import { execFileSync } from "node:child_process";
 import { createWriteStream, lstatSync } from "node:fs";
 import { basename, dirname, resolve, join } from "node:path";
@@ -13,7 +13,9 @@ import { mkdtemp } from "node:fs/promises";
 
 const checkBuildPath = (buildPath: string) => {
   if (!lstatSync(buildPath).isDirectory()) {
-    throw new CLIError(`Build path (${buildPath}) is expected to directory.`);
+    throw new Errors.CLIError(
+      `Build path (${buildPath}) is expected to directory.`
+    );
   }
 
   const parentPath = resolve(dirname(buildPath));
@@ -48,7 +50,7 @@ export const createZip = async (buildPath: string): Promise<string> => {
     const zipStream = new StreamZip.async({ file: zipFile });
     await zipStream.close();
   } catch (error) {
-    throw new CLIError(
+    throw new Errors.CLIError(
       `Failed to create a valid zip file (${zipFile}): ${error}`
     );
   }

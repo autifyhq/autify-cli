@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { MobileClient } from "@autifyhq/autify-sdk";
-import { CLIError } from "@oclif/errors";
+import { Errors } from "@oclif/core";
 import { inspectBuildFile } from "./inspectBuildFile";
 
 export const uploadBuild = async (
@@ -10,6 +10,6 @@ export const uploadBuild = async (
 ): Promise<[string, "ios" | "android"]> => {
   const [uploadPath, os] = await inspectBuildFile(buildPath);
   const res = await client.uploadBuild(workspaceId, uploadPath);
-  if (!res.data.id) throw new CLIError(`Failed to upload ${buildPath}.`);
+  if (!res.data.id) throw new Errors.CLIError(`Failed to upload ${buildPath}.`);
   return [res.data.id, os];
 };

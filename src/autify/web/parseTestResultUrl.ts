@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/filename-case */
-import { CLIError } from "@oclif/errors";
+import { Errors } from "@oclif/core";
 
 export const parseTestResultUrl = (
   url: string
@@ -10,6 +10,7 @@ export const parseTestResultUrl = (
   const match = testResultUrlPathRegExp.exec(pathname);
   const workspaceId = Number.parseInt(match?.groups?.workspaceId ?? "", 10);
   const resultId = Number.parseInt(match?.groups?.resultId ?? "", 10);
-  if (!workspaceId || !resultId) throw new CLIError(`Invalid URL: ${url}`);
+  if (!workspaceId || !resultId)
+    throw new Errors.CLIError(`Invalid URL: ${url}`);
   return { workspaceId, resultId };
 };
