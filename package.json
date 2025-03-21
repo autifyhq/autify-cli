@@ -27,7 +27,7 @@
     "archiver": "^7.0.1",
     "envfile": "^7.1.0",
     "get-port": "^7.1.0",
-    "inquirer": "^8.2.6",
+    "inquirer": "^12.5.0",
     "listr": "^0.14.3",
     "node-emoji": "^2.2.0",
     "node-stream-zip": "^1.15.0",
