@@ -25,7 +25,6 @@ export default class MobileTestRun extends Command {
     }),
     "device-ids": Flags.string({
       description: "Comma-separated device IDs to run the test plan.",
-      exclusive: ["device-ids"],
     }),
     wait: Flags.boolean({
       char: "w",
