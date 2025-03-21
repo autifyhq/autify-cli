@@ -23,6 +23,10 @@ export default class MobileTestRun extends Command {
         "File path to the iOS app (*.app, *.ipa) or Android app (*.apk).",
       exclusive: ["build-id"],
     }),
+    "device-ids": Flags.string({
+      description: "Comma-separated device IDs to run the test plan.",
+      exclusive: ["device-ids"],
+    }),
     wait: Flags.boolean({
       char: "w",
       description: "Wait until the test finishes.",
@@ -57,6 +61,9 @@ export default class MobileTestRun extends Command {
     const { args, flags } = await this.parse(MobileTestRun);
     let buildId = flags["build-id"];
     const buildPath = flags["build-path"];
+    const deviceIds = flags["device-ids"]
+      ? flags["device-ids"].split(",").map((s) => s.trim())
+      : undefined;
     const { configDir, userAgent } = this.config;
     const client = getMobileClient(configDir, userAgent);
     const { workspaceId, testPlanId } = parseTestPlanUrl(args["test-plan-url"]);
@@ -71,6 +78,8 @@ export default class MobileTestRun extends Command {
       const res = await client.runTestPlan(testPlanId, {
         // eslint-disable-next-line camelcase
         build_id: buildId,
+        // eslint-disable-next-line camelcase
+        device_ids: deviceIds,
       });
       if (!res.data.id) throw new Errors.CLIError(`Failed to run a test plan.`);
       const testResultUrl = getMobileTestResultUrl(
