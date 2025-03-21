@@ -279,7 +279,6 @@ export class MobileLinkManager {
 
   private get integrationVariables() {
     return {
-      AUTIFY_CLI_INTEGRATION: "true",
       AUTIFY_CONNECT_BIN_PATH: this.autifyConnectPath,
       AUTIFY_MOBILE_ACCESS_TOKEN: this.accessToken,
     };
