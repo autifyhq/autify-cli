@@ -1,6 +1,6 @@
 {
   "name": "@autifyhq/autify-cli",
-  "version": "0.52.0-beta.0",
+  "version": "0.53.0-beta.0",
   "description": "Autify Command Line Interface (CLI)",
   "author": "Autify",
   "bin": {
@@ -19,7 +19,6 @@
   "dependencies": {
     "@autifyhq/autify-sdk": "^0.25.0",
     "@oclif/core": "^3.27.0",
-    "@oclif/errors": "^1.3.6",
     "@oclif/plugin-help": "^6.2.27",
     "@oclif/plugin-not-found": "^3.2.47",
     "@oclif/plugin-update": "^4.6.35",
@@ -28,7 +27,7 @@
     "archiver": "^7.0.1",
     "envfile": "^7.1.0",
     "get-port": "^7.1.0",
-    "inquirer": "^8.2.6",
+    "inquirer": "^12.5.0",
     "listr": "^0.14.3",
     "node-emoji": "^2.2.0",
     "node-stream-zip": "^1.15.0",
@@ -48,7 +47,6 @@
     "@oclif/prettier-config": "^0.2.1",
     "@types/archiver": "^6.0.3",
     "@types/chai": "^5.2.0",
-    "@types/inquirer": "^8.2.10",
     "@types/listr": "^0.14.9",
     "@types/node": "^22.13.10",
     "@types/shell-quote": "^1.7.5",
@@ -69,7 +67,7 @@
     "tslib": "^2.8.1",
     "typed-emitter": "^2.1.0",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.26.1"
+    "typescript-eslint": "^8.27.0"
   },
   "oclif": {
     "bin": "autify",

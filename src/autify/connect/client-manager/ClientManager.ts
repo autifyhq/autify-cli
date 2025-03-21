@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { WebClient } from "@autifyhq/autify-sdk";
-import { CLIError } from "@oclif/errors";
+import { Errors } from "@oclif/core";
 import { ChildProcessWithoutNullStreams, spawn } from "node:child_process";
 import { env } from "node:process";
 import { EventEmitter } from "node:stream";
@@ -54,7 +54,7 @@ export type ProcessExit = Readonly<{
   code: number | null;
   signal: NodeJS.Signals | null;
 }>;
-export class StateMachineTimeoutError extends CLIError {
+export class StateMachineTimeoutError extends Errors.CLIError {
   constructor(state: string) {
     super(`Autify Connect Manager faced timeout at ${state} state.`);
   }
@@ -95,7 +95,7 @@ export class ClientManager {
     const name = get(options.configDir, "AUTIFY_CONNECT_ACCESS_POINT_NAME");
     const key = get(options.configDir, "AUTIFY_CONNECT_ACCESS_POINT_KEY");
     if (!name || !key)
-      throw new CLIError(
+      throw new Errors.CLIError(
         "Access Point is not saved. Run `autify connect access-point create/set` first."
       );
     const accessPoint = createStaticAccessPoint(name, key);
@@ -322,7 +322,7 @@ export class ClientManager {
         }
       );
     } catch {
-      throw new CLIError(
+      throw new Errors.CLIError(
         `Unknown state transition: ${this.service.getSnapshot().value}`
       );
     }

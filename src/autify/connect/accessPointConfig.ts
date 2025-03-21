@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/filename-case */
-import { CLIError } from "@oclif/errors";
+import { Errors } from "@oclif/core";
 import inquirer from "inquirer";
 import { get, set } from "../../config";
 
@@ -18,7 +18,7 @@ export const confirmOverwriteAccessPoint = async (
       },
     ]);
     if (!res.confirmed) {
-      throw new CLIError(
+      throw new Errors.CLIError(
         `Cancelled to overwrite the existing Access Point. It stays as is (name: ${existingName})`
       );
     }

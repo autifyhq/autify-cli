@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/filename-case */
-import { CLIError } from "@oclif/errors";
+import { Errors } from "@oclif/core";
 import { lstatSync } from "node:fs";
 import { createZip } from "./createZip";
 
@@ -18,7 +18,9 @@ const isAndroidApp = (buildPath: string) => {
 const getOs = (buildPath: string) => {
   if (isIosApp(buildPath)) return "ios";
   if (isAndroidApp(buildPath)) return "android";
-  throw new CLIError(`${buildPath} doesn't look like iOS app nor Android apk.`);
+  throw new Errors.CLIError(
+    `${buildPath} doesn't look like iOS app nor Android apk.`
+  );
 };
 
 const getUploadPath = async (buildPath: string, os: "ios" | "android") => {
@@ -28,7 +30,7 @@ const getUploadPath = async (buildPath: string, os: "ios" | "android") => {
   }
 
   if (os === "android") return buildPath;
-  throw new CLIError(`Invalid os: ${os}`);
+  throw new Errors.CLIError(`Invalid os: ${os}`);
 };
 
 export const inspectBuildFile = async (

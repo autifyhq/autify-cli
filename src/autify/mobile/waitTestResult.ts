@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/filename-case */
-import { CLIError } from "@oclif/errors";
+import { Errors } from "@oclif/core";
 import Listr, { ListrTaskWrapper } from "listr";
 import { setInterval } from "node:timers/promises";
 import { MobileClient } from "@autifyhq/autify-sdk";
@@ -22,7 +22,9 @@ const waitUntil = async <T>(
           )) {
             const now = Date.now();
             if (now - startTime > timeoutSecond * 1000) {
-              throw new CLIError(`Timeout after ${timeoutSecond} seconds.`);
+              throw new Errors.CLIError(
+                `Timeout after ${timeoutSecond} seconds.`
+              );
             }
 
             const result = await callback(task);
