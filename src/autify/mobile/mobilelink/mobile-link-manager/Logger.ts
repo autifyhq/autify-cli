@@ -72,7 +72,17 @@ export const setupMobileLinkOutputLogger = (
     crlfDelay: Number.POSITIVE_INFINITY,
   }).on("line", (line) => {
     try {
-      callback(JSON.parse(line) as ClientLog);
+      const data = JSON.parse(line);
+      const level = data.level;
+      const timestamp = data.timestamp;
+      delete data.level;
+      delete data.timestamp;
+      const log: ClientLog = {
+        level,
+        timestamp,
+        message: JSON.stringify(data),
+      };
+      callback(log);
     } catch {
       callback({
         level: "info",
