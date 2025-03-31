@@ -57,6 +57,7 @@
     "eslint-config-oclif": "^6.0.32",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-unicorn": "^57.0.0",
+    "execa": "^9.5.2",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
     "oclif": "^4.17.37",
