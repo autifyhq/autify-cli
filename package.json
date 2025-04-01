@@ -153,6 +153,7 @@
     "test:integration:connect:dev": "AUTIFY_CONNECT_CLIENT_MODE=fake ./bin/dev connect client install && npm run test:integration:dev AutifyConnectClient",
     "test:integration:connect:record": "autify connect client install && npm run test:integration:record AutifyConnectClient",
     "test:integration:connect:dev:record": "./bin/dev connect client install && npm run test:integration:dev:record AutifyConnectClient",
+    "test:e2e": "npx jest --testPathPattern=e2e-test",
     "version": "oclif readme && git add README.md",
     "prepare": "per-env || true",
     "prepare:development": "husky install",
