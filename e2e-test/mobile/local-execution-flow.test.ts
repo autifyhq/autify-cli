@@ -16,8 +16,8 @@ const TEST_PLAN_URL =
 jest.setTimeout(10 * 60 * 1000);
 
 test("NoCode Mobile local device test execution flow", async () => {
-  const { stdout: version } = await execa("autify", ["--version"]);
-  console.log("AUTIFY CLI version:", version);
+  const { stdout: autifyCliVersion } = await execa("autify", ["--version"]);
+  console.log("AUTIFY CLI version:", autifyCliVersion);
 
   const simulator = await pickupOneSimulator();
   if (!simulator) {
@@ -36,6 +36,14 @@ test("NoCode Mobile local device test execution flow", async () => {
       },
     ]
   );
+
+  const { stdout: mobileLinkVersion } = await execa("autify", [
+    "mobile",
+    "link",
+    "exec",
+    "--version",
+  ]);
+  console.log("MobileLink version:", mobileLinkVersion);
 
   await interactWithProcess(
     getAutifyCliPath(),
