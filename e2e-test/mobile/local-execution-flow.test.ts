@@ -1,4 +1,5 @@
 import { jest, test } from "@jest/globals";
+import execa from "execa";
 
 import { delay } from "./delay";
 import { getAutifyCliPath } from "./get-autify-cli-path";
@@ -15,6 +16,9 @@ const TEST_PLAN_URL =
 jest.setTimeout(10 * 60 * 1000);
 
 test("NoCode Mobile local device test execution flow", async () => {
+  const { stdout: version } = await execa("autify", ["--version"]);
+  console.log("AUTIFY CLI version:", version);
+
   const simulator = await pickupOneSimulator();
   if (!simulator) {
     throw new Error("No available iPhone simulator found");
