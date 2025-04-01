@@ -34,11 +34,11 @@ jobs:
     uses: ./.github/workflows/github-actions-tests.yml
 
   approved:
-    needs: [integration-tests, github-actions-tests]
+    needs: [integration-tests, e2e-tests, github-actions-tests]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ needs.integration-tests.result == 'success' }}
+      - if: ${{ needs.integration-tests.result == 'success' && needs.e2e-tests.result == 'success' }}
         run: echo "Approved!"
       - if: ${{ needs.integration-tests.result != 'success' }}
         run: echo "Not approved!" && exit 1
