@@ -18,6 +18,9 @@ import { execFile } from "node:child_process";
 import * as tar from "tar";
 import { get } from "../../../config";
 
+const MOBILE_LINK_VERSION = "0.3.0";
+const MOBILE_LINK_HASH = "26f64f82d";
+
 const getOs = () => {
   const os = platform;
   if (os === "linux") return "linux";
@@ -41,13 +44,14 @@ export const getMobileLinkSourceUrl = (configDir: string): URL => {
     return new URL(customUrl);
   }
 
-  const baseUrl =
-    "https://d21jojv86oc6d1.cloudfront.net/mobilelink/channels/stable";
+  const baseUrl = "https://d21jojv86oc6d1.cloudfront.net/mobilelink/versions";
   const prefix = "mobilelink";
   const os = getOs();
   const arch = getArch();
   const ext = getExt();
-  return new URL(`${baseUrl}/${prefix}-${os}-${arch}.${ext}`);
+  return new URL(
+    `${baseUrl}/${MOBILE_LINK_VERSION}/${MOBILE_LINK_HASH}/${prefix}-v${MOBILE_LINK_VERSION}-${MOBILE_LINK_HASH}-${os}-${arch}.${ext}`
+  );
 };
 
 const download = async (workspaceDir: string, url: URL) => {
