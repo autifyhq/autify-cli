@@ -26,6 +26,17 @@ test("NoCode Mobile local device test execution flow", async () => {
 
   console.log(`Simulator: ${simulator.name}(${simulator.udid})`);
 
+  // Install mobilelink first to run the `config clean` command
+  await interactWithProcess(
+    getAutifyCliPath(),
+    ["mobile", "link", "install"],
+    [
+      {
+        query: /Successfully installed Mobile Link/,
+      },
+    ]
+  );
+
   await interactWithProcess(
     getAutifyCliPath(),
     ["mobile", "link", "exec", "config", "clean"],
