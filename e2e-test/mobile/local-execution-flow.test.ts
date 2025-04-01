@@ -3,7 +3,7 @@ import { jest, test } from "@jest/globals";
 import { delay } from "./delay";
 import { getAutifyCliPath } from "./get-autify-cli-path";
 import { interactWithProcess } from "./interact-with-process";
-import { killStartProcess } from "./kill-start-process";
+import { terminateStartProcess } from "./terminate-start-process";
 import { pickupOneSimulator } from "./pickup-one-simulator";
 
 const BUILD_ID = "rQuzJw";
@@ -108,7 +108,7 @@ test("NoCode Mobile local device test execution flow", async () => {
       ]
     );
 
-    killStartProcess();
+    terminateStartProcess();
   };
 
   await Promise.all([startMobileLinkResult, runTest()]);
