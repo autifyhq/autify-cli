@@ -120,6 +120,8 @@ test("NoCode Mobile local device test execution flow", async () => {
         "--build-id",
         BUILD_ID,
         "--wait",
+        "--timeout",
+        "600",
         "--device-ids",
         simulator.udid,
         TEST_PLAN_URL,
