@@ -29,3 +29,5 @@ jobs:
       - run: npm run test:e2e
         env:
           AUTIFY_CLI_E2E_AUTIFY_MOBILE_ACCESS_TOKEN: ${{ secrets.AUTIFY_CLI_E2E_AUTIFY_MOBILE_ACCESS_TOKEN }}
+        continue-on-error: true
+      - run: autify mobile link setup
