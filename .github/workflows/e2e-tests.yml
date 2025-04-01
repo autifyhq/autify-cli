@@ -1,0 +1,29 @@
+name: E2E tests
+
+on:
+  workflow_call:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  tarball:
+    strategy:
+      matrix:
+        include:
+          - target: darwin-x64
+            os: macos-latest
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - run: git config --global core.longpaths true
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/install
+        with:
+          target: ${{ matrix.target }}
+      - run: npm run test:e2e
