@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - target: darwin-x64
+          - target: darwin-arm64
             os: macos-latest
       fail-fast: false
 
