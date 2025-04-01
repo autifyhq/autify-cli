@@ -1,0 +1,52 @@
+import { spawn } from "node:child_process";
+import { env } from "node:process";
+
+type Interaction = {
+  answer?: string;
+  query: RegExp;
+};
+
+export const interactWithProcess = async (
+  binaryPath: string,
+  argv: string[],
+  interactions: Interaction[],
+  extraEnv: { [key: string]: string } = {}
+): Promise<void> => {
+  const child = spawn(binaryPath, argv, {
+    env: {
+      ...env,
+      ...extraEnv,
+    },
+  });
+
+  const interactionWithResults = interactions.map((interaction) => ({
+    ...interaction,
+    result: false,
+  }));
+
+  for await (const interaction of interactionWithResults) {
+    let text = "";
+    for await (const data of child.stdout.iterator({
+      destroyOnReturn: false,
+    })) {
+      process.stdout.write(data);
+      text += data.toString();
+      if (interaction.query.test(text)) {
+        if (interaction.answer) {
+          child.stdin.write(interaction.answer);
+        }
+
+        interaction.result = true;
+        break;
+      }
+    }
+  }
+
+  for (const interaction of interactionWithResults) {
+    if (!interaction.result) {
+      throw new Error(
+        `Didn't get expected output to query: ${interaction.query}`
+      );
+    }
+  }
+};
