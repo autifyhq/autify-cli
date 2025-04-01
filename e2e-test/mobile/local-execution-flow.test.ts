@@ -26,6 +26,10 @@ test("NoCode Mobile local device test execution flow", async () => {
 
   console.log(`Simulator: ${simulator.name}(${simulator.udid})`);
 
+  console.log(
+    "access token!!!!",
+    process.env.AUTIFY_CLI_E2E_AUTIFY_MOBILE_ACCESS_TOKEN
+  );
   // Install mobilelink first to run the `config clean` command
   await interactWithProcess(
     getAutifyCliPath(),
