@@ -38,7 +38,10 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ needs.integration-tests.result == 'success' && needs.e2e-tests.result == 'success' }}
-        run: echo "Approved!"
-      - if: ${{ needs.integration-tests.result != 'success' }}
-        run: echo "Not approved!" && exit 1
+      - run: |
+          if [[ "${{ needs.integration-tests.result }}" == "success" && "${{ needs.e2e-tests.result }}" == "success" ]]; then
+            echo "Approved!"
+          else
+            echo "Not approved!"
+            exit 1
+          fi
