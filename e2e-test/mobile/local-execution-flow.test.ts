@@ -13,7 +13,7 @@ const TEAM_ID = "7XV69VPSD3";
 const TEST_PLAN_URL =
   "https://mobile-app.autify.com/projects/2WxFvm/test_plans/kYtaqp";
 
-jest.setTimeout(15 * 60 * 1000);
+jest.setTimeout(20 * 60 * 1000);
 
 test("NoCode Mobile local device test execution flow", async () => {
   const { stdout: autifyCliVersion } = await execa("autify", ["--version"]);
@@ -130,7 +130,7 @@ test("NoCode Mobile local device test execution flow", async () => {
         BUILD_ID,
         "--wait",
         "--timeout",
-        "900",
+        "1200",
         "--device-ids",
         simulator.udid,
         TEST_PLAN_URL,
