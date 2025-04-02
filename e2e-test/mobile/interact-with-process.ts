@@ -50,9 +50,7 @@ export const interactWithProcess = async (
 
   for (const interaction of interactionWithResults) {
     if (!interaction.result) {
-      throw new Error(
-        `Didn't get expected output to query: ${interaction.query}`
-      );
+      throw new Error(`Didn't get expected output: ${interaction.regex}`);
     }
   }
 };
