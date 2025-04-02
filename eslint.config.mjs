@@ -17,7 +17,7 @@ export default [
   ...oclif,
   prettier,
   {
-    files: ["**/*.ts", "**/*.mts"],
+    files: ["**/*.ts"],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-useless-constructor": "error",
