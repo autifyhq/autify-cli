@@ -32,7 +32,8 @@ test("NoCode Mobile local device test execution flow", async () => {
     ["mobile", "link", "install"],
     [
       {
-        query: /Successfully installed Mobile Link/,
+        type: "expect",
+        regex: /Successfully installed Mobile Link/,
       },
     ]
   );
@@ -50,7 +51,8 @@ test("NoCode Mobile local device test execution flow", async () => {
     ["mobile", "link", "exec", "config", "clean"],
     [
       {
-        query: /The configuration has been cleaned/,
+        type: "expect",
+        regex: /The configuration has been cleaned/,
       },
     ]
   );
@@ -60,7 +62,8 @@ test("NoCode Mobile local device test execution flow", async () => {
     ["mobile", "auth", "login"],
     [
       {
-        query: /Enter Access Token/,
+        type: "question",
+        regex: /Enter Access Token/,
         answer: `${process.env.AUTIFY_CLI_E2E_AUTIFY_MOBILE_ACCESS_TOKEN}\n`,
       },
     ]
@@ -71,24 +74,29 @@ test("NoCode Mobile local device test execution flow", async () => {
     ["mobile", "link", "setup"],
     [
       {
-        query:
+        type: "question",
+        regex:
           /Enter the workspace ID of Nocode Mobile to use by default.*\n>/s,
         answer: `${WORKSPACE_ID}\n`,
       },
       {
-        query: /Would you like to send information about test execution.*\n>/s,
+        type: "question",
+        regex: /Would you like to send information about test execution.*\n>/s,
         answer: "Yes\n",
       },
       {
-        query: /Enter the Team ID of the Apple Developer Program.*\n>/s,
+        type: "question",
+        regex: /Enter the Team ID of the Apple Developer Program.*\n>/s,
         answer: `${TEAM_ID}\n`,
       },
       {
-        query: /Enter the Signing ID of the Apple Developer Program.*\n>/s,
+        type: "question",
+        regex: /Enter the Signing ID of the Apple Developer Program.*\n>/s,
         answer: "\n",
       },
       {
-        query:
+        type: "question",
+        regex:
           /Enter the Bundle ID of WebDriverAgent to use for testing iOS apps.*\n>/s,
         answer: "com.autify.WebDriverAgentRunner\n",
       },
@@ -100,7 +108,8 @@ test("NoCode Mobile local device test execution flow", async () => {
     ["mobile", "link", "start"],
     [
       {
-        query: /Exiting this command with the same exit code\(0\)/,
+        type: "expect",
+        regex: /Exiting this command with the same exit code\(0\)/,
       },
     ],
     {
@@ -128,7 +137,8 @@ test("NoCode Mobile local device test execution flow", async () => {
       ],
       [
         {
-          query: /Test passed!/,
+          type: "expect",
+          regex: /Test passed!/,
         },
       ]
     );
