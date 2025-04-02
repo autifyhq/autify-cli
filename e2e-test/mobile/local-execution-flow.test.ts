@@ -118,7 +118,7 @@ test("NoCode Mobile local device test execution flow", async () => {
   );
 
   const runTest = async () => {
-    await delay(10_000);
+    await delay(20_000);
 
     await interactWithProcess(
       getAutifyCliPath(),
