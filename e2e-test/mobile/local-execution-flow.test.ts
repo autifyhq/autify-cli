@@ -118,6 +118,7 @@ test("NoCode Mobile local device test execution flow", async () => {
   );
 
   const runTest = async () => {
+    // Ensure MobileLink gets ready
     await delay(20_000);
 
     await interactWithProcess(
