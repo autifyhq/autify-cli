@@ -1,10 +1,16 @@
 import { spawn } from "node:child_process";
 import { env } from "node:process";
 
-type Interaction = {
-  answer?: string;
-  query: RegExp;
-};
+type Interaction =
+  | {
+      type: "expect";
+      regex: RegExp;
+    }
+  | {
+      type: "question";
+      regex: RegExp;
+      answer: string;
+    };
 
 export const interactWithProcess = async (
   binaryPath: string,
@@ -31,8 +37,8 @@ export const interactWithProcess = async (
     })) {
       process.stdout.write(data);
       text += data.toString();
-      if (interaction.query.test(text)) {
-        if (interaction.answer) {
+      if (interaction.regex.test(text)) {
+        if (interaction.type === "question") {
           child.stdin.write(interaction.answer);
         }
 
