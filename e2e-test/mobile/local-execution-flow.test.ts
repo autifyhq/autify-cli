@@ -122,35 +122,33 @@ test("NoCode Mobile local device test execution flow", async () => {
     // Ensure MobileLink gets ready
     await delay(20_000);
 
-    await interactWithProcess(
-      getAutifyCliPath(),
-      [
-        "mobile",
-        "test",
-        "run",
-        "--build-id",
-        BUILD_ID,
-        "--wait",
-        "--timeout",
-        TIMEOUT_SECONDS.toString(),
-        "--device-ids",
-        simulator.udid,
-        TEST_PLAN_URL,
-      ],
-      [
-        {
-          type: "expect",
-          regex: /Test passed!/,
-        },
-      ]
-    );
-
-    terminateStartProcess();
+    try {
+      await interactWithProcess(
+        getAutifyCliPath(),
+        [
+          "mobile",
+          "test",
+          "run",
+          "--build-id",
+          BUILD_ID,
+          "--wait",
+          "--timeout",
+          TIMEOUT_SECONDS.toString(),
+          "--device-ids",
+          simulator.udid,
+          TEST_PLAN_URL,
+        ],
+        [
+          {
+            type: "expect",
+            regex: /Test passed!/,
+          },
+        ]
+      );
+    } finally {
+      terminateStartProcess();
+    }
   };
-
-  // Test doesn't start in the TIMEOUT_SECONDS sometimes. To ensure E2E to finish in a reasonable time, we terminate
-  // MobileLink so that the test can fail.
-  setTimeout(terminateStartProcess, TIMEOUT_SECONDS * 1000);
 
   await Promise.all([startMobileLinkResult, runTest()]);
 });
