@@ -31,7 +31,7 @@ const getOs = () => {
 
 const getArch = () => {
   if (arch === "ia32") return "386";
-  if (arch === "x64") return "amd64";
+  if (arch === "x64") return "x64";
   if (arch === "arm64") return "arm64";
   throw new Errors.CLIError(`Unsupported Architecture: ${arch}`);
 };
