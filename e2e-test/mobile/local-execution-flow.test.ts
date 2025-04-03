@@ -12,7 +12,7 @@ const WORKSPACE_ID = "2WxFvm";
 const TEAM_ID = "7XV69VPSD3";
 const TEST_PLAN_URL =
   "https://mobile-app.autify.com/projects/2WxFvm/test_plans/kYtaqp";
-const TIMEOUT_SECONDS = 20 * 60; // 20 minutes
+const TIMEOUT_SECONDS = 15 * 60; // 15 minutes
 
 jest.setTimeout(TIMEOUT_SECONDS * 1000);
 
