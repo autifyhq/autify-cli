@@ -12,8 +12,9 @@ const WORKSPACE_ID = "2WxFvm";
 const TEAM_ID = "7XV69VPSD3";
 const TEST_PLAN_URL =
   "https://mobile-app.autify.com/projects/2WxFvm/test_plans/kYtaqp";
+const TIMEOUT_SECONDS = 20 * 60; // 20 minutes
 
-jest.setTimeout(30 * 60 * 1000);
+jest.setTimeout(TIMEOUT_SECONDS * 1000);
 
 test("NoCode Mobile local device test execution flow", async () => {
   const { stdout: autifyCliVersion } = await execa("autify", ["--version"]);
@@ -131,7 +132,7 @@ test("NoCode Mobile local device test execution flow", async () => {
         BUILD_ID,
         "--wait",
         "--timeout",
-        "1800",
+        TIMEOUT_SECONDS.toString(),
         "--device-ids",
         simulator.udid,
         TEST_PLAN_URL,
@@ -146,6 +147,10 @@ test("NoCode Mobile local device test execution flow", async () => {
 
     terminateStartProcess();
   };
+
+  // Test doesn't start in the TIMEOUT_SECONDS sometimes. To ensure E2E to finish in a reasonable time, we terminate
+  // MobileLink so that the test can fail.
+  setTimeout(terminateStartProcess, TIMEOUT_SECONDS * 1000);
 
   await Promise.all([startMobileLinkResult, runTest()]);
 });
