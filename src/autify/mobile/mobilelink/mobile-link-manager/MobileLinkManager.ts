@@ -180,10 +180,10 @@ export class MobileLinkManager {
       },
     });
     if (connectConsole) {
-      this.childProcess.stdout.on('data', (data) => {
+      this.childProcess.stdout.on("data", (data) => {
         process.stdout.write(data);
       });
-      this.childProcess.stderr.on('data', (data) => {
+      this.childProcess.stderr.on("data", (data) => {
         process.stderr.write(data);
       });
       process.stdin.pipe(this.childProcess.stdin);
