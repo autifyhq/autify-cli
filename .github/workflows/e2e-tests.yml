@@ -16,7 +16,7 @@ jobs:
       matrix:
         include:
           - target: darwin-arm64
-            os: macos-latest
+            os: macos-latest-xlarge
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
