@@ -18,7 +18,7 @@
   ],
   "dependencies": {
     "@autifyhq/autify-sdk": "^0.26.0",
-    "@oclif/core": "^3.27.0",
+    "@oclif/core": "^4.2.10",
     "@oclif/plugin-help": "^6.2.27",
     "@oclif/plugin-not-found": "^3.2.49",
     "@oclif/plugin-update": "^4.6.37",
