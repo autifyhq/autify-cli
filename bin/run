@@ -6,7 +6,7 @@ oclif
   .run()
   .then(require("@oclif/core/flush"))
   .catch((error) => {
-    const oclifHandler = require("@oclif/core/handle");
+    const { handle: oclifHandler } = require("@oclif/core/handle");
     if (error.response?.data)
       error.message = `${error.message}: ${JSON.stringify(
         error.response.data
