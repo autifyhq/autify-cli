@@ -22,6 +22,13 @@ export default [
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-useless-constructor": "error",
       "arrow-body-style": "off",
+      "mocha/no-global-tests": "off",
+      "n/no-extraneous-import": [
+        "error",
+        {
+          allowModules: ["@jest/globals"],
+        },
+      ],
       "n/no-process-exit": "off",
       "no-useless-constructor": "off",
       "object-shorthand": "off",

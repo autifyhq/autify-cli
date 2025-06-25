@@ -1,0 +1,34 @@
+name: E2E tests
+
+on:
+  workflow_call:
+    secrets:
+      AUTIFY_CLI_E2E_AUTIFY_MOBILE_ACCESS_TOKEN:
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  tarball:
+    strategy:
+      matrix:
+        include:
+          - target: darwin-arm64
+            os: macos-latest-xlarge
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - run: git config --global core.longpaths true
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/install
+        with:
+          target: ${{ matrix.target }}
+      - run: npm run test:e2e
+        env:
+          AUTIFY_CLI_E2E_AUTIFY_MOBILE_ACCESS_TOKEN: ${{ secrets.AUTIFY_CLI_E2E_AUTIFY_MOBILE_ACCESS_TOKEN }}

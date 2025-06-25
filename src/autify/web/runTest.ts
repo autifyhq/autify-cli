@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/filename-case */
-import { CLIError } from "@oclif/errors";
+import { Errors } from "@oclif/core";
 import { WebClient } from "@autifyhq/autify-sdk";
 import { TestPlan, TestScenario } from "./parseAutifyTestUrl";
 
@@ -35,11 +35,11 @@ const getCapability = async (
     .filter((c) => !option.device || c.device === option.device)
     .filter((c) => !option.device_type || c.device_type === option.device_type);
   if (candidates.length === 0)
-    throw new CLIError(
+    throw new Errors.CLIError(
       `No capability is available for: ${JSON.stringify(option)}`
     );
   if (candidates.length > 1)
-    throw new CLIError(
+    throw new Errors.CLIError(
       `Multiple capabilities are available for: ${JSON.stringify(
         option
       )} => ${JSON.stringify(candidates)}`
@@ -98,13 +98,15 @@ export const runTest = async (
 
   if (testPlanId) {
     if (isCapabilitySpecified(option))
-      throw new CLIError(
+      throw new Errors.CLIError(
         `Running TestPlan doesn't support capability override: ${JSON.stringify(
           option
         )}`
       );
     if (name)
-      throw new CLIError(`Running TestPlan doesn't support --name: ${name}`);
+      throw new Errors.CLIError(
+        `Running TestPlan doesn't support --name: ${name}`
+      );
     const urlReplacementIds = [];
     for await (const urlReplacement of urlReplacements ?? []) {
       const res = await client.createUrlReplacement(testPlanId, urlReplacement);
@@ -129,5 +131,5 @@ export const runTest = async (
     };
   }
 
-  throw new CLIError("testScenarioId or testPlanId is required.");
+  throw new Errors.CLIError("testScenarioId or testPlanId is required.");
 };
