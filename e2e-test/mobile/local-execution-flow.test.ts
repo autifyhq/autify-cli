@@ -87,6 +87,11 @@ test("NoCode Mobile local device test execution flow", async () => {
       },
       {
         type: "question",
+        regex: /Choose the target platform for testing.*\n>/s,
+        answer: "2\n", // 2: iOS only
+      },
+      {
+        type: "question",
         regex: /Enter the Team ID of the Apple Developer Program.*\n>/s,
         answer: `${TEAM_ID}\n`,
       },
