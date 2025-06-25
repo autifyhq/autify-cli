@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/filename-case */
 import { Errors } from "@oclif/core";
 import { ChildProcessWithoutNullStreams, spawn } from "node:child_process";
-import { env } from "node:process";
+import { env, platform } from "node:process";
 import { EventEmitter } from "node:stream";
 import { Logger } from "winston";
 import { getBinaryPath, getInstallVersion } from "../installBinary";
@@ -178,6 +178,8 @@ export class MobileLinkManager {
         ...env,
         ...extraEnv,
       },
+      // On Windows, we need to specify shell:true to handle permission issues
+      shell: platform === "win32",
     });
     if (connectConsole) {
       this.childProcess.stdout.on("data", (data) => {

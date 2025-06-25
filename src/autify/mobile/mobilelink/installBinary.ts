@@ -18,16 +18,8 @@ import { execFile } from "node:child_process";
 import * as tar from "tar";
 import { get } from "../../../config";
 
-const MOBILE_LINK_VERSION = "0.3.2";
-const MOBILE_LINK_HASH = "ec811f971";
-
-const getOs = () => {
-  const os = platform;
-  if (os === "linux") return "linux";
-  if (os === "darwin") return "darwin";
-  if (os === "win32") return "windows";
-  throw new Errors.CLIError(`Unsupported OS: ${os}`);
-};
+const MOBILE_LINK_VERSION = "0.4.5";
+const MOBILE_LINK_HASH = "14f3442c4";
 
 const getArch = () => {
   if (arch === "ia32") return "386";
@@ -36,7 +28,8 @@ const getArch = () => {
   throw new Errors.CLIError(`Unsupported Architecture: ${arch}`);
 };
 
-const getExt = () => (getOs() === "windows" ? "zip" : "tar.gz");
+const getFileName = () =>
+  platform === "win32" ? "mobilelink.cmd" : "mobilelink";
 
 export const getMobileLinkSourceUrl = (configDir: string): URL => {
   const customUrl = get(configDir, "AUTIFY_MOBILE_LINK_SOURCE_URL");
@@ -46,11 +39,9 @@ export const getMobileLinkSourceUrl = (configDir: string): URL => {
 
   const baseUrl = "https://d21jojv86oc6d1.cloudfront.net/mobilelink/versions";
   const prefix = "mobilelink";
-  const os = getOs();
   const arch = getArch();
-  const ext = getExt();
   return new URL(
-    `${baseUrl}/${MOBILE_LINK_VERSION}/${MOBILE_LINK_HASH}/${prefix}-v${MOBILE_LINK_VERSION}-${MOBILE_LINK_HASH}-${os}-${arch}.${ext}`
+    `${baseUrl}/${MOBILE_LINK_VERSION}/${MOBILE_LINK_HASH}/${prefix}-v${MOBILE_LINK_VERSION}-${MOBILE_LINK_HASH}-${platform}-${arch}.tar.gz`
   );
 };
 
@@ -89,7 +80,8 @@ const extract = async (downloadPath: string) => {
 
   const binDir = join(dir, "mobilelink", "bin");
   const files = readdirSync(binDir);
-  const binary = files.find((file) => file.startsWith("mobilelink"));
+
+  const binary = files.find((file) => file.startsWith(getFileName()));
   if (!binary)
     throw new Errors.CLIError(`Cannot find any mobilelink binary in ${binDir}`);
   return join(dir, "mobilelink");
@@ -104,7 +96,7 @@ export const getInstallPath = (cacheDir: string): string => {
 };
 
 export const getBinaryPath = (cacheDir: string): string => {
-  return join(getInstallPath(cacheDir), "bin", "mobilelink");
+  return join(getInstallPath(cacheDir), "bin", getFileName());
 };
 
 export const getInstallVersion = async (path: string): Promise<string> => {
@@ -116,6 +108,8 @@ export const getInstallVersion = async (path: string): Promise<string> => {
 
   const { stdout } = await promisify(execFile)(path, ["--version"], {
     env,
+    // On Windows, we need to specify shell:true to handle permission issues
+    shell: platform === "win32",
   });
   const version = stdout.trim();
   if (version === "") throw new Errors.CLIError("Version is empty");
