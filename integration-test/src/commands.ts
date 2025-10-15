@@ -13,6 +13,7 @@ const mobileIosRealDeviceTestPlanUrl =
   "https://mobile-app.autify.com/projects/4yyFEL/test_plans/1EtZ0P";
 const mobileWorkspaceId = "4yyFEL";
 const mobileAndroidBuildId = "d1ulrD";
+const mobileDeviceIds = "R5CY23ND1KE";
 
 const concatFlagAndValue = (args: string[]) => {
   const newArgs = [];
@@ -75,6 +76,8 @@ const replaceMobileWorkspaceId = (arg: string) =>
     : arg;
 const replaceMobileAndroidBuildId = (arg: string) =>
   arg.startsWith("--build-id=") ? `--build-id=${mobileAndroidBuildId}` : arg;
+const replaceMobileDeviceIds = (arg: string) =>
+  arg.startsWith("--device-ids=") ? `--device-ids=${mobileDeviceIds}` : arg;
 const replaceMobileAndroidBuildPath = (arg: string) =>
   arg.replace(/^(--[^=]+=)?.+\.apk$/, `$1${androidBuildPath}`);
 const replaceMobileIosBuildPath = (arg: string) =>
@@ -112,6 +115,7 @@ const replaceConstants = (args: string[]) => {
       .map((a) => replaceMobileWorkspaceId(a))
       .map((a) => replaceMobileTetsPlanUrl(a, "android"))
       .map((a) => replaceMobileAndroidBuildId(a))
+      .map((a) => replaceMobileDeviceIds(a))
       .map((a) => replaceMobileAndroidBuildPath(a));
   }
 
