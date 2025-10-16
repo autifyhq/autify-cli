@@ -13,7 +13,7 @@ const mobileIosRealDeviceTestPlanUrl =
   "https://mobile-app.autify.com/projects/4yyFEL/test_plans/1EtZ0P";
 const mobileWorkspaceId = "4yyFEL";
 const mobileAndroidBuildId = "d1ulrD";
-const mobileDeviceIds = "R5CY23ND1KE";
+const mobileDeviceIds = "R5CY23ND1KE"; // Need to replace with your device ID(s) when you update the golden file.
 
 const concatFlagAndValue = (args: string[]) => {
   const newArgs = [];
