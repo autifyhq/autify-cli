@@ -6,11 +6,13 @@
       "matchDatasources": ["npm"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "all non major npm update",
-      "prPriority": 10
+      "prPriority": 10,
+      "minimumReleaseAge": "3 days"
     },
     {
       "matchPackageNames": ["@types/express"],
-      "allowedVersions": ">=4.17.17"
+      "allowedVersions": ">=4.17.17",
+      "minimumReleaseAge": "3 days"
     }
   ],
   "rangeStrategy": "bump",
