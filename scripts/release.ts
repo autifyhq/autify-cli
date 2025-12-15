@@ -41,7 +41,7 @@ const channel = (() => {
 })();
 
 const branch = execSync("git branch --show-current").toString().trim();
-const sha = execSync("git rev-parse --short HEAD").toString().trim();
+const sha = execSync("git rev-parse HEAD").toString().trim();
 
 const getNewVersion = () => {
   const newVersion = JSON.parse(execSync("npm version --json").toString())[

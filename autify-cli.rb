@@ -3,6 +3,7 @@
 # Edit https://github.com/autifyhq/autify-cli/blob/main/autify-cli.rb instead.
 
 class AutifyCli < Formula
+  LONG_SHA_VERSION = [0, 64, 0]
   desc "Autify Command-Line Interface (CLI)"
   homepage "https://github.com/autifyhq/autify-cli"
   url "https://github.com/autifyhq/autify-cli", using: :git, revision: "<REVISION>"
@@ -29,7 +30,12 @@ class AutifyCli < Formula
 
     bucket = package.dig(:oclif, :update, :s3, :bucket)
     folder = package.dig(:oclif, :update, :s3, :folder)
-    sha = `git rev-parse --short HEAD`.strip
+    current_version = version.split(".").map(&:to_i)
+    if (current_version <=> LONG_SHA_VERSION) >= 0
+      sha = `git rev-parse HEAD`.strip
+    else
+      sha = `git rev-parse --short=8 HEAD`.strip
+    end
     uname_os = `uname`.strip
     os = case uname_os
     when /darwin/i
