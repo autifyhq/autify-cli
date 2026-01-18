@@ -16,7 +16,9 @@ import { basename, dirname, join } from "node:path";
 import { Extract } from "unzip-stream";
 import { execFile } from "node:child_process";
 import * as tar from "tar";
+import { fetch, ProxyAgent } from "undici";
 import { get } from "../../config";
+import { getProxyUrl } from "./getProxySettings";
 
 // Update whenever to bump supported version.
 export const AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION = "v1.1.34";
@@ -76,9 +78,32 @@ export const getConnectClientSourceUrl = (
   };
 };
 
+// Cache proxy agent to reuse across requests
+let proxyAgent: ProxyAgent | null = null;
+
+const getProxyAgent = async (): Promise<ProxyAgent | undefined> => {
+  if (proxyAgent !== null) {
+    return proxyAgent || undefined;
+  }
+
+  const proxyUrl = await getProxyUrl();
+  if (proxyUrl) {
+    proxyAgent = new ProxyAgent(proxyUrl);
+    return proxyAgent;
+  }
+
+  proxyAgent = null; // Explicitly set to null if no proxy
+  return undefined;
+};
+
 const download = async (workspaceDir: string, url: URL) => {
   const downloadPath = join(workspaceDir, basename(url.pathname));
-  const response = await fetch(url);
+
+  // Get proxy agent if available
+  const dispatcher = await getProxyAgent();
+
+  // Pass dispatcher directly to fetch for explicit proxy usage
+  const response = await fetch(url, dispatcher ? { dispatcher } : {});
   if (!response.ok)
     throw new Errors.CLIError(`Failed to fetch ${url}: ${response.status}`);
   const streamPipeline = promisify(pipeline);
