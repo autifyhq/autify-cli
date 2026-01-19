@@ -17,7 +17,6 @@ import { Extract } from "unzip-stream";
 import { execFile } from "node:child_process";
 import * as tar from "tar";
 import { get } from "../../config";
-import { getProxyAgent } from "./getProxySettings";
 
 // Update whenever to bump supported version.
 export const AUTIFY_CONNECT_CLIENT_SUPPORTED_VERSION = "v1.1.34";
@@ -79,12 +78,7 @@ export const getConnectClientSourceUrl = (
 
 const download = async (workspaceDir: string, url: URL) => {
   const downloadPath = join(workspaceDir, basename(url.pathname));
-
-  // Get proxy agent if available
-  const dispatcher = await getProxyAgent();
-
-  // Pass dispatcher directly to fetch for explicit proxy usage
-  const response = await fetch(url, dispatcher ? { dispatcher } : {});
+  const response = await fetch(url);
   if (!response.ok)
     throw new Errors.CLIError(`Failed to fetch ${url}: ${response.status}`);
   const streamPipeline = promisify(pipeline);

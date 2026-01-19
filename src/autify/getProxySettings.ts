@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { getSystemProxy } from "os-proxy-config";
-import { ProxyAgent } from "undici";
+import { ProxyAgent, setGlobalDispatcher } from "undici";
 
 /**
  * Get proxy URL from system settings or environment variables
@@ -30,24 +30,23 @@ export async function getProxyUrl(): Promise<string | null> {
   return null;
 }
 
-// Cache proxy agent to reuse across requests
-let proxyAgent: ProxyAgent | null = null;
+// Track if proxy dispatcher has been initialized
+let proxyInitialized = false;
 
 /**
- * Get a ProxyAgent instance configured with detected proxy settings
- * Returns a cached ProxyAgent instance or undefined if no proxy is configured
+ * Initialize global proxy dispatcher for all fetch requests
+ * This should be called once at the start of any operation that uses fetch
+ * After calling this, all fetch() calls will automatically use the configured proxy
  */
-export async function getProxyAgent(): Promise<ProxyAgent | undefined> {
-  if (proxyAgent !== null) {
-    return proxyAgent || undefined;
+export async function initializeProxy(): Promise<void> {
+  if (proxyInitialized) {
+    return;
   }
 
   const proxyUrl = await getProxyUrl();
   if (proxyUrl) {
-    proxyAgent = new ProxyAgent(proxyUrl);
-    return proxyAgent;
+    setGlobalDispatcher(new ProxyAgent(proxyUrl));
   }
 
-  proxyAgent = null; // Explicitly set to null if no proxy
-  return undefined;
+  proxyInitialized = true;
 }

@@ -78,6 +78,9 @@
     "bin": "autify",
     "dirname": "autify",
     "commands": "./dist/commands",
+    "hooks": {
+      "init": "./dist/hooks/init/proxy"
+    },
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-not-found",
@@ -149,6 +152,7 @@
     "release": "ts-node ./scripts/release.ts",
     "test:integration": "npm run build -w integration-test && autify-cli-integration-test",
     "test:integration:dev": "npm run build -w integration-test && cross-env AUTIFY_CLI_PATH=../bin/dev autify-cli-integration-test",
+    "test:proxy": "npm run build -w integration-test && cross-env AUTIFY_CLI_PATH=../bin/dev npm run test:proxy -w integration-test",
     "test:integration:record": "npm run build -w integration-test && cross-env AUTIFY_CLI_INTEGRATION_TEST_RECORD=1 AUTIFY_CONNECT_CLIENT_MODE=real autify-cli-integration-test",
     "test:integration:dev:record": "npm run build -w integration-test && cross-env AUTIFY_CLI_PATH=../bin/dev AUTIFY_CLI_INTEGRATION_TEST_RECORD=1 AUTIFY_CONNECT_CLIENT_MODE=real autify-cli-integration-test",
     "test:integration:connect": "AUTIFY_CONNECT_CLIENT_MODE=fake autify connect client install && npm run test:integration AutifyConnectClient",

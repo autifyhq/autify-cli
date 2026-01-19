@@ -48,7 +48,8 @@
     "build": "shx rm -rf dist && tsc -b",
     "prepack": "npm run build",
     "test": "autify-mobile-generate-fake-app && cross-env AUTIFY_TEST_WAIT_INTERVAL_SECOND=0 jest --testMatch **/dist/test/**/*.test.js",
-    "test:record": "AUTIFY_POLLY_RECORD=1 jest --testMatch **/dist/test/**/*.test.js --updateSnapshot"
+    "test:record": "AUTIFY_POLLY_RECORD=1 jest --testMatch **/dist/test/**/*.test.js --updateSnapshot",
+    "test:proxy": "jest --testMatch **/dist/test/proxy/**/*.test.js"
   },
   "engines": {
     "node": ">=22.16.0"
