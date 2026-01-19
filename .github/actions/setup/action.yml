@@ -19,6 +19,11 @@ runs:
     - if: runner.os == 'Windows'
       run: npm install -g npm@9.9.3
       shell: bash
+    # Install setuptools for node-gyp on Windows (required by os-proxy-config dependency)
+    # Python 3.12+ removed distutils, but setuptools provides it
+    - if: runner.os == 'Windows'
+      run: pip install setuptools
+      shell: bash
     - run: npm install
       shell: bash
     - uses: aws-actions/configure-aws-credentials@v4
