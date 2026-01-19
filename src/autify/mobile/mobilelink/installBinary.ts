@@ -16,9 +16,8 @@ import { basename, dirname, join } from "node:path";
 import { Extract } from "unzip-stream";
 import { execFile } from "node:child_process";
 import * as tar from "tar";
-import { fetch, ProxyAgent } from "undici";
 import { get } from "../../../config";
-import { getProxyUrl } from "../../connect/getProxySettings";
+import { getProxyAgent } from "../../connect/getProxySettings";
 
 const MOBILE_LINK_VERSION = "0.6.1";
 const MOBILE_LINK_HASH = "5c8f5d279";
@@ -45,24 +44,6 @@ export const getMobileLinkSourceUrl = (configDir: string): URL => {
   return new URL(
     `${baseUrl}/${MOBILE_LINK_VERSION}/${MOBILE_LINK_HASH}/${prefix}-v${MOBILE_LINK_VERSION}-${MOBILE_LINK_HASH}-${platform}-${arch}.tar.gz`
   );
-};
-
-// Cache proxy agent to reuse across requests
-let proxyAgent: ProxyAgent | null = null;
-
-const getProxyAgent = async (): Promise<ProxyAgent | undefined> => {
-  if (proxyAgent !== null) {
-    return proxyAgent || undefined;
-  }
-
-  const proxyUrl = await getProxyUrl();
-  if (proxyUrl) {
-    proxyAgent = new ProxyAgent(proxyUrl);
-    return proxyAgent;
-  }
-
-  proxyAgent = null; // Explicitly set to null if no proxy
-  return undefined;
 };
 
 const download = async (workspaceDir: string, url: URL) => {
