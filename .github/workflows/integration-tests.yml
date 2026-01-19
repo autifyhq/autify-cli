@@ -170,3 +170,14 @@ jobs:
         env:
           AUTIFY_CONNECT_CLIENT_MODE: "fake"
       - run: autify-cli-integration-test
+
+  proxy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/setup
+      # Don't pre-install binary - let the test download it through proxy
+      - run: npm run test:proxy

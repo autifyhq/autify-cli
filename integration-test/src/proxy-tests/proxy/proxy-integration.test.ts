@@ -7,7 +7,7 @@ import { AddressInfo, Socket } from "node:net";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { env } from "node:process";
-import { getAutifyCliPath } from "../helpers/get-autify-cli-path";
+import { getAutifyCliPath } from "../../test/helpers/get-autify-cli-path";
 
 /**
  * Start a simple HTTP proxy server that supports CONNECT tunneling and tracks URLs
@@ -117,20 +117,25 @@ const runAutifyWithProxy = async (
 
 /**
  * Clean up default cache directory (not the test cache)
- * This is needed if XDG_CACHE_HOME override doesn't work
+ * This ensures a fresh download for testing proxy behavior
  */
 const cleanupDefaultCache = async () => {
-  // macOS default cache
-  const macOSCache = path.join(env.HOME ?? "", "Library", "Caches", "autify");
-  if (existsSync(macOSCache)) {
-    await rm(macOSCache, { recursive: true, force: true });
-  }
+  const cachePaths = [
+    // macOS
+    path.join(env.HOME ?? "", "Library", "Caches", "autify"),
+    // Linux/XDG
+    path.join(env.HOME ?? "", ".cache", "autify"),
+    // Windows (LOCALAPPDATA)
+    env.LOCALAPPDATA ? path.join(env.LOCALAPPDATA, "autify") : null,
+    // Windows fallback (APPDATA)
+    env.APPDATA ? path.join(env.APPDATA, "autify") : null,
+  ].filter((p): p is string => p !== null && existsSync(p));
 
-  // Linux/XDG default cache
-  const linuxCache = path.join(env.HOME ?? "", ".cache", "autify");
-  if (existsSync(linuxCache)) {
-    await rm(linuxCache, { recursive: true, force: true });
-  }
+  await Promise.all(
+    cachePaths.map((cachePath) =>
+      rm(cachePath, { recursive: true, force: true })
+    )
+  );
 };
 
 describe("Proxy Integration Tests", () => {
