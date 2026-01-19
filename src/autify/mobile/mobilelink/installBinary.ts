@@ -17,7 +17,6 @@ import { Extract } from "unzip-stream";
 import { execFile } from "node:child_process";
 import * as tar from "tar";
 import { get } from "../../../config";
-import { getProxyAgent } from "../../connect/getProxySettings";
 
 const MOBILE_LINK_VERSION = "0.6.1";
 const MOBILE_LINK_HASH = "5c8f5d279";
@@ -48,12 +47,7 @@ export const getMobileLinkSourceUrl = (configDir: string): URL => {
 
 const download = async (workspaceDir: string, url: URL) => {
   const downloadPath = join(workspaceDir, basename(url.pathname));
-
-  // Get proxy agent if available
-  const dispatcher = await getProxyAgent();
-
-  // Pass dispatcher directly to fetch for explicit proxy usage
-  const response = await fetch(url, dispatcher ? { dispatcher } : {});
+  const response = await fetch(url);
   if (!response.ok) {
     const b = await response.text();
     console.log("response doby!!!", b);
