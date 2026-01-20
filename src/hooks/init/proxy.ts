@@ -2,20 +2,16 @@ import { Hook } from "@oclif/core";
 import { initializeProxy } from "../../autify/getProxySettings";
 
 /**
- * Commands that require proxy initialization for downloading binaries
+ * Initialize proxy settings for all commands
+ *
+ * This ensures that any command using fetch() will automatically respect
+ * HTTP_PROXY/HTTPS_PROXY environment variables and system proxy settings.
+ *
+ * The initialization is idempotent and lightweight - it only checks proxy
+ * configuration once per command invocation.
  */
-const COMMANDS_REQUIRING_PROXY = new Set([
-  "connect:client:install",
-  "mobile:link:setup",
-]);
-
-/**
- * Initialize proxy settings for commands that download binaries
- */
-const hook: Hook<"init"> = async function (opts) {
-  if (COMMANDS_REQUIRING_PROXY.has(opts.id ?? "")) {
-    await initializeProxy();
-  }
+const hook: Hook<"init"> = async function () {
+  await initializeProxy();
 };
 
 export default hook;
