@@ -37,6 +37,7 @@ export class StateMachineTimeoutError extends Errors.CLIError {
 type MobileLinkManagerOptions = Readonly<{
   configDir: string;
   cacheDir: string;
+  extraArguments?: string;
 }>;
 
 export class MobileLinkManager {
@@ -71,7 +72,12 @@ export class MobileLinkManager {
   }
 
   public async doctor(): Promise<void> {
-    this.exec(["link", "doctor"], this.integrationVariables);
+    const argv = ["link", "doctor"];
+    if (this.options.extraArguments) {
+      argv.push("--extra-arguments", this.options.extraArguments);
+    }
+
+    this.exec(argv, this.integrationVariables);
   }
 
   public async onceReady(): Promise<void> {
@@ -173,6 +179,7 @@ export class MobileLinkManager {
     extraEnv: { [key: string]: string } = {},
     connectConsole: boolean = true
   ) {
+    console.log(argv);
     this.childProcess = spawn(this.mobileLinkPath, argv, {
       env: {
         ...env,
@@ -196,6 +203,10 @@ export class MobileLinkManager {
     try {
       const argv = ["link", "start"];
       if (workspaceId) argv.push(workspaceId);
+      if (this.options.extraArguments) {
+        argv.push("--extra-arguments", this.options.extraArguments);
+      }
+
       this.spawn(argv, this.integrationVariables, false);
       if (this.childProcess) {
         this.childProcess.on("exit", (code, signal) => {
