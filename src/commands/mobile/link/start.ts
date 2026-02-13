@@ -1,4 +1,4 @@
-import { Args, Command } from "@oclif/core";
+import { Args, Command, Flags } from "@oclif/core";
 import { MobileLinkManager } from "../../../autify/mobile/mobilelink/mobile-link-manager/MobileLinkManager";
 
 export default class MobileLinkStart extends Command {
@@ -6,7 +6,12 @@ export default class MobileLinkStart extends Command {
   static examples = [
     "Pass subcommand arguments to mobilelink:\n<%= config.bin %> <%= command.id %> ABC XYZ",
   ];
-  static flags = {};
+  static flags = {
+    "extra-arguments": Flags.string({
+      description:
+        'Extra args for Autify Connect Client e.g. "--tunnel-proxy http://proxy"',
+    }),
+  };
   static args = {
     workspaceId: Args.string({
       description: "Specify the target version of Autify Connect Client.",
@@ -15,11 +20,12 @@ export default class MobileLinkStart extends Command {
   static strict = false;
 
   public async run(): Promise<void> {
-    const { args } = await this.parse(MobileLinkStart);
+    const { args, flags } = await this.parse(MobileLinkStart);
     const { configDir, cacheDir } = this.config;
     const mobileLinkManager = new MobileLinkManager({
       configDir,
       cacheDir,
+      extraArguments: flags["extra-arguments"],
     });
     this.log("Starting MobileLink...");
     await mobileLinkManager.start(args.workspaceId);
