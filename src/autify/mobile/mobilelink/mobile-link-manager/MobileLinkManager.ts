@@ -179,7 +179,6 @@ export class MobileLinkManager {
     extraEnv: { [key: string]: string } = {},
     connectConsole: boolean = true
   ) {
-    console.log(argv);
     this.childProcess = spawn(this.mobileLinkPath, argv, {
       env: {
         ...env,
