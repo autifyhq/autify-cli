@@ -83,7 +83,7 @@ EXAMPLES
   $ autify connect access-point create --name NAME --web-workspace-id ID
 ```
 
-_See code: [src/commands/connect/access-point/create.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/connect/access-point/create.ts)_
+_See code: [src/commands/connect/access-point/create.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/connect/access-point/create.ts)_
 
 ## `autify connect access-point set`
 
@@ -109,7 +109,7 @@ EXAMPLES
     $ autify connect access-point set --name=NAME < key.txt
 ```
 
-_See code: [src/commands/connect/access-point/set.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/connect/access-point/set.ts)_
+_See code: [src/commands/connect/access-point/set.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/connect/access-point/set.ts)_
 
 ## `autify connect client install [VERSION]`
 
@@ -139,7 +139,7 @@ EXAMPLES
     $ autify connect client install stable
 ```
 
-_See code: [src/commands/connect/client/install.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/connect/client/install.ts)_
+_See code: [src/commands/connect/client/install.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/connect/client/install.ts)_
 
 ## `autify connect client start`
 
@@ -173,7 +173,7 @@ EXAMPLES
     $ autify connect client start --web-workspace-id 000
 ```
 
-_See code: [src/commands/connect/client/start.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/connect/client/start.ts)_
+_See code: [src/commands/connect/client/start.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/connect/client/start.ts)_
 
 ## `autify help [COMMAND]`
 
@@ -214,7 +214,7 @@ EXAMPLES
   $ autify mobile api describe-test-result
 ```
 
-_See code: [src/commands/mobile/api/describe-test-result.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/mobile/api/describe-test-result.ts)_
+_See code: [src/commands/mobile/api/describe-test-result.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/mobile/api/describe-test-result.ts)_
 
 ## `autify mobile api list-test-results`
 
@@ -238,7 +238,7 @@ EXAMPLES
   $ autify mobile api list-test-results
 ```
 
-_See code: [src/commands/mobile/api/list-test-results.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/mobile/api/list-test-results.ts)_
+_See code: [src/commands/mobile/api/list-test-results.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/mobile/api/list-test-results.ts)_
 
 ## `autify mobile api run-test-plan`
 
@@ -260,7 +260,7 @@ EXAMPLES
   $ autify mobile api run-test-plan
 ```
 
-_See code: [src/commands/mobile/api/run-test-plan.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/mobile/api/run-test-plan.ts)_
+_See code: [src/commands/mobile/api/run-test-plan.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/mobile/api/run-test-plan.ts)_
 
 ## `autify mobile api upload-build`
 
@@ -281,7 +281,7 @@ EXAMPLES
   $ autify mobile api upload-build
 ```
 
-_See code: [src/commands/mobile/api/upload-build.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/mobile/api/upload-build.ts)_
+_See code: [src/commands/mobile/api/upload-build.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/mobile/api/upload-build.ts)_
 
 ## `autify mobile auth login`
 
@@ -304,7 +304,7 @@ EXAMPLES
     $ autify mobile auth login < token.txt
 ```
 
-_See code: [src/commands/mobile/auth/login.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/mobile/auth/login.ts)_
+_See code: [src/commands/mobile/auth/login.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/mobile/auth/login.ts)_
 
 ## `autify mobile build upload BUILD-PATH`
 
@@ -338,7 +338,7 @@ EXAMPLES
     $ autify mobile build upload --workspace-id AAA ./my.app --json
 ```
 
-_See code: [src/commands/mobile/build/upload.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/mobile/build/upload.ts)_
+_See code: [src/commands/mobile/build/upload.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/mobile/build/upload.ts)_
 
 ## `autify mobile link doctor`
 
@@ -346,7 +346,10 @@ Check MobileLink configuration
 
 ```
 USAGE
-  $ autify mobile link doctor
+  $ autify mobile link doctor [--extra-arguments <value>]
+
+FLAGS
+  --extra-arguments=<value>  Extra args for Autify Connect Client e.g. "--tunnel-proxy http://proxy"
 
 DESCRIPTION
   Check MobileLink configuration
@@ -357,7 +360,7 @@ EXAMPLES
     $ autify mobile link doctor
 ```
 
-_See code: [src/commands/mobile/link/doctor.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/mobile/link/doctor.ts)_
+_See code: [src/commands/mobile/link/doctor.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/mobile/link/doctor.ts)_
 
 ## `autify mobile link exec [THINGS]`
 
@@ -376,7 +379,7 @@ EXAMPLES
     $ autify mobile link exec ABC XYZ
 ```
 
-_See code: [src/commands/mobile/link/exec.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/mobile/link/exec.ts)_
+_See code: [src/commands/mobile/link/exec.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/mobile/link/exec.ts)_
 
 ## `autify mobile link install`
 
@@ -395,7 +398,7 @@ EXAMPLES
     $ autify mobile link install
 ```
 
-_See code: [src/commands/mobile/link/install.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/mobile/link/install.ts)_
+_See code: [src/commands/mobile/link/install.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/mobile/link/install.ts)_
 
 ## `autify mobile link setup`
 
@@ -414,7 +417,7 @@ EXAMPLES
     $ autify mobile link setup
 ```
 
-_See code: [src/commands/mobile/link/setup.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/mobile/link/setup.ts)_
+_See code: [src/commands/mobile/link/setup.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/mobile/link/setup.ts)_
 
 ## `autify mobile link start [WORKSPACEID]`
 
@@ -422,10 +425,13 @@ Start MobileLink session
 
 ```
 USAGE
-  $ autify mobile link start [WORKSPACEID...]
+  $ autify mobile link start [WORKSPACEID...] [--extra-arguments <value>]
 
 ARGUMENTS
   [WORKSPACEID...]  Specify the target version of Autify Connect Client.
+
+FLAGS
+  --extra-arguments=<value>  Extra args for Autify Connect Client e.g. "--tunnel-proxy http://proxy"
 
 DESCRIPTION
   Start MobileLink session
@@ -436,7 +442,7 @@ EXAMPLES
     $ autify mobile link start ABC XYZ
 ```
 
-_See code: [src/commands/mobile/link/start.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/mobile/link/start.ts)_
+_See code: [src/commands/mobile/link/start.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/mobile/link/start.ts)_
 
 ## `autify mobile test run TEST-PLAN-URL`
 
@@ -477,7 +483,7 @@ EXAMPLES
       --timeout 600
 ```
 
-_See code: [src/commands/mobile/test/run.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/mobile/test/run.ts)_
+_See code: [src/commands/mobile/test/run.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/mobile/test/run.ts)_
 
 ## `autify mobile test wait TEST-RESULT-URL`
 
@@ -501,7 +507,7 @@ EXAMPLES
   $ autify mobile test wait https://mobile-app.autify.com/projects/AAA/results/BBB
 ```
 
-_See code: [src/commands/mobile/test/wait.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/mobile/test/wait.ts)_
+_See code: [src/commands/mobile/test/wait.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/mobile/test/wait.ts)_
 
 ## `autify update [CHANNEL]`
 
@@ -562,7 +568,7 @@ EXAMPLES
   $ autify web api create-access-point
 ```
 
-_See code: [src/commands/web/api/create-access-point.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/create-access-point.ts)_
+_See code: [src/commands/web/api/create-access-point.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/create-access-point.ts)_
 
 ## `autify web api create-test-plan-variable`
 
@@ -585,7 +591,7 @@ EXAMPLES
   $ autify web api create-test-plan-variable
 ```
 
-_See code: [src/commands/web/api/create-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/create-test-plan-variable.ts)_
+_See code: [src/commands/web/api/create-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/create-test-plan-variable.ts)_
 
 ## `autify web api create-url-replacement`
 
@@ -608,7 +614,7 @@ EXAMPLES
   $ autify web api create-url-replacement
 ```
 
-_See code: [src/commands/web/api/create-url-replacement.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/create-url-replacement.ts)_
+_See code: [src/commands/web/api/create-url-replacement.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/create-url-replacement.ts)_
 
 ## `autify web api delete-access-point`
 
@@ -631,7 +637,7 @@ EXAMPLES
   $ autify web api delete-access-point
 ```
 
-_See code: [src/commands/web/api/delete-access-point.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/delete-access-point.ts)_
+_See code: [src/commands/web/api/delete-access-point.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/delete-access-point.ts)_
 
 ## `autify web api delete-test-plan-variable`
 
@@ -653,7 +659,7 @@ EXAMPLES
   $ autify web api delete-test-plan-variable
 ```
 
-_See code: [src/commands/web/api/delete-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/delete-test-plan-variable.ts)_
+_See code: [src/commands/web/api/delete-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/delete-test-plan-variable.ts)_
 
 ## `autify web api delete-url-replacement`
 
@@ -675,7 +681,7 @@ EXAMPLES
   $ autify web api delete-url-replacement
 ```
 
-_See code: [src/commands/web/api/delete-url-replacement.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/delete-url-replacement.ts)_
+_See code: [src/commands/web/api/delete-url-replacement.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/delete-url-replacement.ts)_
 
 ## `autify web api describe-result`
 
@@ -697,7 +703,7 @@ EXAMPLES
   $ autify web api describe-result
 ```
 
-_See code: [src/commands/web/api/describe-result.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/describe-result.ts)_
+_See code: [src/commands/web/api/describe-result.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/describe-result.ts)_
 
 ## `autify web api describe-scenario`
 
@@ -718,7 +724,7 @@ EXAMPLES
   $ autify web api describe-scenario
 ```
 
-_See code: [src/commands/web/api/describe-scenario.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/describe-scenario.ts)_
+_See code: [src/commands/web/api/describe-scenario.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/describe-scenario.ts)_
 
 ## `autify web api execute-scenarios`
 
@@ -746,7 +752,7 @@ EXAMPLES
   $ autify web api execute-scenarios
 ```
 
-_See code: [src/commands/web/api/execute-scenarios.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/execute-scenarios.ts)_
+_See code: [src/commands/web/api/execute-scenarios.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/execute-scenarios.ts)_
 
 ## `autify web api execute-schedule`
 
@@ -769,7 +775,7 @@ EXAMPLES
   $ autify web api execute-schedule
 ```
 
-_See code: [src/commands/web/api/execute-schedule.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/execute-schedule.ts)_
+_See code: [src/commands/web/api/execute-schedule.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/execute-schedule.ts)_
 
 ## `autify web api get-credit-usage`
 
@@ -801,7 +807,7 @@ EXAMPLES
   $ autify web api get-credit-usage
 ```
 
-_See code: [src/commands/web/api/get-credit-usage.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/get-credit-usage.ts)_
+_See code: [src/commands/web/api/get-credit-usage.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/get-credit-usage.ts)_
 
 ## `autify web api get-project-info`
 
@@ -821,7 +827,7 @@ EXAMPLES
   $ autify web api get-project-info
 ```
 
-_See code: [src/commands/web/api/get-project-info.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/get-project-info.ts)_
+_See code: [src/commands/web/api/get-project-info.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/get-project-info.ts)_
 
 ## `autify web api list-access-points`
 
@@ -842,7 +848,7 @@ EXAMPLES
   $ autify web api list-access-points
 ```
 
-_See code: [src/commands/web/api/list-access-points.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/list-access-points.ts)_
+_See code: [src/commands/web/api/list-access-points.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/list-access-points.ts)_
 
 ## `autify web api list-capabilities`
 
@@ -869,7 +875,7 @@ EXAMPLES
   $ autify web api list-capabilities
 ```
 
-_See code: [src/commands/web/api/list-capabilities.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/list-capabilities.ts)_
+_See code: [src/commands/web/api/list-capabilities.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/list-capabilities.ts)_
 
 ## `autify web api list-results`
 
@@ -892,7 +898,7 @@ EXAMPLES
   $ autify web api list-results
 ```
 
-_See code: [src/commands/web/api/list-results.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/list-results.ts)_
+_See code: [src/commands/web/api/list-results.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/list-results.ts)_
 
 ## `autify web api list-scenarios`
 
@@ -913,7 +919,7 @@ EXAMPLES
   $ autify web api list-scenarios
 ```
 
-_See code: [src/commands/web/api/list-scenarios.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/list-scenarios.ts)_
+_See code: [src/commands/web/api/list-scenarios.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/list-scenarios.ts)_
 
 ## `autify web api list-test-plan-variable`
 
@@ -934,7 +940,7 @@ EXAMPLES
   $ autify web api list-test-plan-variable
 ```
 
-_See code: [src/commands/web/api/list-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/list-test-plan-variable.ts)_
+_See code: [src/commands/web/api/list-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/list-test-plan-variable.ts)_
 
 ## `autify web api list-url-replacements`
 
@@ -955,7 +961,7 @@ EXAMPLES
   $ autify web api list-url-replacements
 ```
 
-_See code: [src/commands/web/api/list-url-replacements.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/list-url-replacements.ts)_
+_See code: [src/commands/web/api/list-url-replacements.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/list-url-replacements.ts)_
 
 ## `autify web api update-test-plan-variable`
 
@@ -981,7 +987,7 @@ EXAMPLES
   $ autify web api update-test-plan-variable
 ```
 
-_See code: [src/commands/web/api/update-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/update-test-plan-variable.ts)_
+_See code: [src/commands/web/api/update-test-plan-variable.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/update-test-plan-variable.ts)_
 
 ## `autify web api update-url-replacement`
 
@@ -1007,7 +1013,7 @@ EXAMPLES
   $ autify web api update-url-replacement
 ```
 
-_See code: [src/commands/web/api/update-url-replacement.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/api/update-url-replacement.ts)_
+_See code: [src/commands/web/api/update-url-replacement.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/api/update-url-replacement.ts)_
 
 ## `autify web auth login`
 
@@ -1030,7 +1036,7 @@ EXAMPLES
     $ autify web auth login < token.txt
 ```
 
-_See code: [src/commands/web/auth/login.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/auth/login.ts)_
+_See code: [src/commands/web/auth/login.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/auth/login.ts)_
 
 ## `autify web test run SCENARIO-OR-TEST-PLAN-URL`
 
@@ -1111,7 +1117,7 @@ EXAMPLES
     $ autify web test run https://app.autify.com/projects/0000/scenarios/0000 --wait --autify-connect-client
 ```
 
-_See code: [src/commands/web/test/run.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/test/run.ts)_
+_See code: [src/commands/web/test/run.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/test/run.ts)_
 
 ## `autify web test wait TEST-RESULT-URL`
 
@@ -1135,6 +1141,6 @@ EXAMPLES
   $ autify web test wait https://app.autify.com/projects/0000/results/0000
 ```
 
-_See code: [src/commands/web/test/wait.ts](https://github.com/autifyhq/autify-cli/blob/v0.68.0-beta.0/src/commands/web/test/wait.ts)_
+_See code: [src/commands/web/test/wait.ts](https://github.com/autifyhq/autify-cli/blob/v0.69.0-beta.0/src/commands/web/test/wait.ts)_
 
 <!-- commandsstop -->
