@@ -22,7 +22,7 @@
     "@oclif/plugin-help": "^6.2.36",
     "@oclif/plugin-not-found": "^3.2.73",
     "@oclif/plugin-update": "^4.7.16",
-    "@oclif/plugin-warn-if-update-available": "^2.1.1",
+    "@oclif/plugin-warn-if-update-available": "^3.1.55",
     "abort-controller": "^3.0.0",
     "archiver": "^7.0.1",
     "envfile": "^7.1.0",
