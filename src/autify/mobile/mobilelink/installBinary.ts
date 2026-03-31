@@ -18,8 +18,8 @@ import { execFile } from "node:child_process";
 import * as tar from "tar";
 import { get } from "../../../config";
 
-const MOBILE_LINK_VERSION = "0.6.2";
-const MOBILE_LINK_HASH = "f3af65e1b";
+const MOBILE_LINK_VERSION = "0.6.3";
+const MOBILE_LINK_HASH = "d2ce35f34";
 
 const getArch = () => {
   if (arch === "ia32") return "386";
