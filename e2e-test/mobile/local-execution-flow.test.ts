@@ -92,6 +92,11 @@ test("NoCode Mobile local device test execution flow", async () => {
       },
       {
         type: "question",
+        regex: /Choose the screen quality for recording.*\n>/s,
+        answer: "\n",
+      },
+      {
+        type: "question",
         regex: /Enter the Team ID of the Apple Developer Program.*\n>/s,
         answer: `${TEAM_ID}\n`,
       },
