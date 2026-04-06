@@ -1,3 +1,5 @@
+Test
+
 # Autify Command Line Interface (CLI)
 
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/autifyhq/autify-cli?color=blue&display_name=tag&sort=semver) [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
