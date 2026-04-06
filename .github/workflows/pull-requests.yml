@@ -34,16 +34,3 @@ jobs:
   github-actions-tests:
     needs: [upload]
     uses: ./.github/workflows/github-actions-tests.yml
-
-  approved:
-    needs: [integration-tests, e2e-tests, github-actions-tests]
-    if: ${{ always() }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          if [[ "${{ needs.integration-tests.result }}" == "success" && "${{ needs.e2e-tests.result }}" == "success" ]]; then
-            echo "Approved!"
-          else
-            echo "Not approved!"
-            exit 1
-          fi
