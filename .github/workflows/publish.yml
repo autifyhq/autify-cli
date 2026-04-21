@@ -31,5 +31,4 @@ jobs:
           aws-credentials: publish
       - run: git config --global user.name "${GITHUB_ACTOR}"
       - run: git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-      - run: npm install -g npm@latest
       - run: npm run release publish

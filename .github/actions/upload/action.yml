@@ -15,7 +15,7 @@ runs:
     - if: ${{ inputs.target == 'win' }}
       run: sudo apt-get install nsis
       shell: bash
-    - run: npm install
+    - run: npm ci
       shell: bash
     - run: npm run release upload ${{ inputs.target }}
       shell: bash

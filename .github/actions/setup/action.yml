@@ -9,22 +9,14 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v4
-      with:
-        cache: npm
-        registry-url: "https://registry.npmjs.org"
-        node-version-file: "package.json"
-        node-version: 22
-    # https://github.com/npm/cli/issues/7308
-    - if: runner.os == 'Windows'
-      run: npm install -g npm@9.9.3
-      shell: bash
+    # https://github.com/jdx/mise-action/releases/tag/v4.0.1
+    - uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151
     # Install setuptools for node-gyp on Windows (required by os-proxy-config dependency)
     # Python 3.12+ removed distutils, but setuptools provides it
     - if: runner.os == 'Windows'
       run: pip install setuptools
       shell: bash
-    - run: npm install
+    - run: npm ci
       shell: bash
     - uses: aws-actions/configure-aws-credentials@v4
       if: ${{ inputs.aws-credentials == 'upload' }}

@@ -11,5 +11,5 @@ jobs:
       - uses: ./.github/actions/setup
         with:
           aws-credentials: releases/*
-      - run: npm install
+      - run: npm ci
       - run: npm run release rollback

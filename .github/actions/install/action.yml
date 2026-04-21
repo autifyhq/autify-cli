@@ -10,7 +10,7 @@ runs:
   using: composite
   steps:
     - uses: ./.github/actions/setup
-    - run: npm install
+    - run: npm ci
       shell: bash
     - run: npm run release install ${{ inputs.target }}
       shell: bash
