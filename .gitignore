@@ -12,3 +12,4 @@ ios.app*
 ios.ipa*
 android.apk*
 *.tsbuildinfo
+.vscode/settings.json
