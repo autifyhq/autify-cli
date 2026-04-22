@@ -11,3 +11,4 @@ oclif.manifest.json
 ios.app*
 ios.ipa*
 android.apk*
+*.tsbuildinfo

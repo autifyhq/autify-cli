@@ -25,6 +25,7 @@
     "@oclif/plugin-warn-if-update-available": "^2.1.1",
     "abort-controller": "^3.0.0",
     "archiver": "^7.0.1",
+    "axios": "^1.15.2",
     "envfile": "^7.1.0",
     "get-port": "^7.1.0",
     "inquirer": "^12.11.1",
