@@ -73,8 +73,8 @@ export class MobileLinkManager {
 
   public async doctor(): Promise<void> {
     const argv = ["link", "doctor"];
-    if (this.options.extraArguments) {
-      argv.push("--extra-arguments", this.options.extraArguments);
+    if (this.extraArgumentsValue) {
+      argv.push("--extra-arguments", this.extraArgumentsValue);
     }
 
     this.exec(argv, this.integrationVariables);
@@ -135,12 +135,23 @@ export class MobileLinkManager {
   private readonly logger: Logger;
   private readonly clientLogger: Logger;
   private readonly service: MobileLinkStateMachineService;
+  private readonly extraArgumentsValue?: string;
   private childProcess?: ChildProcessWithoutNullStreams;
 
   public constructor(private readonly options: MobileLinkManagerOptions) {
     const level = "info";
     this.logger = createManagerLogger({ level });
     this.clientLogger = createMobileLinkLogger({ level });
+
+    // On Windows, something about the subprocess shell causes the extra
+    // arguments to be passed as unquoted and therefore interpreted as args for
+    // the mobile link process itself rather than the value of the
+    // --extra-arguments flag. Quoting the value again prevents this behavior.
+    this.extraArgumentsValue =
+      platform === "win32" && options.extraArguments
+        ? `"${options.extraArguments}"`
+        : options.extraArguments;
+
     this.service = createService({
       start: (workspaceId) => this.linkStart(workspaceId),
       terminate: () => this.terminate(),
@@ -202,8 +213,8 @@ export class MobileLinkManager {
     try {
       const argv = ["link", "start"];
       if (workspaceId) argv.push(workspaceId);
-      if (this.options.extraArguments) {
-        argv.push("--extra-arguments", this.options.extraArguments);
+      if (this.extraArgumentsValue) {
+        argv.push("--extra-arguments", this.extraArgumentsValue);
       }
 
       this.spawn(argv, this.integrationVariables, false);
