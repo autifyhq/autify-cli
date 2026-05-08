@@ -1,0 +1,91 @@
+name: Bump mobilelink
+
+on:
+  repository_dispatch:
+    types: [mobilelink-released]
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate payload
+        env:
+          VERSION: ${{ github.event.client_payload.version }}
+          SHA: ${{ github.event.client_payload.sha }}
+        run: |
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid version: $VERSION"
+            exit 1
+          fi
+          if [[ ! "$SHA" =~ ^[0-9a-f]{9}$ ]]; then
+            echo "Invalid sha: $SHA"
+            exit 1
+          fi
+
+      - id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+
+      - name: Get GitHub App User ID
+        id: get-user-id
+        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      - name: Configure git user
+        run: |
+          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
+
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Create bump branch
+        env:
+          VERSION: ${{ github.event.client_payload.version }}
+        run: git checkout -b "chore/bump-mobilelink-${VERSION}"
+
+      - name: Update mobilelink manifest
+        env:
+          VERSION: ${{ github.event.client_payload.version }}
+          SHA: ${{ github.event.client_payload.sha }}
+        run: |
+          FILE="src/autify/mobile/mobilelink/mobilelink.json"
+          jq -n '{version: env.VERSION, hash: env.SHA}' > "$FILE"
+          cat "$FILE"
+
+      - name: Write changeset
+        env:
+          VERSION: ${{ github.event.client_payload.version }}
+        run: |
+          mkdir -p .changeset
+          cat > ".changeset/bump-mobilelink-${VERSION}.md" <<EOF
+          ---
+          "@autifyhq/autify-cli": patch
+          ---
+
+          Update mobilelink to v${VERSION}
+          EOF
+
+      - name: Commit and push
+        env:
+          VERSION: ${{ github.event.client_payload.version }}
+        run: |
+          git add -A
+          git commit -m "chore: bump mobilelink to v${VERSION}"
+          git push origin "chore/bump-mobilelink-${VERSION}"
+
+      - name: Open pull request
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          VERSION: ${{ github.event.client_payload.version }}
+          SHA: ${{ github.event.client_payload.sha }}
+        run: |
+          gh pr create \
+            --base main \
+            --head "chore/bump-mobilelink-${VERSION}" \
+            --title "chore: bump mobilelink to v${VERSION}" \
+            --body "Automated bump of mobilelink to v${VERSION} (sha: ${SHA}). Triggered by mobilelink release."

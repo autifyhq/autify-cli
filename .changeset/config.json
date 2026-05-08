@@ -1,0 +1,11 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [["@autifyhq/autify-cli", "@autifyhq/autify-cli-integration-test"]],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}

@@ -17,9 +17,10 @@ import { Extract } from "unzip-stream";
 import { execFile } from "node:child_process";
 import * as tar from "tar";
 import { get } from "../../../config";
+import mobilelinkManifest from "./mobilelink.json";
 
-const MOBILE_LINK_VERSION = "0.6.3";
-const MOBILE_LINK_HASH = "d2ce35f34";
+const MOBILE_LINK_VERSION = mobilelinkManifest.version;
+const MOBILE_LINK_HASH = mobilelinkManifest.hash;
 
 const getArch = () => {
   if (arch === "ia32") return "386";
