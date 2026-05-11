@@ -4,35 +4,33 @@ on:
   pull_request:
     branches:
       - main
-      - releases/*
 
 jobs:
-  validate:
-    uses: ./.github/workflows/validate.yml
-    with:
-      branch: ${{ github.base_ref }}
-
   lint:
     uses: ./.github/workflows/lint.yml
     with:
       branch: ${{ github.base_ref }}
 
   upload:
-    needs: [validate]
+    needs: [lint]
+    if: ${{ !startsWith(github.head_ref, 'changeset-release/') }}
     uses: ./.github/workflows/upload.yml
 
   integration-tests:
     needs: [upload]
+    if: ${{ !startsWith(github.head_ref, 'changeset-release/') }}
     uses: ./.github/workflows/integration-tests.yml
 
   e2e-tests:
     needs: [upload]
+    if: ${{ !startsWith(github.head_ref, 'changeset-release/') }}
     uses: ./.github/workflows/e2e-tests.yml
     secrets:
       AUTIFY_CLI_E2E_AUTIFY_MOBILE_ACCESS_TOKEN: ${{ secrets.AUTIFY_CLI_E2E_AUTIFY_MOBILE_ACCESS_TOKEN }}
 
   github-actions-tests:
     needs: [upload]
+    if: ${{ !startsWith(github.head_ref, 'changeset-release/') }}
     uses: ./.github/workflows/github-actions-tests.yml
 
   approved:
@@ -41,6 +39,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
+          if [[ "${{ github.head_ref }}" == changeset-release/* ]]; then
+            echo "Approved (changesets version PR)"
+            exit 0
+          fi
           if [[ "${{ needs.integration-tests.result }}" == "success" && "${{ needs.e2e-tests.result }}" == "success" ]]; then
             echo "Approved!"
           else

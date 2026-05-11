@@ -1,0 +1,60 @@
+name: Dependencies changeset
+
+on:
+  pull_request:
+    types: [labeled, synchronize]
+
+jobs:
+  changeset:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'dependencies') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          client-id: ${{ vars.BOT_CLIENT_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+
+      - name: Get GitHub App User ID
+        id: get-user-id
+        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      - name: Configure git user
+        run: |
+          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ steps.app-token.outputs.token }}
+          fetch-depth: 0
+
+      - name: Skip if changeset already exists
+        id: check
+        run: |
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD \
+              | grep -q '^\.changeset/.*\.md$'; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create changeset
+        if: steps.check.outputs.exists == 'false'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          FILE=".changeset/dependencies-${{ github.event.pull_request.number }}.md"
+          cat > "$FILE" <<EOF
+          ---
+          "@autifyhq/autify-cli": patch
+          ---
+
+          ${PR_TITLE}
+          EOF
+          git add "$FILE"
+          git commit -m "chore: add changeset for dependencies bump"
+          git push

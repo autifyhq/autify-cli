@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@autifyhq/autify-cli-integration-test": "*",
+    "@changesets/changelog-github": "^0.7.0",
     "@changesets/cli": "^2.27.0",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.39.1",
@@ -162,7 +163,6 @@
     "test:integration:connect:record": "autify connect client install && npm run test:integration:record AutifyConnectClient",
     "test:integration:connect:dev:record": "./bin/dev connect client install && npm run test:integration:dev:record AutifyConnectClient",
     "test:e2e": "npx jest --config e2e-test/jest.config.js",
-    "version": "oclif readme && git add README.md",
     "prepare": "per-env || true",
     "prepare:development": "husky install",
     "prepare:production": "true"

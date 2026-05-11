@@ -3,13 +3,36 @@ name: Rollback
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+
 jobs:
-  bump:
+  rollback:
     runs-on: ubuntu-latest
     steps:
+      - id: generate-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.BOT_CLIENT_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+          owner: autifyhq
+          repositories: autify-cli,homebrew-tap
+
       - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+
+      - uses: actions/checkout@v4
+        with:
+          repository: autifyhq/homebrew-tap
+          path: homebrew-tap
+          token: ${{ steps.generate-token.outputs.token }}
+
       - uses: ./.github/actions/setup
         with:
-          aws-credentials: releases/*
-      - run: npm ci
+          aws-credentials: publish
+
+      - run: git config --global user.name "${GITHUB_ACTOR}"
+      - run: git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
       - run: npm run release rollback

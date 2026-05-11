@@ -15,6 +15,7 @@ runs:
     - if: ${{ inputs.target == 'win' }}
       run: sudo apt-get install nsis
       shell: bash
+    - uses: ./.github/actions/inject-build-metadata
     - run: npm ci
       shell: bash
     - run: npm run release upload ${{ inputs.target }}

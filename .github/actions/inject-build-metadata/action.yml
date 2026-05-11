@@ -1,0 +1,21 @@
+name: Inject build metadata
+description: |
+  On pull request builds, append the short commit SHA to the version in
+  package.json (and the integration-test workspace) as an extra prerelease
+  identifier. Lets PR builds be distinguished from releases via
+  `autify --version` and scopes their S3 paths to unique versions.
+  Uses `-` rather than `+` (build metadata) because `+` in URL path segments
+  is unreliable — some clients and proxies interpret it as a space and S3
+  returns 404 for the wrong key.
+
+runs:
+  using: composite
+  steps:
+    - if: ${{ github.event_name == 'pull_request' }}
+      shell: bash
+      run: |
+        SHA=$(git rev-parse --short HEAD)
+        for f in package.json integration-test/package.json; do
+          jq --arg sha "$SHA" '.version = .version + "-" + $sha' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+        done
+        echo "Version injected: $(jq -r .version package.json)"

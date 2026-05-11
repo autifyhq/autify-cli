@@ -15,6 +15,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: ./.github/actions/setup
+      - uses: ./.github/actions/inject-build-metadata
       - id: run
         run: npm run release get-installer-url
     outputs:

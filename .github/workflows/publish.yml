@@ -6,7 +6,6 @@ on:
 
 permissions:
   id-token: write
-  contents: write
 
 jobs:
   channel:
@@ -14,10 +13,12 @@ jobs:
 
     steps:
       - id: generate-token
-        uses: tibdex/github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
-          app_id: ${{ secrets.BOT_APP_ID }}
-          private_key: ${{ secrets.BOT_PRIVATE_KEY }}
+          client-id: ${{ vars.BOT_CLIENT_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+          owner: autifyhq
+          repositories: autify-cli,homebrew-tap
       - uses: actions/checkout@v4
         with:
           token: ${{ steps.generate-token.outputs.token }}

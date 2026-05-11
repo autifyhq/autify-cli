@@ -1,0 +1,100 @@
+name: Changesets
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: changesets
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+
+jobs:
+  # Open/update the Version PR if pending changesets exist, otherwise signal
+  # that we should publish. The publish script is a noop here — it just flips
+  # `outputs.published` to true so downstream jobs run. The actual GitHub
+  # release is created later, after upload completes, by the `release` job.
+  changesets:
+    runs-on: ubuntu-latest
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
+    steps:
+      - id: generate-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.BOT_CLIENT_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.generate-token.outputs.token }}
+
+      - uses: ./.github/actions/setup
+
+      - id: changesets
+        uses: changesets/action@63a615b9cd06ba9a3e6d13796c7fbcb080a60a0b # v1.8.0
+        with:
+          title: "chore: release packages"
+          commit: "chore: release packages"
+          version: |
+            npx changeset version
+            npx oclif readme --repository-prefix='<%- repo %>/blob/@autifyhq/autify-cli@<%- version %>/<%- commandPath %>'
+          # Signal "release this version" by emitting a `New tag:` line that the
+          # action parses to determine published packages. The conditional makes
+          # this idempotent — if the current version already has a tag, no
+          # release is triggered (so pushes to main without a changeset are
+          # harmless).
+          publish: |
+            VERSION=$(jq -r .version package.json)
+            TAG="@autifyhq/autify-cli@${VERSION}"
+            git fetch --tags --quiet
+            if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+              echo "Tag ${TAG} already exists, skipping release"
+            else
+              echo "New tag: ${TAG}"
+            fi
+          createGithubReleases: false
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+  # Build and upload binaries to S3 (multi-platform via workflow_call).
+  upload:
+    needs: [changesets]
+    if: needs.changesets.outputs.published == 'true'
+    uses: ./.github/workflows/upload.yml
+
+  # Create the GitHub release. The release event triggers publish.yml which
+  # handles S3 channel promotion, npm publish, and Homebrew tap update.
+  release:
+    needs: [upload]
+    runs-on: ubuntu-latest
+    steps:
+      - id: generate-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.BOT_CLIENT_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.generate-token.outputs.token }}
+
+      - uses: ./.github/actions/setup
+
+      - name: Create GitHub release
+        uses: changesets/action@63a615b9cd06ba9a3e6d13796c7fbcb080a60a0b # v1.8.0
+        with:
+          # The action scans stdout for `New tag:` lines and creates a GitHub
+          # release for each one. We only want a release for the CLI itself,
+          # not the integration-test workspace package.
+          publish: |
+            VERSION=$(jq -r .version package.json)
+            echo "New tag: @autifyhq/autify-cli@${VERSION}"
+          createGithubReleases: true
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}

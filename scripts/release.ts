@@ -30,26 +30,17 @@ const fail = (message: string) => {
   process.exit(1);
 };
 
-const channel = (() => {
-  const beta = /-beta\.\d+$/;
-  const rc = /-rc\.\d+$/;
-  const stable = /^\d+\.\d+\.\d+$/;
-  if (beta.test(version)) return "beta";
-  if (rc.test(version)) return version.split(".").slice(0, -1).join(".");
-  if (stable.test(version)) return "stable";
-  throw new Error(`Invalid version: ${version}`);
-})();
+const channel = "stable";
 
-const branch = execSync("git branch --show-current").toString().trim();
-const sha = execSync("git rev-parse --short HEAD").toString().trim();
-
-const getNewVersion = () => {
-  const newVersion = JSON.parse(execSync("npm version --json").toString())[
-    "@autifyhq/autify-cli"
-  ] as string | undefined;
-  if (!newVersion) throw new Error("Can't find the new version.");
-  return newVersion;
+const assertStableVersion = () => {
+  if (!/^\d+\.\d+\.\d+$/.test(version)) {
+    throw new Error(
+      `Invalid version: ${version} (expected stable semver like X.Y.Z)`
+    );
+  }
 };
+
+const sha = execSync("git rev-parse --short HEAD").toString().trim();
 
 type S3FileOption = Readonly<{
   target: string;
@@ -194,11 +185,10 @@ const promoteNpm = (
 };
 
 const promoteS3 = () => {
-  const indexes = channel === "stable" ? "--indexes" : "";
   const targets =
     "darwin-arm64,darwin-x64,linux-arm,linux-arm64,linux-x64,win32-x86,win32-x64";
   oclif(
-    `promote --channel ${channel} --version ${version} --sha ${sha} ${indexes} --targets ${targets} --win --macos --xz`
+    `promote --channel ${channel} --version ${version} --sha ${sha} --indexes --targets ${targets} --win --macos --xz`
   );
   promoteShellInstaller("install-standalone.sh", channel);
   promoteShellInstaller("install-cicd.bash", channel);
@@ -206,22 +196,11 @@ const promoteS3 = () => {
   promoteNpm("autify-cli-integration-test", channel);
 };
 
-const promoteCommand = () => {
-  if (channel === "stable") {
-    const tag = `v${version}`;
-    run(`git tag ${tag}`);
-    run(`git push origin ${tag}`);
-  } else {
-    promoteS3();
-  }
-};
-
 const publishBrew = () => {
   updateBrewFormula("autify-cli.rb");
   run("cp autify-cli.rb ./homebrew-tap/Formula/");
-  const newVersion = getNewVersion();
   run(
-    `git add . && git commit -m "[autify-cli] Release ${newVersion}"`,
+    `git add . && git commit -m "[autify-cli] Release ${version}"`,
     "./homebrew-tap"
   );
   run("git push", "./homebrew-tap");
@@ -238,20 +217,18 @@ const publishNpm = () => {
 };
 
 const publishCommand = () => {
+  assertStableVersion();
   const tag = execSync("git tag --points-at HEAD").toString();
   if (tag === "") throw new Error("Publish only supports a tagged commit.");
-  if (channel !== "stable")
-    throw new Error(`Publish only supports stable channel: ${channel}`);
   promoteS3();
   publishBrew();
   publishNpm();
 };
 
 const rollbackCommand = () => {
+  assertStableVersion();
   const tag = execSync("git tag --points-at HEAD").toString();
   if (tag === "") throw new Error("Rollback only supports a tagged commit.");
-  if (channel !== "stable")
-    throw new Error(`Rollback only supports stable channel: ${channel}`);
   promoteS3();
   publishBrew();
 };
@@ -377,90 +354,6 @@ const installCommand = (args: string[]) => {
   }
 };
 
-const pushToBumpBranch = (
-  prefix: "beta" | "rc" | "stable",
-  npmVersionCommand: string
-) => {
-  const tempBranch = "temp";
-  run(`git checkout -b ${tempBranch}`);
-  run(npmVersionCommand);
-  run(npmVersionCommand + " -w integration-test");
-  const newVersion = getNewVersion();
-  const bumpBranch = `bump/${prefix}/${newVersion}`;
-  run(`git add . && git commit -m "Release ${newVersion}"`);
-  run(`git push origin ${tempBranch}:${bumpBranch}`);
-  run(`git checkout ${branch}`);
-  run(`git branch -D ${tempBranch}`);
-};
-
-const bumpCommand = () => {
-  run("npm run build");
-  if (branch === "main") {
-    // 0.1.0-beta.0 => 0.1.0-rc.0
-    pushToBumpBranch(
-      "rc",
-      "npm version prerelease --preid rc --no-git-tag-version"
-    );
-    // 0.1.0-beta.0 => 0.2.0-beta.0
-    pushToBumpBranch(
-      "beta",
-      "npm version preminor --preid beta --no-git-tag-version"
-    );
-  } else if (branch.startsWith("releases/")) {
-    if (channel.endsWith("-rc")) {
-      // 0.1.0-rc.0 => 0.1.0
-      pushToBumpBranch("stable", "npm version patch --no-git-tag-version");
-    } else if (channel === "stable") {
-      // 0.1.0 => 0.1.1-rc.0
-      pushToBumpBranch(
-        "rc",
-        "npm version prepatch --preid rc --no-git-tag-version"
-      );
-    }
-  }
-};
-
-const mergeBumpBranchAndPushTo = (targetBranch: string) => {
-  run(`git checkout ${targetBranch} || git checkout -b ${targetBranch}`);
-  run(`git merge --ff-only ${branch}`);
-  run(`git push origin ${targetBranch}`);
-  run(`git push origin --delete ${branch}`);
-};
-
-const mergeBumpCommand = () => {
-  const releaseBranch = `releases/${version.split(".").slice(0, 2).join(".")}`;
-  if (channel === "beta") {
-    mergeBumpBranchAndPushTo("main");
-  } else if (channel.endsWith("-rc")) {
-    mergeBumpBranchAndPushTo(releaseBranch);
-  } else {
-    throw new Error(`Unexpected channel: ${channel}`);
-  }
-};
-
-const prBumpCommand = () => {
-  const releaseBranch = `releases/${version.split(".").slice(0, 2).join(".")}`;
-  if (channel === "stable") {
-    run(
-      `gh pr create --base ${releaseBranch} --head ${branch} --title "Release ${version}" --body ""`
-    );
-  } else {
-    throw new Error(`Unexpected channel: ${channel}`);
-  }
-};
-
-const validateCommand = (args: string[]) => {
-  const targetBranch = args[0];
-  if (!targetBranch)
-    fail("Usage: ts-node ./scripts/release.ts validate BRANCH");
-  if (targetBranch !== "main" && !targetBranch.startsWith("releases/"))
-    throw new Error(`Invalid branch: ${targetBranch}`);
-  if (targetBranch === "main" && channel !== "beta")
-    throw new Error(`Invalid channel (${channel}) for branch: ${targetBranch}`);
-  if (targetBranch.startsWith("releases/") && channel === "beta")
-    throw new Error(`Invalid channel (${channel}) for branch: ${targetBranch}`);
-};
-
 const setOutput = (name: string, value: string) => {
   if (!process.env.GITHUB_OUTPUT) throw new Error("GITHUB_OUTPUT is empty");
   writeFileSync(process.env.GITHUB_OUTPUT, `${name}=${value}`, { flag: "a" });
@@ -479,11 +372,6 @@ const main = () => {
   const command = process.argv[2];
   const args = process.argv.slice(3);
   switch (command) {
-    case "bump": {
-      bumpCommand();
-      break;
-    }
-
     case "get-installer-url": {
       getInstallerUrlCommand();
       break;
@@ -491,21 +379,6 @@ const main = () => {
 
     case "install": {
       installCommand(args);
-      break;
-    }
-
-    case "merge-bump": {
-      mergeBumpCommand();
-      break;
-    }
-
-    case "pr-bump": {
-      prBumpCommand();
-      break;
-    }
-
-    case "promote": {
-      promoteCommand();
       break;
     }
 
@@ -521,11 +394,6 @@ const main = () => {
 
     case "upload": {
       uploadCommand(args);
-      break;
-    }
-
-    case "validate": {
-      validateCommand(args);
       break;
     }
 
