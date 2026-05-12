@@ -4,7 +4,7 @@
 # so subsequent pushes without a changeset are no-ops.
 set -euo pipefail
 
-VERSION=$(jq -r .version package.json)
+VERSION=$(jq -r .version "$(dirname "$0")/../package.json")
 TAG="@autifyhq/autify-cli@${VERSION}"
 
 git fetch --tags --quiet

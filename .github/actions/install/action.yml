@@ -15,5 +15,6 @@ runs:
       shell: bash
     - run: npm run release install ${{ inputs.target }}
       shell: bash
+      working-directory: autify-cli
       env:
         HOMEBREW_AUTIFY_CLI_PR_BUILD: ${{ github.event_name == 'pull_request' && '1' || '' }}

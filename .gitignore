@@ -1,10 +1,11 @@
 *-debug.log
 *-error.log
 /.nyc_output
-/dist
+dist
 /lib
-/tmp
+tmp
 /yarn.lock
+/autify-cli/package-lock.json
 node_modules
 oclif.manifest.json
 *.tgz

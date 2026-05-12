@@ -20,3 +20,4 @@ runs:
       shell: bash
     - run: npm run release upload ${{ inputs.target }}
       shell: bash
+      working-directory: autify-cli

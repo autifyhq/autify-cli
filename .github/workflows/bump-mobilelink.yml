@@ -53,7 +53,7 @@ jobs:
           VERSION: ${{ github.event.client_payload.version }}
           SHA: ${{ github.event.client_payload.sha }}
         run: |
-          FILE="src/autify/mobile/mobilelink/mobilelink.json"
+          FILE="autify-cli/src/autify/mobile/mobilelink/mobilelink.json"
           jq -n '{version: env.VERSION, hash: env.SHA}' > "$FILE"
           cat "$FILE"
 

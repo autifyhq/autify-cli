@@ -2,6 +2,8 @@ import assert from "node:assert";
 import { execSync } from "node:child_process";
 import {
   appendFileSync,
+  copyFileSync,
+  existsSync,
   readFileSync,
   writeFileSync,
   mkdtempSync,
@@ -9,6 +11,12 @@ import {
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 import pkg from "../package.json";
+
+// oclif pack reads the lockfile from the package root, but in this monorepo
+// the canonical lockfile lives at the workspace root one directory up.
+if (!existsSync("package-lock.json") && existsSync("../package-lock.json")) {
+  copyFileSync("../package-lock.json", "package-lock.json");
+}
 
 const { version, oclif: oclifConfig } = pkg;
 
@@ -90,7 +98,7 @@ const uploadNpmPackage = (
 ) => {
   if (npm === "autify-cli") run("npm pack");
   else if (npm === "autify-cli-integration-test")
-    run("npm pack -w integration-test");
+    run("npm pack -w integration-test --pack-destination=autify-cli", "..");
   const file = s3File({ target: "npm", npm });
   run(
     `aws s3 cp --acl public-read ${file} s3://${bucket}/${s3KeyPrefix}/${file}`

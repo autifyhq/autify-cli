@@ -43,9 +43,9 @@ jobs:
           commit: "chore: release packages"
           version: |
             npx changeset version
-            npx oclif readme --repository-prefix='<%- repo %>/blob/@autifyhq/autify-cli@<%- version %>/<%- commandPath %>'
+            cd autify-cli && npx oclif readme --repository-prefix='<%- repo %>/blob/@autifyhq/autify-cli@<%- version %>/autify-cli/<%- commandPath %>'
           # Publish must be a single command (action splits on whitespace).
-          publish: bash scripts/changesets-detect-publish.sh
+          publish: bash autify-cli/scripts/changesets-detect-publish.sh
           createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
@@ -79,7 +79,7 @@ jobs:
         uses: changesets/action@63a615b9cd06ba9a3e6d13796c7fbcb080a60a0b # v1.8.0
         with:
           # Only tag the CLI itself, not the integration-test workspace.
-          publish: bash scripts/changesets-tag.sh
+          publish: bash autify-cli/scripts/changesets-tag.sh
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}

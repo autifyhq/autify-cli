@@ -15,7 +15,7 @@ runs:
       shell: bash
       run: |
         SHA=$(git rev-parse --short HEAD)
-        for f in package.json integration-test/package.json; do
+        for f in autify-cli/package.json integration-test/package.json; do
           jq --arg sha "$SHA" '.version = .version + "-" + $sha' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
         done
-        echo "Version injected: $(jq -r .version package.json)"
+        echo "Version injected: $(jq -r .version autify-cli/package.json)"

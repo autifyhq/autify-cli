@@ -17,4 +17,5 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: ./.github/actions/setup
       - run: npx prettier -c .
+        working-directory: autify-cli
       - run: npm run lint

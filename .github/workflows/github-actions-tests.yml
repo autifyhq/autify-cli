@@ -18,6 +18,7 @@ jobs:
       - uses: ./.github/actions/inject-build-metadata
       - id: run
         run: npm run release get-installer-url
+        working-directory: autify-cli
     outputs:
       installer-url: ${{ steps.run.outputs.installer-url }}
 
