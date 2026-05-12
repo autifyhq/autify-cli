@@ -41,10 +41,8 @@ jobs:
         with:
           title: "chore: release packages"
           commit: "chore: release packages"
-          version: |
-            npx changeset version
-            cd autify-cli && npx oclif readme --repository-prefix='<%- repo %>/blob/@autifyhq/autify-cli@<%- version %>/autify-cli/<%- commandPath %>'
-          # Publish must be a single command (action splits on whitespace).
+          # version and publish must be single commands (action splits on whitespace).
+          version: bash autify-cli/scripts/changesets-version.sh
           publish: bash autify-cli/scripts/changesets-detect-publish.sh
           createGithubReleases: false
         env:
