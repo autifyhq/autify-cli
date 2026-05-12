@@ -182,6 +182,7 @@
     "oclif"
   ],
   "workspaces": [
+    ".",
     "integration-test"
   ],
   "types": "dist/index.d.ts"
