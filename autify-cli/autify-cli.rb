@@ -24,7 +24,7 @@ class AutifyCli < Formula
   private
 
   def taball_url
-    package = JSON.parse(File.read("./package.json"), symbolize_names: true)
+    package = JSON.parse(File.read("./autify-cli/package.json"), symbolize_names: true)
     # In PR builds the workflow injects a SHA suffix into the formula's version
     # without committing it to package.json, so allow the mismatch when an
     # explicit env var marks the build as a PR test. Homebrew strips custom
