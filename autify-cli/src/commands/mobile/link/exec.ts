@@ -1,5 +1,6 @@
 import { Args, Command } from "@oclif/core";
 import { MobileLinkManager } from "../../../autify/mobile/mobilelink/mobile-link-manager/MobileLinkManager";
+import { getMobileLinkStartupTimeoutMs } from "../../../autify/mobile/mobilelink/getMobileLinkStartupTimeoutMs";
 
 export default class MobileLinkExec extends Command {
   static description = "Execute arbitrary MobileLink subcommand";
@@ -16,6 +17,7 @@ export default class MobileLinkExec extends Command {
     const mobileLinkManager = new MobileLinkManager({
       configDir,
       cacheDir,
+      startupTimeoutMs: getMobileLinkStartupTimeoutMs(configDir),
     });
     await mobileLinkManager.exec(this.argv);
   }
