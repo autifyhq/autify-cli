@@ -6,6 +6,7 @@ import { EventEmitter } from "node:stream";
 import { Logger } from "winston";
 import { getBinaryPath, getInstallVersion } from "../installBinary";
 import { getInstallPath } from "../../../connect/installClient";
+import { getConnectClientStartupTimeoutMs } from "../../../connect/getConnectClientStartupTimeoutMs";
 import { waitFor } from "xstate/lib/waitFor";
 import { MobileLinkStateMachineService, createService } from "./StateMachine";
 import {
@@ -38,6 +39,7 @@ type MobileLinkManagerOptions = Readonly<{
   configDir: string;
   cacheDir: string;
   extraArguments?: string;
+  startupTimeoutMs: number;
 }>;
 
 export class MobileLinkManager {
@@ -152,13 +154,16 @@ export class MobileLinkManager {
         ? `"${options.extraArguments}"`
         : options.extraArguments;
 
-    this.service = createService({
-      start: (workspaceId) => this.linkStart(workspaceId),
-      terminate: () => this.terminate(),
-      kill: () => this.kill(),
-      cleanup: () => this.cleanup(),
-      errors: [],
-    }).onTransition((state, event) => {
+    this.service = createService(
+      {
+        start: (workspaceId) => this.linkStart(workspaceId),
+        terminate: () => this.terminate(),
+        kill: () => this.kill(),
+        cleanup: () => this.cleanup(),
+        errors: [],
+      },
+      options.startupTimeoutMs
+    ).onTransition((state, event) => {
       if (!state.changed) return;
       this.logger.debug(
         `Transition to: ${state.value}, event: ${JSON.stringify(event)}`
@@ -193,6 +198,9 @@ export class MobileLinkManager {
     this.childProcess = spawn(this.mobileLinkPath, argv, {
       env: {
         ...env,
+        AUTIFY_CONNECT_CLIENT_STARTUP_TIMEOUT: getConnectClientStartupTimeoutMs(
+          this.options.configDir
+        ).toString(),
         ...extraEnv,
       },
       // On Windows, we need to specify shell:true to handle permission issues

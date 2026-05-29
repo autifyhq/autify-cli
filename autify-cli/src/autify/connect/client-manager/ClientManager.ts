@@ -67,6 +67,7 @@ type ClientManagerOptions = Readonly<{
   fileLogging?: boolean;
   debugServerPort?: number;
   extraArguments?: string;
+  startupTimeoutMs: number;
 }>;
 
 export class ClientManager {
@@ -207,13 +208,16 @@ export class ClientManager {
       : undefined;
     if (filename) this.logger.info(`Client log will be written on ${filename}`);
     this.clientLogger = createClientLogger({ level }, filename);
-    this.service = createService({
-      spawn: (debugServerPort) => this.spawn(debugServerPort),
-      terminate: () => this.terminate(),
-      kill: () => this.kill(),
-      cleanup: () => this.cleanup(),
-      errors: [],
-    }).onTransition((state, event) => {
+    this.service = createService(
+      {
+        spawn: (debugServerPort) => this.spawn(debugServerPort),
+        terminate: () => this.terminate(),
+        kill: () => this.kill(),
+        cleanup: () => this.cleanup(),
+        errors: [],
+      },
+      options.startupTimeoutMs
+    ).onTransition((state, event) => {
       if (!state.changed) return;
       this.logger.debug(
         `Transition to: ${state.value}, event: ${JSON.stringify(event)}`
