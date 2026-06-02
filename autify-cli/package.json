@@ -1,6 +1,6 @@
 {
   "name": "@autifyhq/autify-cli",
-  "version": "0.73.1",
+  "version": "0.73.2",
   "description": "Autify Command Line Interface (CLI)",
   "author": "Autify",
   "bin": {
