@@ -19,10 +19,10 @@ jobs:
           private-key: ${{ secrets.BOT_PRIVATE_KEY }}
           owner: autifyhq
           repositories: autify-cli,homebrew-tap
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           token: ${{ steps.generate-token.outputs.token }}
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: autifyhq/homebrew-tap
           path: autify-cli/homebrew-tap
