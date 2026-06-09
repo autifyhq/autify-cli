@@ -35,7 +35,7 @@
     "os-proxy-config": "^1.1.2",
     "per-env": "^1.0.2",
     "shell-quote": "^1.8.3",
-    "tar": "^7.5.2",
+    "tar": "^7.5.11",
     "undici": "^6.19.8",
     "unzip-stream": "^0.3.4",
     "uuid": "^11.1.0",
