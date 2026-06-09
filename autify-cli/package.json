@@ -1,6 +1,6 @@
 {
   "name": "@autifyhq/autify-cli",
-  "version": "0.73.1",
+  "version": "0.73.2",
   "description": "Autify Command Line Interface (CLI)",
   "author": "Autify",
   "bin": {
@@ -25,7 +25,7 @@
     "@oclif/plugin-warn-if-update-available": "^2.1.1",
     "abort-controller": "^3.0.0",
     "archiver": "^7.0.1",
-    "axios": "^1.15.2",
+    "axios": "^1.16.0",
     "envfile": "^7.1.0",
     "get-port": "^7.1.0",
     "inquirer": "^12.11.1",
