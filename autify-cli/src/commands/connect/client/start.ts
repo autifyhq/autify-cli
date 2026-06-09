@@ -1,5 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 import { ClientManager } from "../../../autify/connect/client-manager/ClientManager";
+import { getConnectClientStartupTimeoutMs } from "../../../autify/connect/getConnectClientStartupTimeoutMs";
 
 export default class ConnectClientStart extends Command {
   static description = "Start Autify Connect Client";
@@ -42,6 +43,7 @@ export default class ConnectClientStart extends Command {
       debugServerPort: flags["debug-server-port"],
       webWorkspaceId: flags["web-workspace-id"],
       extraArguments: flags["extra-arguments"],
+      startupTimeoutMs: getConnectClientStartupTimeoutMs(configDir),
     });
     this.log("Starting Autify Connect Client...");
     await clientManager.start();

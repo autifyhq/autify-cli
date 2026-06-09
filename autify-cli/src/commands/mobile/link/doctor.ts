@@ -1,5 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 import { MobileLinkManager } from "../../../autify/mobile/mobilelink/mobile-link-manager/MobileLinkManager";
+import { getMobileLinkStartupTimeoutMs } from "../../../autify/mobile/mobilelink/getMobileLinkStartupTimeoutMs";
 
 export default class MobileLinkDoctor extends Command {
   static description = "Check MobileLink configuration";
@@ -21,6 +22,7 @@ export default class MobileLinkDoctor extends Command {
       configDir,
       cacheDir,
       extraArguments: flags["extra-arguments"],
+      startupTimeoutMs: getMobileLinkStartupTimeoutMs(configDir),
     });
     await mobileLinkManager.doctor();
   }

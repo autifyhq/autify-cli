@@ -5,6 +5,7 @@ import {
   getBinaryPath,
 } from "../../../autify/mobile/mobilelink/installBinary";
 import { MobileLinkManager } from "../../../autify/mobile/mobilelink/mobile-link-manager/MobileLinkManager";
+import { getMobileLinkStartupTimeoutMs } from "../../../autify/mobile/mobilelink/getMobileLinkStartupTimeoutMs";
 import { existsSync } from "node:fs";
 import {
   getConnectClientSourceUrl,
@@ -63,6 +64,7 @@ export default class MobileLinkSetup extends Command {
     const mobileLinkManager = new MobileLinkManager({
       configDir,
       cacheDir,
+      startupTimeoutMs: getMobileLinkStartupTimeoutMs(configDir),
     });
     await mobileLinkManager.setup();
   }

@@ -1,5 +1,6 @@
 import { Args, Command, Flags } from "@oclif/core";
 import { MobileLinkManager } from "../../../autify/mobile/mobilelink/mobile-link-manager/MobileLinkManager";
+import { getMobileLinkStartupTimeoutMs } from "../../../autify/mobile/mobilelink/getMobileLinkStartupTimeoutMs";
 
 export default class MobileLinkStart extends Command {
   static description = "Start MobileLink session";
@@ -26,6 +27,7 @@ export default class MobileLinkStart extends Command {
       configDir,
       cacheDir,
       extraArguments: flags["extra-arguments"],
+      startupTimeoutMs: getMobileLinkStartupTimeoutMs(configDir),
     });
     this.log("Starting MobileLink...");
     await mobileLinkManager.start(args.workspaceId);

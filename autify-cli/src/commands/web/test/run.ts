@@ -5,6 +5,7 @@ import { getWebTestResultUrl } from "../../../autify/web/getTestResultUrl";
 import WebTestWait from "./wait";
 import { parseAutifyTestUrl } from "../../../autify/web/parseAutifyTestUrl";
 import { ClientManager } from "../../../autify/connect/client-manager/ClientManager";
+import { getConnectClientStartupTimeoutMs } from "../../../autify/connect/getConnectClientStartupTimeoutMs";
 import { getWebClient } from "../../../autify/web/getWebClient";
 
 const urlReplacementsToString = (
@@ -173,6 +174,7 @@ export default class WebTestRun extends Command {
           debugServerPort: flags["autify-connect-client-debug-server-port"],
           webWorkspaceId: workspaceId,
           extraArguments: flags["autify-connect-client-extra-arguments"],
+          startupTimeoutMs: getConnectClientStartupTimeoutMs(configDir),
         });
         autifyConnectAccessPoint = autifyConnectClientManager.accessPointName;
         this.log("Starting Autify Connect Client...");
