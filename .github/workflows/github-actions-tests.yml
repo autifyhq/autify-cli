@@ -30,7 +30,7 @@ jobs:
       AUTIFY_TEST_WAIT_INTERVAL_SECOND: 0
       AUTIFY_CONNECT_CLIENT_MODE: fake
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
 
       - id: web-test-run
         uses: autifyhq/actions-web-test-run@v2
@@ -98,7 +98,7 @@ jobs:
       AUTIFY_CLI_INTEGRATION_TEST_INSTALL: 1
       AUTIFY_TEST_WAIT_INTERVAL_SECOND: 0
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
 
       - id: mobile-test-run
         uses: autifyhq/actions-mobile-test-run@v2
@@ -195,7 +195,7 @@ jobs:
       AUTIFY_CLI_INTEGRATION_TEST_INSTALL: 1
       AUTIFY_TEST_WAIT_INTERVAL_SECOND: 0
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
 
       - id: mobile-build-upload-ios
         uses: autifyhq/actions-mobile-build-upload@v2
