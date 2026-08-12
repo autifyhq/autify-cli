@@ -301,6 +301,9 @@ const installBrew = () => {
   run(`mkdir -p ${tap}/Formula`);
   updateBrewFormula("autify-cli.rb");
   run(`cp autify-cli.rb ${tap}/Formula/`);
+  // Homebrew refuses to load formulae from non-official taps until they are
+  // trusted, and the formula being installed is the one written just above.
+  run("brew trust --tap autifyhq/tap");
   run("brew install -v -d autify-cli");
 };
 
