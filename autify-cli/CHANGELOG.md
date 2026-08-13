@@ -1,5 +1,11 @@
 # @autifyhq/autify-cli
 
+## 0.73.4
+
+### Patch Changes
+
+- [#729](https://github.com/autifyhq/autify-cli/pull/729) [`261f69b`](https://github.com/autifyhq/autify-cli/commit/261f69b6d85f768b5156a19ff5d7f82865d1869c) - Update mobilelink to v0.6.8
+
 ## 0.73.3
 
 ### Patch Changes
