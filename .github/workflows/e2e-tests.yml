@@ -15,8 +15,13 @@ jobs:
     strategy:
       matrix:
         include:
+          # Pinned to macOS 15. On the macOS 26 image the app download outruns
+          # bsdtar, and appium-xcuitest-driver 8.4.3 registers no error listener
+          # on its stdin, so the resulting EPIPE becomes an uncaught exception
+          # and kills the Appium server mid-session. Safe to move back to
+          # macos-latest-xlarge once mobilelink ships a driver that handles it.
           - target: darwin-arm64
-            os: macos-latest-xlarge
+            os: macos-15-xlarge
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
