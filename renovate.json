@@ -1,9 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "github>autifyhq/dependency-update-control-plane//renovate-config/default",
-    "config:recommended"
-  ],
+  "extends": ["github>autifyhq/dependency-update-control-plane//renovate-config/default"],
   "packageRules": [
     {
       "matchDatasources": ["npm"],
