@@ -8,7 +8,7 @@ exports[`autify web test run https://app.autify.com/projects/0000/test_plans/000
 ✅ Successfully started: https://app.autify.com/projects/743/results/1920728 (Capability is configured by test plan)
 🕐 Waiting for the test result: https://app.autify.com/projects/743/results/1920728
 [HH:MM:SS] Waiting... (timeout: 300 s) [started]
-[HH:MM:SS] → TestPlan: 🌀 Queuing, TestCases: 
+[HH:MM:SS] → TestPlan: 🚦 Queuing, TestCases: 
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
