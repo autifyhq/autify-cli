@@ -49,34 +49,39 @@ type Status = Awaited<
   ReturnType<MobileClient["describeTestResult"]>
 >["data"]["status"];
 
-type StatusDisplay = { emoji: string; label: string };
+type StatusDisplay = { emoji: string[]; label: string };
 
 /* eslint-disable camelcase */
 const STATUS_DISPLAY: Record<string, StatusDisplay> = {
-  canceled: { emoji: "stop_button", label: "Canceled" },
-  failed: { emoji: "rotating_light", label: "Failed" },
-  internal_error: { emoji: "no_entry_sign", label: "Internal error" },
-  passed: { emoji: "+1", label: "Passed" },
-  queuing: { emoji: "cyclone", label: "Queuing" },
-  running: { emoji: "red_car", label: "Running" },
-  skip_passed: { emoji: "fast_forward", label: "Already passed" },
-  skipped: { emoji: "zzz", label: "Skipped" },
-  wait_device: { emoji: "hourglass", label: "Waiting device" },
-  wait_device_timeout: { emoji: "alarm_clock", label: "Device timeout" },
-  waiting: { emoji: "hourglass_flowing_sand", label: "Waiting" },
+  canceled: { emoji: ["stop_button"], label: "Canceled" },
+  failed: { emoji: ["rotating_light"], label: "Failed" },
+  internal_error: { emoji: ["no_entry_sign"], label: "Internal error" },
+  passed: { emoji: ["+1"], label: "Passed" },
+  queuing: { emoji: ["cyclone"], label: "Queuing" },
+  running: { emoji: ["red_car"], label: "Running" },
+  skip_passed: {
+    emoji: ["white_check_mark", "fast_forward"],
+    label: "Already passed",
+  },
+  skipped: { emoji: ["fast_forward"], label: "Skipped" },
+  wait_device: { emoji: ["hourglass"], label: "Waiting device" },
+  wait_device_timeout: { emoji: ["stopwatch"], label: "Device timeout" },
+  waiting: { emoji: ["hourglass_flowing_sand"], label: "Waiting" },
 };
 /* eslint-enable camelcase */
 
 const UNKNOWN_STATUS: StatusDisplay = {
-  emoji: "grey_question",
+  emoji: ["grey_question"],
   label: "None",
 };
 
 const MIN_LABEL_WIDTH = 7;
 
 const emojiStatus = (status?: Status) => {
-  const { emoji: name, label } = STATUS_DISPLAY[status ?? ""] ?? UNKNOWN_STATUS;
-  return `${emoji.get(name)} ${label.padEnd(MIN_LABEL_WIDTH)}`;
+  const { emoji: names, label } =
+    STATUS_DISPLAY[status ?? ""] ?? UNKNOWN_STATUS;
+  const glyphs = names.map((name) => emoji.get(name)).join("");
+  return `${glyphs} ${label.padEnd(MIN_LABEL_WIDTH)}`;
 };
 
 const describeTestResult =
