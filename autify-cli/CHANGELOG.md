@@ -1,5 +1,11 @@
 # @autifyhq/autify-cli
 
+## 0.73.5
+
+### Patch Changes
+
+- [#740](https://github.com/autifyhq/autify-cli/pull/740) [`d2b1b26`](https://github.com/autifyhq/autify-cli/commit/d2b1b268ce3f85382631811a32af7aafe3d2772c) - Show every Autify for Mobile test status in `--wait` output. Carried-over, cancelled, errored and device-wait results previously all rendered as "None". Refreshes the status emoji for both web and mobile so the two commands stay in step.
+
 ## 0.73.4
 
 ### Patch Changes
