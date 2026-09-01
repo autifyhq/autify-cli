@@ -49,15 +49,34 @@ type Status = Awaited<
   ReturnType<MobileClient["describeTestResult"]>
 >["data"]["status"];
 
+type StatusDisplay = { emoji: string; label: string };
+
+/* eslint-disable camelcase */
+const STATUS_DISPLAY: Record<string, StatusDisplay> = {
+  canceled: { emoji: "stop_button", label: "Canceled" },
+  failed: { emoji: "rotating_light", label: "Failed" },
+  internal_error: { emoji: "no_entry_sign", label: "Internal error" },
+  passed: { emoji: "+1", label: "Passed" },
+  queuing: { emoji: "cyclone", label: "Queuing" },
+  running: { emoji: "red_car", label: "Running" },
+  skip_passed: { emoji: "fast_forward", label: "Already passed" },
+  skipped: { emoji: "zzz", label: "Skipped" },
+  wait_device: { emoji: "hourglass", label: "Waiting device" },
+  wait_device_timeout: { emoji: "alarm_clock", label: "Device timeout" },
+  waiting: { emoji: "hourglass_flowing_sand", label: "Waiting" },
+};
+/* eslint-enable camelcase */
+
+const UNKNOWN_STATUS: StatusDisplay = {
+  emoji: "grey_question",
+  label: "None",
+};
+
+const MIN_LABEL_WIDTH = 7;
+
 const emojiStatus = (status?: Status) => {
-  if (status === "queuing") return emoji.get("cyclone") + " Queuing";
-  if (status === "waiting")
-    return emoji.get("hourglass_flowing_sand") + " Waiting";
-  if (status === "running") return emoji.get("red_car") + " Running";
-  if (status === "passed") return emoji.get("+1") + " Passed ";
-  if (status === "failed") return emoji.get("rotating_light") + " Failed ";
-  if (status === "skipped") return emoji.get("zzz") + " Skipped";
-  return emoji.get("grey_question") + " None   ";
+  const { emoji: name, label } = STATUS_DISPLAY[status ?? ""] ?? UNKNOWN_STATUS;
+  return `${emoji.get(name)} ${label.padEnd(MIN_LABEL_WIDTH)}`;
 };
 
 const describeTestResult =

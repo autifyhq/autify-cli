@@ -8,7 +8,7 @@ exports[`autify mobile test run https://mobile-app.autify.com/projects/AAA/test_
 ✅ Successfully started: https://mobile-app.autify.com/projects/4yyFEL/results/jztZqV
 🕐 Waiting for the test result: https://mobile-app.autify.com/projects/4yyFEL/results/jztZqV
 [HH:MM:SS] Waiting... (timeout: 300 s) [started]
-[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ❔ None   
+[HH:MM:SS] → TestPlan: 🚗 Running, TestCases: ⌛ Waiting device
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
 [HH:MM:SS] → TestPlan: 🚗 Running, TestCases: 🚗 Running
