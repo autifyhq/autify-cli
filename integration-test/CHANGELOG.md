@@ -1,5 +1,7 @@
 # @autifyhq/autify-cli-integration-test
 
+## 0.73.5
+
 ## 0.73.4
 
 ## 0.73.3
