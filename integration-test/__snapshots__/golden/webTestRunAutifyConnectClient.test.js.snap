@@ -16,9 +16,9 @@ Autify Connect Client is ready!
 ✅ Successfully started: https://app.autify.com/projects/743/results/4758669 (Capability is Linux Chrome 136.0 computer)
 🕐 Waiting for the test result: https://app.autify.com/projects/743/results/4758669
 [HH:MM:SS] Waiting... (timeout: 300 s) [started]
-[HH:MM:SS] → TestPlan: 🌀 Queuing, TestCases: 
-[HH:MM:SS] → TestPlan: 🌀 Queuing, TestCases: 
-[HH:MM:SS] → TestPlan: 🌀 Queuing, TestCases: 
+[HH:MM:SS] → TestPlan: 🚦 Queuing, TestCases: 
+[HH:MM:SS] → TestPlan: 🚦 Queuing, TestCases: 
+[HH:MM:SS] → TestPlan: 🚦 Queuing, TestCases: 
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting
 [HH:MM:SS] → TestPlan: ⏳ Waiting, TestCases: ⏳ Waiting

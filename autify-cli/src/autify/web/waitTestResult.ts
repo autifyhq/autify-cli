@@ -60,13 +60,14 @@ type Status = Awaited<
 >["data"]["status"];
 
 const emojiStatus = (status?: Status) => {
-  if (status === "queuing") return emoji.get("cyclone") + " Queuing";
+  if (status === "queuing")
+    return emoji.get("vertical_traffic_light") + " Queuing";
   if (status === "waiting")
     return emoji.get("hourglass_flowing_sand") + " Waiting";
   if (status === "running") return emoji.get("red_car") + " Running";
   if (status === "passed") return emoji.get("+1") + " Passed ";
-  if (status === "failed") return emoji.get("rotating_light") + " Failed ";
-  if (status === "skipped") return emoji.get("zzz") + " Skipped";
+  if (status === "failed") return emoji.get("x") + " Failed ";
+  if (status === "skipped") return emoji.get("fast_forward") + " Skipped";
   return emoji.get("grey_question") + " None   ";
 };
 

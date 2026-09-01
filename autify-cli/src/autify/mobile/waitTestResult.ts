@@ -54,10 +54,10 @@ type StatusDisplay = { emoji: string[]; label: string };
 /* eslint-disable camelcase */
 const STATUS_DISPLAY: Record<string, StatusDisplay> = {
   canceled: { emoji: ["stop_button"], label: "Canceled" },
-  failed: { emoji: ["rotating_light"], label: "Failed" },
+  failed: { emoji: ["x"], label: "Failed" },
   internal_error: { emoji: ["no_entry_sign"], label: "Internal error" },
   passed: { emoji: ["+1"], label: "Passed" },
-  queuing: { emoji: ["cyclone"], label: "Queuing" },
+  queuing: { emoji: ["vertical_traffic_light"], label: "Queuing" },
   running: { emoji: ["red_car"], label: "Running" },
   skip_passed: {
     emoji: ["white_check_mark", "fast_forward"],
