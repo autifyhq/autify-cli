@@ -28,9 +28,9 @@
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.7.0",
-    "@changesets/cli": "^2.27.0",
+    "@changesets/cli": "^2.31.1",
     "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
+    "lint-staged": "^16.4.0",
     "per-env": "^1.0.2"
   },
   "lint-staged": {
@@ -42,6 +42,6 @@
   },
   "engines": {
     "node": ">=22.16.0",
-    "npm": ">=11.10.0"
+    "npm": ">=11.19.1"
   }
 }
