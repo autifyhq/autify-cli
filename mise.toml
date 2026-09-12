@@ -4,7 +4,7 @@ node = "22"
 # backend to every platform, and aqua has no Windows build while npm:npm leaves
 # node's npm 10 on PATH on unix. Letting the registry choose gets npm 11 (which
 # min-release-age needs) everywhere. Don't let a re-lock add that line back.
-npm = "11.19.0"
+npm = "11.19.1"
 
 [settings]
 locked = true
