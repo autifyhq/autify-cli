@@ -52,7 +52,7 @@
     "test:proxy": "jest --testMatch **/dist/proxy-tests/**/*.test.js"
   },
   "engines": {
-    "node": ">=22.16.0"
+    "node": ">=22.23.2"
   },
   "bugs": {
     "url": "https://github.com/autifyhq/autify-cli/issues"
