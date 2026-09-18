@@ -160,7 +160,7 @@
     "test:e2e": "npx jest --config e2e-test/jest.config.js"
   },
   "engines": {
-    "node": ">=22.16.0"
+    "node": ">=22.23.2"
   },
   "bugs": "https://github.com/autifyhq/autify-cli/issues",
   "keywords": [
