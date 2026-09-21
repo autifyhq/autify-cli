@@ -73,10 +73,16 @@ export default class MobileTestRun extends Command {
       buildId = res.buildId;
     }
 
+    if (!buildId)
+      throw new Errors.CLIError(
+        `Either --build-id or --build-path must be specified.`
+      );
+    const resolvedBuildId = buildId;
+
     const runTestPlanOnce = async () => {
       const res = await client.runTestPlan(testPlanId, {
         // eslint-disable-next-line camelcase
-        build_id: buildId,
+        build_id: resolvedBuildId,
         // eslint-disable-next-line camelcase
         device_ids: deviceIds,
       });

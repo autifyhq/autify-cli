@@ -48,7 +48,7 @@ export function parseProxyFromExtraArguments(
   const parsed = parse(extraArguments).filter(
     (entry): entry is string => typeof entry === "string"
   );
-  for (let i = 0; i < parsed.length; ) {
+  for (let i = 0; i < parsed.length;) {
     if (parsed[i] === "--tunnel-proxy" && i + 1 < parsed.length) {
       out.tunnelProxyUrl = parsed[i + 1];
       i += 2;
