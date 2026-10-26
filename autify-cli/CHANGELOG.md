@@ -1,5 +1,13 @@
 # @autifyhq/autify-cli
 
+## 0.73.6
+
+### Patch Changes
+
+- [#750](https://github.com/autifyhq/autify-cli/pull/750) [`f702f30`](https://github.com/autifyhq/autify-cli/commit/f702f302b28ca8276d241eb02f54b86dbc4c3703) - Update mobilelink to v0.6.9
+
+- [#749](https://github.com/autifyhq/autify-cli/pull/749) [`56f0cbb`](https://github.com/autifyhq/autify-cli/commit/56f0cbbc50c2ec874b52583063daf17b45e501b9) - Bundle Node.js 22.23.4 in the standalone installers for the October 2026 Node.js security release, and update undici to 6.29.1
+
 ## 0.73.5
 
 ### Patch Changes
