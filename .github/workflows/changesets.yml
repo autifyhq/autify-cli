@@ -37,7 +37,7 @@ jobs:
       - uses: ./.github/actions/setup
 
       - id: changesets
-        uses: changesets/action@63a615b9cd06ba9a3e6d13796c7fbcb080a60a0b # v1.8.0
+        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
         with:
           title: "chore: release packages"
           commit: "chore: release packages"
@@ -74,7 +74,7 @@ jobs:
       - uses: ./.github/actions/setup
 
       - name: Create GitHub release
-        uses: changesets/action@63a615b9cd06ba9a3e6d13796c7fbcb080a60a0b # v1.8.0
+        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
         with:
           # Only tag the CLI itself, not the integration-test workspace.
           publish: bash autify-cli/scripts/changesets-tag.sh
