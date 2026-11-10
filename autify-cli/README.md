@@ -11,6 +11,7 @@ Autify CLI can help your integration with Autify!
 - [Autify Command Line Interface (CLI)](#autify-command-line-interface-cli)
 - [Usage](#usage)
 - [Commands](#commands)
+
 <!-- tocstop -->
 
 # Usage
