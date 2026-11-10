@@ -28,13 +28,17 @@ url = "https://nodejs.org/dist/v22.23.4/node-v22.23.4-win-x64.zip"
 version = "11.19.0"
 
 [tools.npm."platforms.linux-arm64"]
+checksum = "sha256:31e9770f7dc71119a58509353b27917557aaf0ac9b5ef1a0465ee7d8ec67ae75"
 url = "https://registry.npmjs.org/npm/-/npm-11.19.0.tgz"
 
 [tools.npm."platforms.linux-x64"]
+checksum = "sha256:31e9770f7dc71119a58509353b27917557aaf0ac9b5ef1a0465ee7d8ec67ae75"
 url = "https://registry.npmjs.org/npm/-/npm-11.19.0.tgz"
 
 [tools.npm."platforms.macos-arm64"]
+checksum = "sha256:31e9770f7dc71119a58509353b27917557aaf0ac9b5ef1a0465ee7d8ec67ae75"
 url = "https://registry.npmjs.org/npm/-/npm-11.19.0.tgz"
 
 [tools.npm."platforms.macos-x64"]
+checksum = "sha256:31e9770f7dc71119a58509353b27917557aaf0ac9b5ef1a0465ee7d8ec67ae75"
 url = "https://registry.npmjs.org/npm/-/npm-11.19.0.tgz"
