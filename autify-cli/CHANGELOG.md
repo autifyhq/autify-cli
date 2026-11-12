@@ -1,5 +1,11 @@
 # @autifyhq/autify-cli
 
+## 0.73.7
+
+### Patch Changes
+
+- [#748](https://github.com/autifyhq/autify-cli/pull/748) [`4d26761`](https://github.com/autifyhq/autify-cli/commit/4d26761f3acb98ad0c71b0a98daf36c178972a3a) - Lock file maintenance
+
 ## 0.73.6
 
 ### Patch Changes
